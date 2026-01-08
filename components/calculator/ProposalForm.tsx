@@ -18,6 +18,7 @@ import {
   Mail,
   Phone,
   Users,
+  ExternalLink,
 } from 'lucide-react'
 import { Button } from '../ui/Button'
 import { Input, Select } from '../ui/Input'
@@ -102,8 +103,8 @@ export function ProposalForm() {
   }, [proposalType, patientsPerMonth, consultDuration])
 
   const onSubmit = (data: FormData) => {
-    setShowResult(true)
-    setCurrentStep(4)
+    // Redireciona para o simulador externo (provisório)
+    window.open('https://salad-elf-60532010.figma.site', '_blank')
   }
 
   const nextStep = () => {
@@ -416,8 +417,8 @@ export function ProposalForm() {
                 variant="primary"
                 className="gap-2"
               >
-                Gerar Proposta
-                <FileText className="w-4 h-4" />
+                Acessar Simulador
+                <ExternalLink className="w-4 h-4" />
               </Button>
             )}
           </div>
