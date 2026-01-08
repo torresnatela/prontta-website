@@ -12,9 +12,10 @@ const footerLinks = {
     { name: 'Carreiras', href: '#' },
   ],
   servicos: [
-    { name: 'Retorno Implante Capilar', href: '#servicos' },
-    { name: 'Acompanhamento Pós-Op', href: '#servicos' },
-    { name: 'Pré-Operatório', href: '#servicos' },
+    { name: 'Agenda On Demand', href: '#servicos' },
+    { name: 'Agenda Compartilhada', href: '#servicos' },
+    { name: 'Pacotes de Atendimento', href: '#servicos' },
+    { name: 'Telesaúde Híbrida', href: '#telesaude' },
   ],
   recursos: [
     { name: 'Calculadora de Propostas', href: '/proposta' },

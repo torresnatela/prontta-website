@@ -31,9 +31,9 @@ interface ProposalResultProps {
 }
 
 const proposalTypeNames: Record<string, string> = {
-  'retorno-implante': 'Retorno Implante Capilar',
-  'acompanhamento-pos-op': 'Acompanhamento Pós-Operatório',
-  'pre-operatorio': 'Pré-Operatório Cardiológico',
+  'agenda-on-demand': 'Agenda On Demand',
+  'agenda-compartilhada': 'Agenda Compartilhada',
+  'pacotes-atendimento': 'Pacotes de Atendimento',
 }
 
 export function ProposalResult({ pricing, formData, onBack }: ProposalResultProps) {

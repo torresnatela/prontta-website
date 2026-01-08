@@ -11,8 +11,8 @@ import { cn } from '@/lib/utils'
 const navItems = [
   { name: 'Início', href: '#' },
   { name: 'Serviços', href: '#servicos' },
+  { name: 'Telesaúde Híbrida', href: '#telesaude' },
   { name: 'Como Funciona', href: '#como-funciona' },
-  { name: 'Benefícios', href: '#beneficios' },
   { name: 'Contato', href: '#contato' },
 ]
 

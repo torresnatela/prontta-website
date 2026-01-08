@@ -1,52 +1,52 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { UserCheck, HeartPulse, Activity, ArrowRight } from 'lucide-react'
+import { CalendarClock, CalendarRange, Package, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/Card'
 
 const services = [
   {
-    id: 'retorno-implante',
-    icon: UserCheck,
-    title: 'Retorno Implante Capilar',
-    description: 'Terceirização completa do retorno de pacientes de implante capilar. Avaliação especializada e relatórios detalhados para sua clínica.',
+    id: 'agenda-on-demand',
+    icon: CalendarClock,
+    title: 'Agenda On Demand',
+    description: 'Profissionais de saúde disponíveis sob demanda para sua clínica. Flexibilidade total para atender picos de demanda ou substituições.',
     features: [
-      'Avaliação do resultado',
-      'Orientações de cuidados',
-      'Relatório para a clínica',
-      'Suporte ao paciente',
+      'Profissionais qualificados',
+      'Disponibilidade imediata',
+      'Sem compromisso fixo',
+      'Ideal para demandas pontuais',
     ],
     color: 'from-primary-cyan to-blue-400',
     bgColor: 'bg-primary-cyan/10',
   },
   {
-    id: 'acompanhamento-pos-op',
-    icon: HeartPulse,
-    title: 'Acompanhamento Pós-Op',
-    description: 'Pacote completo com psicólogo, nutricionista e endocrinologista para acompanhamento multidisciplinar do paciente.',
+    id: 'agenda-compartilhada',
+    icon: CalendarRange,
+    title: 'Agenda Compartilhada',
+    description: 'Compartilhe profissionais especializados com outras clínicas. Reduza custos mantendo acesso a especialistas de alta qualidade.',
     features: [
-      'Psicólogo',
-      'Nutricionista',
-      'Endocrinologista',
-      'Relatório integrado',
-    ],
-    color: 'from-rose-500 to-pink-400',
-    bgColor: 'bg-rose-500/10',
-  },
-  {
-    id: 'pre-operatorio',
-    icon: Activity,
-    title: 'Pré-Operatório Cardiológico',
-    description: 'Análise cardiológica completa para liberação cirúrgica. ECG e laudo profissional para segurança do procedimento.',
-    features: [
-      'Avaliação completa',
-      'Eletrocardiograma',
-      'Laudo de liberação',
-      'Orientações',
+      'Custo otimizado',
+      'Especialistas compartilhados',
+      'Agenda flexível',
+      'Escala inteligente',
     ],
     color: 'from-emerald-500 to-teal-400',
     bgColor: 'bg-emerald-500/10',
+  },
+  {
+    id: 'pacotes-atendimento',
+    icon: Package,
+    title: 'Pacotes de Atendimento',
+    description: 'Pacotes personalizados com múltiplas especialidades. Solução completa para acompanhamento multidisciplinar dos seus pacientes.',
+    features: [
+      'Múltiplas especialidades',
+      'Preço fechado',
+      'Relatórios integrados',
+      'Gestão simplificada',
+    ],
+    color: 'from-violet-500 to-purple-400',
+    bgColor: 'bg-violet-500/10',
   },
 ]
 
@@ -92,12 +92,12 @@ export function Services() {
             Nossos Serviços
           </span>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-primary-navy mb-6">
-            Soluções completas em{' '}
+            Modelos flexíveis de{' '}
             <span className="gradient-text">terceirização médica</span>
           </h2>
           <p className="text-neutral-gray text-lg">
-            Oferecemos serviços especializados para clínicas e hospitais que buscam 
-            excelência no atendimento e otimização de recursos.
+            Escolha o modelo que melhor se adapta às necessidades da sua clínica. 
+            Flexibilidade e qualidade para otimizar seus atendimentos.
           </p>
         </motion.div>
 
@@ -154,4 +154,3 @@ export function Services() {
     </section>
   )
 }
-

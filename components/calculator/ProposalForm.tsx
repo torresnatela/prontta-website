@@ -7,9 +7,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { 
-  UserCheck, 
-  HeartPulse, 
-  Activity, 
+  CalendarClock,
+  CalendarRange,
+  Package,
   Calculator, 
   FileText,
   ChevronRight,
@@ -18,7 +18,6 @@ import {
   Mail,
   Phone,
   Users,
-  Clock
 } from 'lucide-react'
 import { Button } from '../ui/Button'
 import { Input, Select } from '../ui/Input'
@@ -37,7 +36,7 @@ const formSchema = z.object({
   companyName: z.string().min(2, 'Nome da empresa é obrigatório'),
   email: z.string().email('E-mail inválido'),
   phone: z.string().min(10, 'Telefone inválido'),
-  proposalType: z.enum(['retorno-implante', 'acompanhamento-pos-op', 'pre-operatorio']),
+  proposalType: z.enum(['agenda-on-demand', 'agenda-compartilhada', 'pacotes-atendimento']),
   patientsPerMonth: z.number().min(1, 'Informe a quantidade de pacientes'),
   consultDuration: z.number().optional(),
 })
@@ -51,10 +50,10 @@ const steps = [
   { id: 4, title: 'Resultado', icon: FileText },
 ]
 
-const serviceIcons: Record<ProposalType, typeof UserCheck> = {
-  'retorno-implante': UserCheck,
-  'acompanhamento-pos-op': HeartPulse,
-  'pre-operatorio': Activity,
+const serviceIcons: Record<ProposalType, typeof CalendarClock> = {
+  'agenda-on-demand': CalendarClock,
+  'agenda-compartilhada': CalendarRange,
+  'pacotes-atendimento': Package,
 }
 
 export function ProposalForm() {
@@ -72,7 +71,7 @@ export function ProposalForm() {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      proposalType: 'retorno-implante',
+      proposalType: 'agenda-on-demand',
       patientsPerMonth: 10,
       consultDuration: 30,
     },
@@ -85,7 +84,7 @@ export function ProposalForm() {
   // Set service from URL param
   useEffect(() => {
     const servico = searchParams.get('servico')
-    if (servico && ['retorno-implante', 'acompanhamento-pos-op', 'pre-operatorio'].includes(servico)) {
+    if (servico && ['agenda-on-demand', 'agenda-compartilhada', 'pacotes-atendimento'].includes(servico)) {
       setValue('proposalType', servico as ProposalType)
     }
   }, [searchParams, setValue])
@@ -127,10 +126,10 @@ export function ProposalForm() {
           >
             <div>
               <h3 className="font-display text-xl font-bold text-primary-navy mb-2">
-                Selecione o tipo de proposta
+                Selecione o modelo de atendimento
               </h3>
               <p className="text-neutral-gray">
-                Escolha o serviço que melhor atende às necessidades da sua clínica.
+                Escolha o modelo que melhor atende às necessidades da sua clínica.
               </p>
             </div>
 
@@ -269,7 +268,7 @@ export function ProposalForm() {
                 )}
               </div>
 
-              {proposalType !== 'acompanhamento-pos-op' && (
+              {proposalType !== 'pacotes-atendimento' && (
                 <Select
                   label="Duração da consulta"
                   options={DURATION_OPTIONS.map(d => ({ value: d.value, label: d.label }))}
@@ -427,4 +426,3 @@ export function ProposalForm() {
     </div>
   )
 }
-

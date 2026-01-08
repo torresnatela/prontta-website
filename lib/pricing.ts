@@ -1,7 +1,7 @@
 export type ProposalType = 
-  | 'retorno-implante'
-  | 'acompanhamento-pos-op'
-  | 'pre-operatorio'
+  | 'agenda-on-demand'
+  | 'agenda-compartilhada'
+  | 'pacotes-atendimento'
 
 export type ConsultDuration = 25 | 30 | 40
 
@@ -20,34 +20,34 @@ export interface PricingResult {
 
 // Tabela de preços base por tipo de proposta e duração
 const PRICING_TABLE = {
-  'retorno-implante': {
-    25: 85,
-    30: 95,
-    40: 120,
+  'agenda-on-demand': {
+    25: 95,
+    30: 110,
+    40: 140,
   },
-  'pre-operatorio': {
-    25: 150,
-    30: 170,
-    40: 200,
+  'agenda-compartilhada': {
+    25: 75,
+    30: 85,
+    40: 110,
   },
 }
 
-// Preço fixo para acompanhamento pós-operatório
-const POS_OP_PACKAGE_PRICE = 610
+// Preço fixo para pacotes de atendimento
+const PACOTE_PRICE = 450
 
 export function calculatePricing(params: PricingParams): PricingResult {
   const { proposalType, patientsPerMonth, consultDuration = 30 } = params
 
-  if (proposalType === 'acompanhamento-pos-op') {
+  if (proposalType === 'pacotes-atendimento') {
     return {
-      unitPrice: POS_OP_PACKAGE_PRICE,
-      totalMonthly: POS_OP_PACKAGE_PRICE * patientsPerMonth,
-      description: 'Pacote completo de acompanhamento pós-operatório',
+      unitPrice: PACOTE_PRICE,
+      totalMonthly: PACOTE_PRICE * patientsPerMonth,
+      description: 'Pacote completo de atendimento multidisciplinar',
       includes: [
-        'Consulta com Psicólogo',
-        'Consulta com Nutricionista',
-        'Consulta com Endocrinologista',
-        'Relatório integrado de acompanhamento',
+        'Múltiplas especialidades incluídas',
+        'Acompanhamento integrado do paciente',
+        'Relatórios unificados',
+        'Gestão centralizada',
       ],
     }
   }
@@ -56,25 +56,25 @@ export function calculatePricing(params: PricingParams): PricingResult {
   const unitPrice = priceTable[consultDuration]
 
   const descriptions: Record<ProposalType, string> = {
-    'retorno-implante': 'Terceirização de retorno de implante capilar',
-    'acompanhamento-pos-op': 'Acompanhamento pós-operatório completo',
-    'pre-operatorio': 'Análise cardiológica pré-operatória',
+    'agenda-on-demand': 'Profissionais sob demanda para sua clínica',
+    'agenda-compartilhada': 'Especialistas compartilhados com custo otimizado',
+    'pacotes-atendimento': 'Pacote completo multidisciplinar',
   }
 
   const includesMap: Record<ProposalType, string[]> = {
-    'retorno-implante': [
-      'Avaliação do resultado do implante',
-      'Orientações de cuidados',
-      'Relatório detalhado para a clínica',
-      'Suporte ao paciente',
+    'agenda-on-demand': [
+      'Profissionais qualificados e certificados',
+      'Disponibilidade imediata',
+      'Flexibilidade de horários',
+      'Sem compromisso de longo prazo',
     ],
-    'acompanhamento-pos-op': [],
-    'pre-operatorio': [
-      'Avaliação cardiológica completa',
-      'Eletrocardiograma (ECG)',
-      'Laudo de liberação cirúrgica',
-      'Orientações pré-operatórias',
+    'agenda-compartilhada': [
+      'Custo reduzido por compartilhamento',
+      'Acesso a especialistas de alta qualidade',
+      'Escala inteligente de atendimentos',
+      'Agenda flexível e otimizada',
     ],
+    'pacotes-atendimento': [],
   }
 
   // Desconto por volume
@@ -100,22 +100,22 @@ export function calculatePricing(params: PricingParams): PricingResult {
 
 export const PROPOSAL_OPTIONS = [
   {
-    id: 'retorno-implante' as ProposalType,
-    name: 'Retorno Implante Capilar',
-    description: 'Terceirização completa do retorno de pacientes de implante capilar',
-    icon: 'UserCheck',
+    id: 'agenda-on-demand' as ProposalType,
+    name: 'Agenda On Demand',
+    description: 'Profissionais sob demanda para atender picos ou substituições',
+    icon: 'CalendarClock',
   },
   {
-    id: 'acompanhamento-pos-op' as ProposalType,
-    name: 'Acompanhamento Pós-Operatório',
-    description: 'Pacote com Psicólogo, Nutricionista e Endocrinologista',
-    icon: 'HeartPulse',
+    id: 'agenda-compartilhada' as ProposalType,
+    name: 'Agenda Compartilhada',
+    description: 'Compartilhe especialistas com outras clínicas e reduza custos',
+    icon: 'CalendarSync',
   },
   {
-    id: 'pre-operatorio' as ProposalType,
-    name: 'Pré-Operatório Cardiológico',
-    description: 'Análise cardiológica para liberação cirúrgica',
-    icon: 'Activity',
+    id: 'pacotes-atendimento' as ProposalType,
+    name: 'Pacotes de Atendimento',
+    description: 'Pacotes personalizados com múltiplas especialidades',
+    icon: 'Package',
   },
 ]
 
@@ -124,4 +124,3 @@ export const DURATION_OPTIONS: { value: ConsultDuration; label: string }[] = [
   { value: 30, label: '30 minutos' },
   { value: 40, label: '40 minutos' },
 ]
-
