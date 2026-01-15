@@ -58,14 +58,14 @@ export function HowItWorks() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <span className="inline-block px-4 py-2 bg-primary-cyan/20 text-primary-cyan font-medium rounded-full text-sm mb-4">
+          <span className="inline-block px-5 py-2.5 bg-primary-cyan/20 text-primary-cyan font-medium rounded-full text-base mb-4">
             Como Funciona
           </span>
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             Processo simples e{' '}
             <span className="text-primary-cyan">transparente</span>
           </h2>
-          <p className="text-white/70 text-lg">
+          <p className="text-white/70 text-xl">
             Em apenas 4 passos, sua clínica estará conectada aos melhores 
             profissionais de saúde do mercado.
           </p>
@@ -86,26 +86,26 @@ export function HowItWorks() {
                 transition={{ duration: 0.6, delay: index * 0.15 }}
                 className="relative"
               >
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 h-full hover:bg-white/10 transition-colors">
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-full hover:bg-white/10 transition-colors">
                   {/* Number badge */}
                   <div className="absolute -top-4 left-6">
-                    <div className="bg-primary-cyan text-white font-display font-bold text-lg px-4 py-1 rounded-full">
+                    <div className="bg-primary-cyan text-white font-display font-bold text-xl px-5 py-1.5 rounded-full">
                       {step.number}
                     </div>
                   </div>
 
                   {/* Icon */}
                   <div className="mt-4 mb-6">
-                    <div className="inline-flex p-4 bg-primary-cyan/20 rounded-xl">
-                      <step.icon className="w-8 h-8 text-primary-cyan" />
+                    <div className="inline-flex p-5 bg-primary-cyan/20 rounded-xl">
+                      <step.icon className="w-10 h-10 text-primary-cyan" />
                     </div>
                   </div>
 
                   {/* Content */}
-                  <h3 className="font-display text-xl font-bold text-white mb-3">
+                  <h3 className="font-display text-2xl font-bold text-white mb-3">
                     {step.title}
                   </h3>
-                  <p className="text-white/60 leading-relaxed">
+                  <p className="text-white/60 leading-relaxed text-lg">
                     {step.description}
                   </p>
                 </div>

@@ -50,43 +50,43 @@ export function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block px-4 py-2 bg-primary-cyan/10 text-primary-cyan font-medium rounded-full text-sm mb-4">
+            <span className="inline-block px-5 py-2.5 bg-primary-cyan/10 text-primary-cyan font-medium rounded-full text-base mb-4">
               Vamos Conversar
             </span>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-primary-navy mb-6">
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-navy mb-6">
               Pronto para{' '}
               <span className="gradient-text">transformar</span>{' '}
               sua clínica?
             </h2>
-            <p className="text-neutral-gray text-lg mb-8 max-w-lg">
+            <p className="text-neutral-gray text-xl mb-8 max-w-lg">
               Entre em contato conosco ou solicite uma proposta personalizada. 
               Nossa equipe está pronta para entender suas necessidades.
             </p>
 
             {/* Contact Info */}
-            <div className="space-y-4 mb-8">
+            <div className="space-y-5 mb-8">
               <a 
-                href="tel:+5511999999999"
+                href="tel:+5531993333245"
                 className="flex items-center gap-4 text-primary-navy hover:text-primary-cyan transition-colors"
               >
-                <div className="p-3 bg-accent-light rounded-xl">
-                  <Phone className="w-5 h-5 text-primary-cyan" />
+                <div className="p-4 bg-accent-light rounded-xl">
+                  <Phone className="w-6 h-6 text-primary-cyan" />
                 </div>
                 <div>
-                  <div className="text-sm text-neutral-gray">Telefone</div>
-                  <div className="font-semibold">(11) 99999-9999</div>
+                  <div className="text-base text-neutral-gray">Telefone</div>
+                  <div className="font-semibold text-lg">(31) 99333-3245</div>
                 </div>
               </a>
               <a 
                 href="mailto:contato@pronttasaude.com.br"
                 className="flex items-center gap-4 text-primary-navy hover:text-primary-cyan transition-colors"
               >
-                <div className="p-3 bg-accent-light rounded-xl">
-                  <Mail className="w-5 h-5 text-primary-cyan" />
+                <div className="p-4 bg-accent-light rounded-xl">
+                  <Mail className="w-6 h-6 text-primary-cyan" />
                 </div>
                 <div>
-                  <div className="text-sm text-neutral-gray">E-mail</div>
-                  <div className="font-semibold">contato@pronttasaude.com.br</div>
+                  <div className="text-base text-neutral-gray">E-mail</div>
+                  <div className="font-semibold text-lg">contato@pronttasaude.com.br</div>
                 </div>
               </a>
             </div>
@@ -107,8 +107,8 @@ export function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="bg-white rounded-3xl shadow-2xl shadow-primary-navy/10 p-8 md:p-10">
-              <h3 className="font-display text-2xl font-bold text-primary-navy mb-6">
+            <div className="bg-white rounded-3xl shadow-2xl shadow-primary-navy/10 p-8 md:p-12">
+              <h3 className="font-display text-2xl md:text-3xl font-bold text-primary-navy mb-8">
                 Envie uma mensagem
               </h3>
 
@@ -118,13 +118,13 @@ export function CTA() {
                   animate={{ opacity: 1, scale: 1 }}
                   className="text-center py-12"
                 >
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Send className="w-8 h-8 text-green-600" />
+                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
+                    <Send className="w-10 h-10 text-green-600" />
                   </div>
-                  <h4 className="text-xl font-bold text-primary-navy mb-2">
+                  <h4 className="text-2xl font-bold text-primary-navy mb-3">
                     Mensagem enviada!
                   </h4>
-                  <p className="text-neutral-gray">
+                  <p className="text-neutral-gray text-lg">
                     Entraremos em contato em breve.
                   </p>
                 </motion.div>
@@ -150,7 +150,7 @@ export function CTA() {
                     <Input
                       label="Telefone"
                       type="tel"
-                      placeholder="(11) 99999-9999"
+                      placeholder="(31) 99999-9999"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       required

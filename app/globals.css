@@ -13,10 +13,11 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-size: 18px; /* Base font size increased for better readability */
   }
   
   body {
-    @apply bg-white text-primary-navy antialiased;
+    @apply bg-white text-primary-navy antialiased text-lg;
   }
 
   ::selection {

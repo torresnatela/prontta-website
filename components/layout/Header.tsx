@@ -52,7 +52,7 @@ export function Header() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  'text-sm font-medium transition-colors duration-300 hover:text-primary-cyan',
+                  'text-base font-medium transition-colors duration-300 hover:text-primary-cyan',
                   isScrolled ? 'text-primary-navy' : 'text-primary-navy'
                 )}
               >
@@ -104,7 +104,7 @@ export function Header() {
                   >
                     <Link
                       href={item.href}
-                      className="block py-2 text-primary-navy font-medium hover:text-primary-cyan transition-colors"
+                      className="block py-2 text-lg text-primary-navy font-medium hover:text-primary-cyan transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {item.name}

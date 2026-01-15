@@ -32,7 +32,7 @@ interface ProposalResultProps {
 
 const proposalTypeNames: Record<string, string> = {
   'agenda-on-demand': 'Agenda On Demand',
-  'agenda-compartilhada': 'Agenda Compartilhada',
+  'agenda-dedicada': 'Agenda Dedicada',
   'pacotes-atendimento': 'Pacotes de Atendimento',
 }
 

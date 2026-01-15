@@ -1,6 +1,6 @@
 export type ProposalType = 
   | 'agenda-on-demand'
-  | 'agenda-compartilhada'
+  | 'agenda-dedicada'
   | 'pacotes-atendimento'
 
 export type ConsultDuration = 25 | 30 | 40
@@ -25,7 +25,7 @@ const PRICING_TABLE = {
     30: 110,
     40: 140,
   },
-  'agenda-compartilhada': {
+  'agenda-dedicada': {
     25: 75,
     30: 85,
     40: 110,
@@ -57,7 +57,7 @@ export function calculatePricing(params: PricingParams): PricingResult {
 
   const descriptions: Record<ProposalType, string> = {
     'agenda-on-demand': 'Profissionais sob demanda para sua clínica',
-    'agenda-compartilhada': 'Especialistas compartilhados com custo otimizado',
+    'agenda-dedicada': 'Especialista exclusivo dedicado à sua clínica',
     'pacotes-atendimento': 'Pacote completo multidisciplinar',
   }
 
@@ -68,11 +68,11 @@ export function calculatePricing(params: PricingParams): PricingResult {
       'Flexibilidade de horários',
       'Sem compromisso de longo prazo',
     ],
-    'agenda-compartilhada': [
-      'Custo reduzido por compartilhamento',
-      'Acesso a especialistas de alta qualidade',
-      'Escala inteligente de atendimentos',
-      'Agenda flexível e otimizada',
+    'agenda-dedicada': [
+      'Especialista exclusivo para sua clínica',
+      'Mesmo profissional em todas as consultas',
+      'Agenda personalizada',
+      'Pacotes por especialidade',
     ],
     'pacotes-atendimento': [],
   }
@@ -106,9 +106,9 @@ export const PROPOSAL_OPTIONS = [
     icon: 'CalendarClock',
   },
   {
-    id: 'agenda-compartilhada' as ProposalType,
-    name: 'Agenda Compartilhada',
-    description: 'Compartilhe especialistas com outras clínicas e reduza custos',
+    id: 'agenda-dedicada' as ProposalType,
+    name: 'Agenda Dedicada',
+    description: 'Tenha um especialista exclusivo dedicado à sua clínica',
     icon: 'CalendarSync',
   },
   {

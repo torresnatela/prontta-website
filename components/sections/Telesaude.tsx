@@ -10,7 +10,8 @@ import {
   HeartHandshake,
   CheckCircle2,
   XCircle,
-  ArrowRight
+  ArrowRight,
+  CalendarCheck
 } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '../ui/Button'
@@ -57,14 +58,14 @@ export function Telesaude() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-4xl mx-auto mb-16"
         >
-          <span className="inline-block px-4 py-2 bg-emerald-500/20 text-emerald-400 font-medium rounded-full text-sm mb-4">
+          <span className="inline-block px-5 py-2.5 bg-emerald-500/20 text-emerald-400 font-medium rounded-full text-base mb-4">
             Metodologia Exclusiva
           </span>
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             Telesaúde 2.0{' '}
             <span className="text-primary-cyan">(Híbrida)</span>
           </h2>
-          <p className="text-white/70 text-lg max-w-2xl mx-auto">
+          <p className="text-white/70 text-xl max-w-2xl mx-auto">
             Uma metodologia inovadora criada pela Prontta Saúde que combina o melhor 
             do atendimento digital com a confiança do presencial.
           </p>
@@ -82,14 +83,14 @@ export function Telesaude() {
           >
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 h-full">
               <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 bg-neutral-gray/20 rounded-xl">
-                  <Smartphone className="w-8 h-8 text-neutral-gray" />
+                <div className="p-4 bg-neutral-gray/20 rounded-xl">
+                  <Smartphone className="w-10 h-10 text-neutral-gray" />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl font-bold text-neutral-gray">
+                  <h3 className="font-display text-2xl md:text-3xl font-bold text-neutral-gray">
                     Telemedicina 1.0
                   </h3>
-                  <p className="text-neutral-gray/60 text-sm">Modelo tradicional</p>
+                  <p className="text-neutral-gray/60 text-base">Modelo tradicional</p>
                 </div>
               </div>
 
@@ -103,8 +104,8 @@ export function Telesaude() {
                     transition={{ delay: index * 0.1 }}
                     className="flex items-center gap-3"
                   >
-                    <XCircle className="w-5 h-5 text-red-400 shrink-0" />
-                    <span className="text-white/60">{item.text}</span>
+                    <XCircle className="w-6 h-6 text-red-400 shrink-0" />
+                    <span className="text-white/60 text-lg">{item.text}</span>
                   </motion.li>
                 ))}
               </ul>
@@ -147,14 +148,14 @@ export function Telesaude() {
               </div>
 
               <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 bg-emerald-500/30 rounded-xl">
-                  <HeartHandshake className="w-8 h-8 text-emerald-400" />
+                <div className="p-4 bg-emerald-500/30 rounded-xl">
+                  <HeartHandshake className="w-10 h-10 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl font-bold text-emerald-400">
+                  <h3 className="font-display text-2xl md:text-3xl font-bold text-emerald-400">
                     Telesaúde Híbrida
                   </h3>
-                  <p className="text-emerald-400/60 text-sm">Metodologia Prontta</p>
+                  <p className="text-emerald-400/60 text-base">Metodologia Prontta</p>
                 </div>
               </div>
 
@@ -168,8 +169,8 @@ export function Telesaude() {
                     transition={{ delay: index * 0.1 }}
                     className="flex items-center gap-3"
                   >
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-                    <span className="text-white font-medium">{item.text}</span>
+                    <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" />
+                    <span className="text-white font-medium text-lg">{item.text}</span>
                   </motion.li>
                 ))}
               </ul>
@@ -216,8 +217,8 @@ export function Telesaude() {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <div className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-8 py-6">
-            <p className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-white">
+          <div className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-10 py-8">
+            <p className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-white">
               A escala do <span className="text-primary-cyan">digital</span> + A confiança do <span className="text-emerald-400">presencial</span>.
             </p>
           </div>
@@ -231,32 +232,38 @@ export function Telesaude() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-16 bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 md:p-12"
         >
-          <h3 className="font-display text-2xl md:text-3xl font-bold text-white text-center mb-8">
+          <h3 className="font-display text-3xl md:text-4xl font-bold text-white text-center mb-10">
             Como funciona a Telesaúde Híbrida?
           </h3>
 
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-5 gap-5">
             {[
               {
                 step: '01',
+                icon: CalendarCheck,
+                title: 'Agendamento',
+                description: 'A clínica vende e agenda a consulta usando nosso sistema de agendamentos.',
+              },
+              {
+                step: '02',
                 icon: Building2,
                 title: 'Paciente vai à clínica',
                 description: 'O paciente é recebido na sua clínica com todo o acolhimento presencial.',
               },
               {
-                step: '02',
+                step: '03',
                 icon: UserCheck,
                 title: 'Apoio profissional',
                 description: 'Uma profissional de saúde acompanha o paciente durante toda a consulta.',
               },
               {
-                step: '03',
+                step: '04',
                 icon: MonitorPlay,
                 title: 'Especialista online',
                 description: 'O especialista realiza o atendimento pela tela, com apoio presencial.',
               },
               {
-                step: '04',
+                step: '05',
                 icon: Stethoscope,
                 title: 'Exames em tempo real',
                 description: 'A profissional auxilia na realização de exames e procedimentos.',
@@ -271,15 +278,15 @@ export function Telesaude() {
                 className="text-center"
               >
                 <div className="relative inline-flex mb-4">
-                  <div className="w-16 h-16 bg-primary-cyan/20 rounded-2xl flex items-center justify-center">
-                    <item.icon className="w-8 h-8 text-primary-cyan" />
+                  <div className="w-18 h-18 bg-primary-cyan/20 rounded-2xl flex items-center justify-center p-4">
+                    <item.icon className="w-10 h-10 text-primary-cyan" />
                   </div>
-                  <span className="absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full text-white text-xs font-bold flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 w-7 h-7 bg-emerald-500 rounded-full text-white text-sm font-bold flex items-center justify-center">
                     {item.step}
                   </span>
                 </div>
-                <h4 className="font-semibold text-white mb-2">{item.title}</h4>
-                <p className="text-white/60 text-sm">{item.description}</p>
+                <h4 className="font-semibold text-white mb-2 text-lg">{item.title}</h4>
+                <p className="text-white/60 text-base">{item.description}</p>
               </motion.div>
             ))}
           </div>

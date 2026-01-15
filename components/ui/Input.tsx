@@ -14,7 +14,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium text-primary-navy mb-2">
+          <label className="block text-base font-medium text-primary-navy mb-2">
             {label}
           </label>
         )}
@@ -27,7 +27,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             type={type}
             className={cn(
-              'w-full px-4 py-3 rounded-xl border-2 border-accent-light bg-white',
+              'w-full px-4 py-3.5 rounded-xl border-2 border-accent-light bg-white text-lg',
               'text-primary-navy placeholder:text-neutral-gray/50',
               'transition-all duration-300',
               'focus:outline-none focus:border-primary-cyan focus:ring-2 focus:ring-primary-cyan/20',
@@ -60,13 +60,13 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium text-primary-navy mb-2">
+          <label className="block text-base font-medium text-primary-navy mb-2">
             {label}
           </label>
         )}
         <textarea
           className={cn(
-            'w-full px-4 py-3 rounded-xl border-2 border-accent-light bg-white',
+            'w-full px-4 py-3.5 rounded-xl border-2 border-accent-light bg-white text-lg',
             'text-primary-navy placeholder:text-neutral-gray/50',
             'transition-all duration-300 resize-none',
             'focus:outline-none focus:border-primary-cyan focus:ring-2 focus:ring-primary-cyan/20',
@@ -98,13 +98,13 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium text-primary-navy mb-2">
+          <label className="block text-base font-medium text-primary-navy mb-2">
             {label}
           </label>
         )}
         <select
           className={cn(
-            'w-full px-4 py-3 rounded-xl border-2 border-accent-light bg-white',
+            'w-full px-4 py-3.5 rounded-xl border-2 border-accent-light bg-white text-lg',
             'text-primary-navy',
             'transition-all duration-300 cursor-pointer',
             'focus:outline-none focus:border-primary-cyan focus:ring-2 focus:ring-primary-cyan/20',

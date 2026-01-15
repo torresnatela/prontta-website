@@ -52,10 +52,10 @@ export function Hero() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 bg-accent-light px-4 py-2 rounded-full mb-6"
+              className="inline-flex items-center gap-2 bg-accent-light px-5 py-2.5 rounded-full mb-6"
             >
-              <span className="w-2 h-2 bg-primary-cyan rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-primary-navy">
+              <span className="w-2.5 h-2.5 bg-primary-cyan rounded-full animate-pulse" />
+              <span className="text-base font-medium text-primary-navy">
                 Soluções em saúde corporativa
               </span>
             </motion.div>
@@ -65,7 +65,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-navy leading-tight text-balance"
+              className="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-primary-navy leading-tight text-balance"
             >
               Terceirização médica{' '}
               <span className="gradient-text">inteligente</span>{' '}
@@ -77,7 +77,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="mt-6 text-lg md:text-xl text-neutral-gray max-w-lg leading-relaxed"
+              className="mt-6 text-xl md:text-2xl text-neutral-gray max-w-xl leading-relaxed"
             >
               Conectamos sua clínica aos melhores profissionais de saúde. 
               Reduza custos, aumente a qualidade do atendimento e foque no que importa: seus pacientes.
@@ -98,8 +98,8 @@ export function Hero() {
                   transition={{ delay: 0.6 + index * 0.1 }}
                   className="flex items-center gap-2"
                 >
-                  <CheckCircle2 className="w-5 h-5 text-primary-cyan" />
-                  <span className="text-primary-navy font-medium">{item}</span>
+                  <CheckCircle2 className="w-6 h-6 text-primary-cyan" />
+                  <span className="text-primary-navy font-medium text-lg">{item}</span>
                 </motion.div>
               ))}
             </motion.div>
@@ -142,29 +142,29 @@ export function Hero() {
                     whileHover={{ y: -5 }}
                     className="bg-accent-light rounded-2xl p-6"
                   >
-                    <div className="text-4xl font-display font-bold text-primary-cyan">98%</div>
-                    <div className="text-sm text-neutral-gray mt-1">Satisfação</div>
+                    <div className="text-5xl font-display font-bold text-primary-cyan">98%</div>
+                    <div className="text-base text-neutral-gray mt-2">Satisfação</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ y: -5 }}
                     className="bg-accent-light rounded-2xl p-6"
                   >
-                    <div className="text-4xl font-display font-bold text-primary-navy">500+</div>
-                    <div className="text-sm text-neutral-gray mt-1">Clínicas parceiras</div>
+                    <div className="text-5xl font-display font-bold text-primary-navy">500+</div>
+                    <div className="text-base text-neutral-gray mt-2">Clínicas parceiras</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ y: -5 }}
                     className="bg-accent-light rounded-2xl p-6"
                   >
-                    <div className="text-4xl font-display font-bold text-primary-cyan">50k+</div>
-                    <div className="text-sm text-neutral-gray mt-1">Atendimentos/mês</div>
+                    <div className="text-5xl font-display font-bold text-primary-cyan">50k+</div>
+                    <div className="text-base text-neutral-gray mt-2">Atendimentos/mês</div>
                   </motion.div>
                   <motion.div
                     whileHover={{ y: -5 }}
                     className="bg-accent-light rounded-2xl p-6"
                   >
-                    <div className="text-4xl font-display font-bold text-primary-navy">24h</div>
-                    <div className="text-sm text-neutral-gray mt-1">Suporte</div>
+                    <div className="text-5xl font-display font-bold text-primary-navy">24h</div>
+                    <div className="text-base text-neutral-gray mt-2">Suporte</div>
                   </motion.div>
                 </div>
 
@@ -194,15 +194,15 @@ export function Hero() {
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-8 -right-8 bg-white rounded-2xl shadow-xl p-4"
+              className="absolute -top-8 -right-8 bg-white rounded-2xl shadow-xl p-5"
             >
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
+                <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="w-7 h-7 text-green-600" />
                 </div>
                 <div>
-                  <div className="text-sm font-semibold text-primary-navy">Nova clínica</div>
-                  <div className="text-xs text-neutral-gray">Parceria confirmada</div>
+                  <div className="text-base font-semibold text-primary-navy">Nova clínica</div>
+                  <div className="text-sm text-neutral-gray">Parceria confirmada</div>
                 </div>
               </div>
             </motion.div>

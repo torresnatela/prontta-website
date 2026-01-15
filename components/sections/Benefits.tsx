@@ -95,14 +95,14 @@ export function Benefits() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <span className="inline-block px-4 py-2 bg-primary-cyan/10 text-primary-cyan font-medium rounded-full text-sm mb-4">
+          <span className="inline-block px-5 py-2.5 bg-primary-cyan/10 text-primary-cyan font-medium rounded-full text-base mb-4">
             Benefícios
           </span>
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-primary-navy mb-6">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-navy mb-6">
             Por que escolher a{' '}
             <span className="gradient-text">Prontta Saúde</span>?
           </h2>
-          <p className="text-neutral-gray text-lg">
+          <p className="text-neutral-gray text-xl">
             Oferecemos vantagens competitivas que transformam a gestão 
             de serviços médicos da sua clínica.
           </p>
@@ -123,21 +123,21 @@ export function Benefits() {
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
               className="group"
             >
-              <div className="bg-white rounded-2xl p-6 h-full shadow-lg shadow-primary-navy/5 border border-transparent hover:border-primary-cyan/20 transition-all duration-300">
+              <div className="bg-white rounded-2xl p-7 h-full shadow-lg shadow-primary-navy/5 border border-transparent hover:border-primary-cyan/20 transition-all duration-300">
                 {/* Icon */}
-                <div className="mb-4 relative">
-                  <div className="inline-flex p-3 bg-accent-light rounded-xl group-hover:bg-primary-cyan/10 transition-colors">
-                    <benefit.icon className="w-6 h-6 text-primary-cyan" />
+                <div className="mb-5 relative">
+                  <div className="inline-flex p-4 bg-accent-light rounded-xl group-hover:bg-primary-cyan/10 transition-colors">
+                    <benefit.icon className="w-7 h-7 text-primary-cyan" />
                   </div>
                   {/* Glow effect on hover */}
                   <div className="absolute inset-0 bg-primary-cyan/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
 
                 {/* Content */}
-                <h3 className="font-display text-lg font-bold text-primary-navy mb-2 group-hover:text-primary-cyan transition-colors">
+                <h3 className="font-display text-xl font-bold text-primary-navy mb-3 group-hover:text-primary-cyan transition-colors">
                   {benefit.title}
                 </h3>
-                <p className="text-neutral-gray text-sm leading-relaxed">
+                <p className="text-neutral-gray text-base leading-relaxed">
                   {benefit.description}
                 </p>
               </div>
@@ -179,10 +179,10 @@ export function Benefits() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <div className="text-4xl md:text-5xl font-display font-bold text-primary-cyan mb-2">
+                <div className="text-5xl md:text-6xl font-display font-bold text-primary-cyan mb-3">
                   {stat.value}
                 </div>
-                <div className="text-white/70">
+                <div className="text-white/70 text-lg">
                   {stat.label}
                 </div>
               </motion.div>

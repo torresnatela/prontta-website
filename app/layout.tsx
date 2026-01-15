@@ -76,14 +76,16 @@ export default function RootLayout({
               logo: 'https://pronttasaude.com.br/logo.png',
               contactPoint: {
                 '@type': 'ContactPoint',
-                telephone: '+55-11-99999-9999',
+                telephone: '+55-31-99333-3245',
                 contactType: 'sales',
                 availableLanguage: ['Portuguese'],
               },
               address: {
                 '@type': 'PostalAddress',
-                addressLocality: 'São Paulo',
-                addressRegion: 'SP',
+                streetAddress: 'Av. Pres. Eurico Dutra, 608 - Belvedere',
+                addressLocality: 'Belo Horizonte',
+                addressRegion: 'MG',
+                postalCode: '30320-190',
                 addressCountry: 'BR',
               },
               sameAs: [

@@ -37,7 +37,7 @@ const formSchema = z.object({
   companyName: z.string().min(2, 'Nome da empresa é obrigatório'),
   email: z.string().email('E-mail inválido'),
   phone: z.string().min(10, 'Telefone inválido'),
-  proposalType: z.enum(['agenda-on-demand', 'agenda-compartilhada', 'pacotes-atendimento']),
+  proposalType: z.enum(['agenda-on-demand', 'agenda-dedicada', 'pacotes-atendimento']),
   patientsPerMonth: z.number().min(1, 'Informe a quantidade de pacientes'),
   consultDuration: z.number().optional(),
 })
@@ -53,7 +53,7 @@ const steps = [
 
 const serviceIcons: Record<ProposalType, typeof CalendarClock> = {
   'agenda-on-demand': CalendarClock,
-  'agenda-compartilhada': CalendarRange,
+  'agenda-dedicada': CalendarRange,
   'pacotes-atendimento': Package,
 }
 
@@ -85,7 +85,7 @@ export function ProposalForm() {
   // Set service from URL param
   useEffect(() => {
     const servico = searchParams.get('servico')
-    if (servico && ['agenda-on-demand', 'agenda-compartilhada', 'pacotes-atendimento'].includes(servico)) {
+    if (servico && ['agenda-on-demand', 'agenda-dedicada', 'pacotes-atendimento'].includes(servico)) {
       setValue('proposalType', servico as ProposalType)
     }
   }, [searchParams, setValue])
@@ -224,7 +224,7 @@ export function ProposalForm() {
               <Input
                 label="Telefone"
                 type="tel"
-                placeholder="(11) 99999-9999"
+                placeholder="(31) 99999-9999"
                 icon={<Phone className="w-5 h-5" />}
                 error={errors.phone?.message}
                 {...register('phone')}
