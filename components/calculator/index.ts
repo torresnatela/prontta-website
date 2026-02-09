@@ -1,3 +1,2 @@
-export { ProposalForm } from './ProposalForm'
-export { ProposalResult } from './ProposalResult'
-
+export { ProposalProvider } from './ProposalContext'
+export { ProposalWizard } from './ProposalWizard'

@@ -139,7 +139,7 @@ export function Services() {
 
                   {/* CTA Link */}
                   <Link
-                    href={`/proposta?servico=${service.id}`}
+                    href="/proposta"
                     className="inline-flex items-center gap-2 text-primary-cyan font-semibold text-lg group/link"
                   >
                     Solicitar proposta

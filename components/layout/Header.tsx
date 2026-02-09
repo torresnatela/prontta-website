@@ -65,7 +65,7 @@ export function Header() {
           <div className="hidden lg:block">
             <Link href="/proposta">
               <Button variant="primary" size="md">
-                Solicitar Proposta
+                Simular Proposta
               </Button>
             </Link>
           </div>
@@ -119,7 +119,7 @@ export function Header() {
                 >
                   <Link href="/proposta" onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="primary" size="lg" className="w-full">
-                      Solicitar Proposta
+                      Simular Proposta
                     </Button>
                   </Link>
                 </motion.div>
