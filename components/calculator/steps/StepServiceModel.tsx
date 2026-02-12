@@ -24,8 +24,7 @@ export function StepServiceModel() {
           Modelos de Atendimento
         </h2>
         <p className="text-neutral-gray text-lg max-w-2xl mx-auto">
-          Escolha um ou ambos os modelos para compor sua operação. Você pode combinar
-          agenda compartilhada com pacotes dedicados.
+          Escolha um ou ambos os modelos para compor sua operação. Na agenda compartilhada você compra consultas avulsas nos mesmos preços da categoria Intermediária; pode combinar com pacotes dedicados.
         </p>
       </motion.div>
 
@@ -63,7 +62,7 @@ export function StepServiceModel() {
                     Agenda Compartilhada
                   </h3>
                   <p className="text-sm text-neutral-gray">
-                    Consultas avulsas em diversas especialidades
+                    Consultas avulsas com preços da categoria Intermediária — mesmo padrão de tempo e valor da agenda dedicada intermediária.
                   </p>
                 </div>
               </div>

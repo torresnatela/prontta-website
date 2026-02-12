@@ -123,9 +123,9 @@ export function calculateTotalEmployeesCost(employees: Employee[]): number {
   return employees.reduce((sum, emp) => sum + emp.custoTotal, 0)
 }
 
-// ---- Sugestao de Preco de Venda (margem de 30%) ----
+// ---- Sugestao de Preco de Venda (margem de 60% por padrao) ----
 
-export function suggestSellingPrice(costPerConsultation: number, marginPercent: number = 0.30): number {
+export function suggestSellingPrice(costPerConsultation: number, marginPercent: number = 0.60): number {
   return costPerConsultation / (1 - marginPercent)
 }
 

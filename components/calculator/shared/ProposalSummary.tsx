@@ -27,18 +27,21 @@ export function ProposalSummary() {
 
   return (
     <div className="space-y-6">
-      {/* Pacotes Agenda Dedicada */}
+      {/* 1. Agenda Dedicada — Resumo na proposta */}
       {state.dedicatedPackages.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+          className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
         >
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+          <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3 bg-gray-50/50">
             <CalendarRange className="w-5 h-5 text-primary-cyan" />
-            <h4 className="font-display font-bold text-primary-navy">
-              Pacotes - Agenda Dedicada
-            </h4>
+            <div>
+              <h4 className="font-display font-bold text-primary-navy">
+                1. Agenda Dedicada — Pacotes de Atendimento
+              </h4>
+              <p className="text-xs text-neutral-gray mt-0.5">Especialistas dedicados · plantões mensais · valor por consulta conforme categoria</p>
+            </div>
           </div>
           <div className="divide-y divide-gray-50">
             {state.dedicatedPackages.map((pkg) => (
@@ -48,63 +51,66 @@ export function ProposalSummary() {
                   <span className="text-sm text-neutral-gray ml-2">
                     ({CATEGORIES[pkg.category].label})
                   </span>
-                  <div className="text-xs text-neutral-gray">
-                    {pkg.quantity} pacote{pkg.quantity > 1 ? 's' : ''} &middot; {pkg.totalConsultations} consultas &middot; {formatCurrency(pkg.pricePerConsultation)}/consulta
+                  <div className="text-xs text-neutral-gray mt-0.5">
+                    {pkg.quantity} pacote{pkg.quantity > 1 ? 's' : ''} &middot; {pkg.totalConsultations} consultas/mês &middot; {formatCurrency(pkg.pricePerConsultation)}/consulta
                   </div>
                 </div>
-                <span className="font-semibold text-primary-navy">{formatCurrency(pkg.totalCost)}</span>
+                <span className="font-semibold text-primary-navy">{formatCurrency(pkg.totalCost)}/mês</span>
               </div>
             ))}
             <div className="px-6 py-3.5 bg-gray-50 flex items-center justify-between">
-              <span className="font-semibold text-primary-navy">Subtotal Agenda Dedicada</span>
-              <span className="font-bold text-primary-navy">{formatCurrency(dedicatedCost)}</span>
+              <span className="font-semibold text-primary-navy">Subtotal — Agenda Dedicada</span>
+              <span className="font-bold text-primary-navy">{formatCurrency(dedicatedCost)}/mês</span>
             </div>
           </div>
         </motion.div>
       )}
 
-      {/* Consultas Avulsas */}
+      {/* 2. Consultas Avulsas — Resumo na proposta */}
       {state.sharedConsultations.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+          className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
         >
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+          <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3 bg-gray-50/50">
             <MonitorPlay className="w-5 h-5 text-primary-cyan" />
-            <h4 className="font-display font-bold text-primary-navy">
-              Consultas Avulsas - Agenda Compartilhada
-            </h4>
+            <div>
+              <h4 className="font-display font-bold text-primary-navy">
+                2. Consultas Avulsas — Agenda Compartilhada
+              </h4>
+              <p className="text-xs text-neutral-gray mt-0.5">Preços categoria Intermediária · diversas especialidades · sem compromisso de pacote</p>
+            </div>
           </div>
           <div className="divide-y divide-gray-50">
             {state.sharedConsultations.map((sc) => (
               <div key={sc.id} className="px-6 py-3.5 flex items-center justify-between">
                 <div>
                   <span className="font-medium text-primary-navy">{sc.specialty}</span>
-                  <div className="text-xs text-neutral-gray">
-                    {sc.quantity} consultas &middot; {formatCurrency(sc.pricePerConsultation)}/consulta
+                  <div className="text-xs text-neutral-gray mt-0.5">
+                    {sc.quantity} consultas/mês &middot; {formatCurrency(sc.pricePerConsultation)}/consulta
                   </div>
                 </div>
-                <span className="font-semibold text-primary-navy">{formatCurrency(sc.totalCost)}</span>
+                <span className="font-semibold text-primary-navy">{formatCurrency(sc.totalCost)}/mês</span>
               </div>
             ))}
             <div className="px-6 py-3.5 bg-gray-50 flex items-center justify-between">
-              <span className="font-semibold text-primary-navy">Subtotal Consultas Avulsas</span>
-              <span className="font-bold text-primary-navy">{formatCurrency(sharedCost)}</span>
+              <span className="font-semibold text-primary-navy">Subtotal — Consultas Avulsas</span>
+              <span className="font-bold text-primary-navy">{formatCurrency(sharedCost)}/mês</span>
             </div>
           </div>
         </motion.div>
       )}
 
-      {/* Infraestrutura */}
+      {/* 3. Infraestrutura */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
       >
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+        <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3 bg-gray-50/50">
           <Building2 className="w-5 h-5 text-primary-cyan" />
-          <h4 className="font-display font-bold text-primary-navy">Infraestrutura</h4>
+          <h4 className="font-display font-bold text-primary-navy">3. Infraestrutura</h4>
         </div>
         <div className="px-6 py-3.5 flex items-center justify-between">
           <div>
@@ -133,15 +139,15 @@ export function ProposalSummary() {
         </div>
       </motion.div>
 
-      {/* Software */}
+      {/* 4. Software */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
       >
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+        <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3 bg-gray-50/50">
           <Monitor className="w-5 h-5 text-primary-cyan" />
-          <h4 className="font-display font-bold text-primary-navy">Software de Telemedicina</h4>
+          <h4 className="font-display font-bold text-primary-navy">4. Software de Telemedicina</h4>
         </div>
         <div className="px-6 py-3.5 flex items-center justify-between">
           <div>
@@ -157,15 +163,15 @@ export function ProposalSummary() {
         </div>
       </motion.div>
 
-      {/* Implantacao */}
+      {/* 5. Implantação */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden"
       >
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+        <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3 bg-gray-50/50">
           <Rocket className="w-5 h-5 text-primary-cyan" />
-          <h4 className="font-display font-bold text-primary-navy">Implantação</h4>
+          <h4 className="font-display font-bold text-primary-navy">5. Implantação</h4>
         </div>
         <div className="px-6 py-3.5 flex items-center justify-between">
           <span className="font-medium text-primary-navy">Projeto de implantação</span>

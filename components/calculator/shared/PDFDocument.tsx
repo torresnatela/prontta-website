@@ -167,10 +167,6 @@ function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
   const infraData = state.infrastructure ? INFRASTRUCTURE_OPTIONS[state.infrastructure.option] : null
   const date = new Date().toLocaleDateString('pt-BR')
 
-  // #region agent log
-  if (typeof fetch !== 'undefined') fetch('http://127.0.0.1:7250/ingest/aa1abfe3-81d7-4e72-b278-85b033756b31',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PDFDocument.tsx:ProposalPDF',message:'render',data:{hasInfraData:!!infraData,dedicatedLen:state.dedicatedPackages?.length,sharedLen:state.sharedConsultations?.length,receitaBruta:dre.receitaBruta,secondPageRendered:dre.receitaBruta>0},timestamp:Date.now(),hypothesisId:'H1'})}).catch(()=>{});
-  // #endregion
-
   return (
     <Document>
       {/* Page 1: Proposta Comercial */}
@@ -204,7 +200,7 @@ function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
         {/* Consultas Compartilhadas */}
         {state.sharedConsultations.length > 0 ? (
           <View>
-            <Text style={styles.sectionTitle}>Consultas Avulsas — Agenda Compartilhada</Text>
+            <Text style={styles.sectionTitle}>Consultas Avulsas — Agenda Compartilhada (preços Intermediários)</Text>
             {state.sharedConsultations.map((sc, i) => (
               <View key={i} style={i % 2 === 0 ? styles.row : styles.rowAlt}>
                 <Text style={styles.rowLabel}>
@@ -406,22 +402,7 @@ function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
 }
 
 export async function generateProposalPDF(state: ProposalState, dre: DREResult) {
-  // #region agent log
-  fetch('http://127.0.0.1:7250/ingest/aa1abfe3-81d7-4e72-b278-85b033756b31',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PDFDocument.tsx:generateProposalPDF',message:'entry',data:{stateUndefined:state===undefined,dreUndefined:dre===undefined,receitaBruta:dre?.receitaBruta},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
-  // #endregion
-  let blob: Blob
-  try {
-    blob = await pdf(<ProposalPDF state={state} dre={dre} />).toBlob()
-  } catch (err) {
-    // #region agent log
-    const e = err as Error
-    fetch('http://127.0.0.1:7250/ingest/aa1abfe3-81d7-4e72-b278-85b033756b31',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PDFDocument.tsx:generateProposalPDF',message:'pdf error',data:{message:e?.message,stack:e?.stack},timestamp:Date.now(),hypothesisId:'H6'})}).catch(()=>{});
-    // #endregion
-    throw err
-  }
-  // #region agent log
-  fetch('http://127.0.0.1:7250/ingest/aa1abfe3-81d7-4e72-b278-85b033756b31',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'PDFDocument.tsx:generateProposalPDF',message:'pdf toBlob done',data:{},timestamp:Date.now(),hypothesisId:'H2'})}).catch(()=>{});
-  // #endregion
+  const blob = await pdf(<ProposalPDF state={state} dre={dre} />).toBlob()
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url

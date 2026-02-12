@@ -108,8 +108,14 @@ function reducer(state: ProposalState, action: Action): ProposalState {
     case 'PREV_STEP':
       return { ...state, currentStep: Math.max(state.currentStep - 1, 0) }
 
-    case 'TOGGLE_SHARED_AGENDA':
-      return { ...state, useSharedAgenda: !state.useSharedAgenda }
+    case 'TOGGLE_SHARED_AGENDA': {
+      const nextShared = !state.useSharedAgenda
+      return {
+        ...state,
+        useSharedAgenda: nextShared,
+        sharedConsultations: nextShared ? state.sharedConsultations : [],
+      }
+    }
 
     case 'TOGGLE_DEDICATED_AGENDA':
       return { ...state, useDedicatedAgenda: !state.useDedicatedAgenda }

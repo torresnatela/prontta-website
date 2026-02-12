@@ -17,7 +17,7 @@ const features = [
   {
     icon: MonitorPlay,
     title: 'Agenda Compartilhada',
-    description: 'Compre consultas avulsas de diversas especialidades em uma agenda compartilhada com preços acessíveis.',
+    description: 'Compre consultas avulsas de diversas especialidades. Os preços são os mesmos da categoria Intermediária da agenda dedicada — equilíbrio entre volume e tempo por consulta.',
   },
   {
     icon: CalendarRange,
