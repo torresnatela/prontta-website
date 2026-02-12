@@ -17,6 +17,8 @@ import {
   calculateSoftwareCost,
   calculateTotalMonthlyCost,
   calculateOneTimeInvestment,
+  calculateCompanyTotalConsultations,
+  calculateCompanyTotalMonthlyCost,
 } from '@/lib/pricing-engine'
 
 const styles = StyleSheet.create({
@@ -160,23 +162,69 @@ function formatBRL(value: number): string {
 }
 
 function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
-  const totalConsultations = calculateTotalMonthlyConsultations(state)
+  const date = new Date().toLocaleDateString('pt-BR')
+  const isEmpresa = state.clientCategory === 'empresa'
+  const isMunicipio = state.clientCategory === 'municipio'
+  const showDRE = !isMunicipio && !isEmpresa && dre.receitaBruta > 0
+
+  const totalConsultations = isEmpresa
+    ? calculateCompanyTotalConsultations(state.employeePackages, state.numberOfEmployees)
+    : calculateTotalMonthlyConsultations(state)
   const softwareCost = calculateSoftwareCost(totalConsultations)
-  const totalMonthly = calculateTotalMonthlyCost(state)
+  const totalMonthly = isEmpresa
+    ? calculateCompanyTotalMonthlyCost(state)
+    : calculateTotalMonthlyCost(state)
   const oneTimeInvestment = calculateOneTimeInvestment(state)
   const infraData = state.infrastructure ? INFRASTRUCTURE_OPTIONS[state.infrastructure.option] : null
-  const date = new Date().toLocaleDateString('pt-BR')
+
+  const costPerEmployeeTotal =
+    isEmpresa && state.employeePackages.length > 0
+      ? state.employeePackages.reduce((sum, pkg) => sum + pkg.costPerEmployee, 0)
+      : 0
 
   return (
     <Document>
-      {/* Page 1: Proposta Comercial */}
+      {/* Page 1: Proposta Comercial (ou Plano Empresarial) */}
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.title}>Proposta Comercial</Text>
+          <Text style={styles.title}>
+            {isEmpresa ? 'Proposta Comercial — Plano Empresarial' : 'Proposta Comercial'}
+          </Text>
           <Text style={styles.subtitle}>Prontta Saúde — Simulação gerada em {date}</Text>
         </View>
 
-        {/* Pacotes Dedicados */}
+        {isEmpresa ? (
+          <>
+            {/* Empresa: Pacotes por colaborador */}
+            {state.employeePackages.map((pkg) => (
+              <View key={pkg.id}>
+                <Text style={styles.sectionTitle}>{pkg.name}</Text>
+                {pkg.items.map((item, i) => (
+                  <View key={item.id} style={i % 2 === 0 ? styles.row : styles.rowAlt}>
+                    <Text style={styles.rowLabel}>
+                      {item.specialty} — {item.quantityPerEmployee} consultas/colab. × {formatBRL(item.pricePerConsultation)}
+                    </Text>
+                    <Text style={styles.rowValue}>{formatBRL(item.costPerEmployee)}/colab.</Text>
+                  </View>
+                ))}
+                <View style={styles.rowBold}>
+                  <Text style={styles.rowLabelBold}>
+                    Por colaborador / Total ({state.numberOfEmployees} colab.)
+                  </Text>
+                  <Text style={styles.rowValue}>
+                    {formatBRL(pkg.costPerEmployee)} / {formatBRL(pkg.costPerEmployee * state.numberOfEmployees)}/mês
+                  </Text>
+                </View>
+              </View>
+            ))}
+            <View style={styles.rowBold}>
+              <Text style={styles.rowLabelBold}>Colaboradores</Text>
+              <Text style={styles.rowValue}>{state.numberOfEmployees}</Text>
+            </View>
+          </>
+        ) : (
+          <>
+            {/* Pacotes Dedicados */}
         {state.dedicatedPackages.length > 0 ? (
           <View>
             <Text style={styles.sectionTitle}>Pacotes — Agenda Dedicada</Text>
@@ -217,6 +265,8 @@ function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
             </View>
           </View>
         ) : null}
+          </>
+        )}
 
         {/* Infraestrutura */}
         <Text style={styles.sectionTitle}>Infraestrutura</Text>
@@ -268,6 +318,14 @@ function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
                 {totalConsultations}
               </Text>
             </View>
+            {isEmpresa && costPerEmployeeTotal > 0 ? (
+              <View>
+                <Text style={styles.totalLabel}>Custo por colaborador/mês</Text>
+                <Text style={{ ...styles.totalValue, fontSize: 16, color: '#FFFFFF' }}>
+                  {formatBRL(costPerEmployeeTotal)}
+                </Text>
+              </View>
+            ) : null}
             {oneTimeInvestment > 0 ? (
               <View>
                 <Text style={styles.totalLabel}>Investimento inicial</Text>
@@ -288,8 +346,8 @@ function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
         </Text>
       </Page>
 
-      {/* Page 2: DRE - use ternary so Document never receives false as child (react-pdf may call hasOwnProperty on children) */}
-      {dre.receitaBruta > 0 ? (
+      {/* Page 2: DRE (apenas estabelecimento) */}
+      {showDRE ? (
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
             <Text style={styles.title}>Simulação de Rentabilidade</Text>

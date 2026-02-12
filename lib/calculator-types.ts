@@ -39,6 +39,26 @@ export interface SharedConsultation {
   totalCost: number
 }
 
+// Categoria do cliente (determina o fluxo do wizard)
+export type ClientCategory = 'municipio' | 'estabelecimento' | 'empresa'
+
+// Especialidade dentro de um pacote de empresa (sempre intermediaria)
+export interface EmployeePackageItem {
+  id: string
+  specialty: string
+  quantityPerEmployee: number // consultas/mes por colaborador
+  pricePerConsultation: number // preco intermediario da specialty
+  costPerEmployee: number // quantityPerEmployee * pricePerConsultation
+}
+
+// Pacote nomeado que sera distribuido por colaborador
+export interface EmployeePackage {
+  id: string
+  name: string // ex: "Pacote Saude Mental"
+  items: EmployeePackageItem[]
+  costPerEmployee: number // soma dos items.costPerEmployee
+}
+
 export type InfrastructureOption = 'propria' | 'totem' | 'cabine'
 export type PaymentMode = 'compra' | 'aluguel'
 
@@ -76,10 +96,17 @@ export interface SellingPrice {
 export interface ProposalState {
   currentStep: number
 
-  // Step 2 - Modelos de Atendimento
+  // Step 1 - Categoria do Cliente
+  clientCategory: ClientCategory | null
+
+  // Step 2 - Modelos de Atendimento (municipio / estabelecimento)
   useSharedAgenda: boolean
   useDedicatedAgenda: boolean
   dedicatedPackages: DedicatedPackage[]
+
+  // Empresa only - Step 2 (Pacotes por Colaborador)
+  employeePackages: EmployeePackage[]
+  numberOfEmployees: number
 
   // Step 3 - Infraestrutura
   infrastructure: InfrastructureSelection

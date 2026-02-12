@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Plus, Trash2, ChevronDown, CalendarRange } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Plus, Trash2, ChevronDown, CalendarRange, FileDown } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useProposal } from '../ProposalContext'
 import { ProposalSummary } from '../shared/ProposalSummary'
@@ -61,14 +61,47 @@ export function StepProposal() {
           <ArrowLeft className="mr-2 w-4 h-4" />
           Voltar
         </Button>
-        <Button
-          variant="primary"
-          size="md"
-          onClick={() => dispatch({ type: 'NEXT_STEP' })}
-        >
-          Simulador de Rentabilidade
-          <ArrowRight className="ml-2 w-4 h-4" />
-        </Button>
+        {state.clientCategory === 'municipio' ? (
+          <Button
+            variant="primary"
+            size="md"
+            onClick={async () => {
+              const { generateProposalPDF } = await import('../shared/PDFDocument')
+              const emptyDRE = {
+                receitaDedicada: 0,
+                receitaCompartilhada: 0,
+                receitaBruta: 0,
+                impostos: 0,
+                receitaLiquida: 0,
+                custoDedicada: 0,
+                custoCompartilhada: 0,
+                custoSoftware: 0,
+                custoInfraestrutura: 0,
+                totalCustos: 0,
+                lucroBruto: 0,
+                margemBruta: 0,
+                custoFuncionarios: 0,
+                despesasFixas: 0,
+                totalDespesas: 0,
+                resultadoOperacional: 0,
+                margemOperacional: 0,
+              }
+              generateProposalPDF(state, emptyDRE)
+            }}
+          >
+            <FileDown className="mr-2 w-4 h-4" />
+            Exportar Proposta
+          </Button>
+        ) : (
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() => dispatch({ type: 'NEXT_STEP' })}
+          >
+            Simulador de Rentabilidade
+            <ArrowRight className="ml-2 w-4 h-4" />
+          </Button>
+        )}
       </div>
     </div>
   )

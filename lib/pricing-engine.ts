@@ -11,6 +11,7 @@ import type {
   ServiceCategory,
   SellingPrice,
   Employee,
+  EmployeePackage,
 } from './calculator-types'
 import {
   DEDICATED_SPECIALTIES,
@@ -85,6 +86,38 @@ export function calculateInfrastructureMonthlyCost(infra: InfrastructureSelectio
 
 export function calculateSoftwareCost(totalMonthlyConsultations: number): number {
   return totalMonthlyConsultations >= SOFTWARE_FREE_THRESHOLD ? 0 : SOFTWARE_MONTHLY_COST
+}
+
+// ---- Empresa (Pacotes por Colaborador) ----
+
+export function calculateEmployeePackageCostPerEmployee(pkg: EmployeePackage): number {
+  return pkg.items.reduce((sum, item) => sum + item.costPerEmployee, 0)
+}
+
+export function calculateCompanyTotalConsultations(
+  packages: EmployeePackage[],
+  numberOfEmployees: number
+): number {
+  const perEmployee = packages.reduce(
+    (sum, pkg) =>
+      sum + pkg.items.reduce((s, item) => s + item.quantityPerEmployee, 0),
+    0
+  )
+  return perEmployee * numberOfEmployees
+}
+
+export function calculateCompanyTotalMonthlyCost(state: ProposalState): number {
+  const packagesCost = state.employeePackages.reduce(
+    (sum, pkg) => sum + pkg.costPerEmployee * state.numberOfEmployees,
+    0
+  )
+  const totalConsultations = calculateCompanyTotalConsultations(
+    state.employeePackages,
+    state.numberOfEmployees
+  )
+  const softwareCost = calculateSoftwareCost(totalConsultations)
+  const infraCost = state.infrastructure.monthlyCost
+  return packagesCost + softwareCost + infraCost
 }
 
 // ---- Total de Consultas ----

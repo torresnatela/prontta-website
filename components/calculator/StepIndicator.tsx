@@ -4,25 +4,17 @@ import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const STEPS = [
-  { label: 'Introdução' },
-  { label: 'Modelos' },
-  { label: 'Infraestrutura' },
-  { label: 'Implantação' },
-  { label: 'Proposta' },
-  { label: 'Rentabilidade' },
-]
-
 interface StepIndicatorProps {
   currentStep: number
+  steps: { label: string }[]
   onStepClick?: (step: number) => void
 }
 
-export function StepIndicator({ currentStep, onStepClick }: StepIndicatorProps) {
+export function StepIndicator({ currentStep, steps, onStepClick }: StepIndicatorProps) {
   return (
     <div className="w-full py-6">
       <div className="flex items-center justify-between max-w-4xl mx-auto px-4">
-        {STEPS.map((step, index) => {
+        {steps.map((step, index) => {
           const isCompleted = index < currentStep
           const isActive = index === currentStep
 
@@ -66,7 +58,7 @@ export function StepIndicator({ currentStep, onStepClick }: StepIndicatorProps) 
               </button>
 
               {/* Connector Line */}
-              {index < STEPS.length - 1 && (
+              {index < steps.length - 1 && (
                 <div className="flex-1 h-0.5 mx-2 mt-[-20px] sm:mt-[-24px]">
                   <div
                     className={cn(

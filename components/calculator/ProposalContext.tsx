@@ -10,6 +10,9 @@ import type {
   FixedExpense,
   SellingPrice,
   ServiceCategory,
+  ClientCategory,
+  EmployeePackage,
+  EmployeePackageItem,
 } from '@/lib/calculator-types'
 import {
   getConsultationsPerPackage,
@@ -23,9 +26,14 @@ import { DEFAULT_TAX_PERCENTAGE } from '@/lib/pricing-data'
 const initialState: ProposalState = {
   currentStep: 0,
 
+  clientCategory: null,
+
   useSharedAgenda: false,
   useDedicatedAgenda: false,
   dedicatedPackages: [],
+
+  employeePackages: [],
+  numberOfEmployees: 0,
 
   infrastructure: {
     option: 'propria',
@@ -68,9 +76,40 @@ type Action =
   | { type: 'ADD_FIXED_EXPENSE'; categoria: string; valor: number }
   | { type: 'UPDATE_FIXED_EXPENSE'; id: string; valor: number }
   | { type: 'REMOVE_FIXED_EXPENSE'; id: string }
+  | { type: 'SET_CLIENT_CATEGORY'; category: ClientCategory }
+  | { type: 'ADD_EMPLOYEE_PACKAGE'; name: string }
+  | { type: 'UPDATE_EMPLOYEE_PACKAGE_NAME'; id: string; name: string }
+  | { type: 'REMOVE_EMPLOYEE_PACKAGE'; id: string }
+  | { type: 'ADD_EMPLOYEE_PACKAGE_ITEM'; packageId: string; specialty: string }
+  | { type: 'UPDATE_EMPLOYEE_PACKAGE_ITEM'; packageId: string; itemId: string; quantityPerEmployee: number }
+  | { type: 'REMOVE_EMPLOYEE_PACKAGE_ITEM'; packageId: string; itemId: string }
+  | { type: 'SET_NUMBER_OF_EMPLOYEES'; count: number }
 
 function generateId() {
   return Math.random().toString(36).substring(2, 9)
+}
+
+function getMaxStep(clientCategory: ClientCategory | null): number {
+  if (clientCategory === null) return 1 // Intro, then ClientCategory
+  if (clientCategory === 'municipio') return 5 // Intro, Cat, Modelos, Infra, Implant, Proposta
+  if (clientCategory === 'estabelecimento') return 6 // + Rentabilidade
+  return 5 // empresa: Intro, Cat, Pacotes, Infra, Implant, PropostaEmpresa
+}
+
+function buildEmployeePackageItem(specialty: string, quantityPerEmployee: number): EmployeePackageItem {
+  const pricePerConsultation = getPackagePrice(specialty, 'intermediaria')
+  return {
+    id: generateId(),
+    specialty,
+    quantityPerEmployee,
+    pricePerConsultation,
+    costPerEmployee: quantityPerEmployee * pricePerConsultation,
+  }
+}
+
+function recalcEmployeePackageCost(pkg: EmployeePackage): EmployeePackage {
+  const costPerEmployee = pkg.items.reduce((sum, item) => sum + item.costPerEmployee, 0)
+  return { ...pkg, costPerEmployee }
 }
 
 function buildDedicatedPackage(
@@ -99,14 +138,21 @@ function buildDedicatedPackage(
 
 function reducer(state: ProposalState, action: Action): ProposalState {
   switch (action.type) {
-    case 'SET_STEP':
-      return { ...state, currentStep: action.step }
+    case 'SET_STEP': {
+      const max = getMaxStep(state.clientCategory)
+      return { ...state, currentStep: Math.max(0, Math.min(action.step, max)) }
+    }
 
-    case 'NEXT_STEP':
-      return { ...state, currentStep: Math.min(state.currentStep + 1, 5) }
+    case 'NEXT_STEP': {
+      const max = getMaxStep(state.clientCategory)
+      return { ...state, currentStep: Math.min(state.currentStep + 1, max) }
+    }
 
     case 'PREV_STEP':
       return { ...state, currentStep: Math.max(state.currentStep - 1, 0) }
+
+    case 'SET_CLIENT_CATEGORY':
+      return { ...state, clientCategory: action.category }
 
     case 'TOGGLE_SHARED_AGENDA': {
       const nextShared = !state.useSharedAgenda
@@ -230,6 +276,69 @@ function reducer(state: ProposalState, action: Action): ProposalState {
         ...state,
         fixedExpenses: state.fixedExpenses.filter((e) => e.id !== action.id),
       }
+
+    case 'ADD_EMPLOYEE_PACKAGE': {
+      const pkg: EmployeePackage = {
+        id: generateId(),
+        name: action.name || 'Novo pacote',
+        items: [],
+        costPerEmployee: 0,
+      }
+      return { ...state, employeePackages: [...state.employeePackages, pkg] }
+    }
+
+    case 'UPDATE_EMPLOYEE_PACKAGE_NAME': {
+      const packages = state.employeePackages.map((p) =>
+        p.id === action.id ? { ...p, name: action.name } : p
+      )
+      return { ...state, employeePackages: packages }
+    }
+
+    case 'REMOVE_EMPLOYEE_PACKAGE':
+      return {
+        ...state,
+        employeePackages: state.employeePackages.filter((p) => p.id !== action.id),
+      }
+
+    case 'ADD_EMPLOYEE_PACKAGE_ITEM': {
+      const item = buildEmployeePackageItem(action.specialty, 1)
+      const packages = state.employeePackages.map((p) => {
+        if (p.id !== action.packageId) return p
+        const items = [...p.items, item]
+        const costPerEmployee = items.reduce((sum, i) => sum + i.costPerEmployee, 0)
+        return { ...p, items, costPerEmployee }
+      })
+      return { ...state, employeePackages: packages }
+    }
+
+    case 'UPDATE_EMPLOYEE_PACKAGE_ITEM': {
+      const packages = state.employeePackages.map((p) => {
+        if (p.id !== action.packageId) return p
+        const items = p.items.map((i) => {
+          if (i.id !== action.itemId) return i
+          const costPerEmployee = action.quantityPerEmployee * i.pricePerConsultation
+          return {
+            ...i,
+            quantityPerEmployee: action.quantityPerEmployee,
+            costPerEmployee,
+          }
+        })
+        return recalcEmployeePackageCost({ ...p, items })
+      })
+      return { ...state, employeePackages: packages }
+    }
+
+    case 'REMOVE_EMPLOYEE_PACKAGE_ITEM': {
+      const packages = state.employeePackages.map((p) => {
+        if (p.id !== action.packageId) return p
+        const items = p.items.filter((i) => i.id !== action.itemId)
+        return recalcEmployeePackageCost({ ...p, items })
+      })
+      return { ...state, employeePackages: packages }
+    }
+
+    case 'SET_NUMBER_OF_EMPLOYEES':
+      return { ...state, numberOfEmployees: Math.max(0, action.count) }
 
     default:
       return state
