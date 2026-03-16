@@ -59,7 +59,7 @@ function createSpecialtyPricing(
   intConsPerHour: number,
   intPrice: number,
   premConsPerHour: number,
-  premPrice: number
+  premPrice: number,
 ): SpecialtyPricing {
   return {
     popular: {
@@ -79,14 +79,14 @@ function createSpecialtyPricing(
 
 export const DEDICATED_SPECIALTIES: Record<string, SpecialtyPricing> = {
   "Médico Generalista": createSpecialtyPricing(
-    2.4,
+    2.5,
     60.0,
     2.0,
     75.0,
     1.5,
-    100.0
+    100.0,
   ),
-  Cardiologista: createSpecialtyPricing(2.4, 90.0, 2.0, 110.0, 1.5, 220.0),
+  Cardiologista: createSpecialtyPricing(2.5, 90.0, 2.0, 110.0, 1.5, 220.0),
   Dermatologia: createSpecialtyPricing(2.5, 90.0, 2.0, 110.0, 1.0, 220.0),
   Endocrinologia: createSpecialtyPricing(2.5, 90.0, 2.0, 110.0, 1.0, 220.0),
   Fonoaudiologia: createSpecialtyPricing(2, 55.0, 2.0, 83.0, 1.0, 109.09),
@@ -96,7 +96,7 @@ export const DEDICATED_SPECIALTIES: Record<string, SpecialtyPricing> = {
     2.0,
     109.09,
     1.0,
-    218.18
+    218.18,
   ),
   Geriatria: createSpecialtyPricing(2.5, 90.0, 2.0, 110.0, 1.0, 220.0),
   Ginecologia: createSpecialtyPricing(2.5, 90.0, 2.0, 110.0, 1.0, 220.0),
@@ -108,7 +108,7 @@ export const DEDICATED_SPECIALTIES: Record<string, SpecialtyPricing> = {
     2.0,
     110.0,
     1.0,
-    218.18
+    218.18,
   ),
   Nefrologia: createSpecialtyPricing(2.5, 90.0, 2.0, 110.0, 1.0, 220.0),
   Neurologia: createSpecialtyPricing(2.5, 110.0, 2.0, 140.0, 1.0, 272.73),
@@ -123,7 +123,7 @@ export const DEDICATED_SPECIALTIES: Record<string, SpecialtyPricing> = {
     2.0,
     110.0,
     1.0,
-    220.0
+    220.0,
   ),
   Pediatria: createSpecialtyPricing(2.5, 110.0, 2.0, 136.36, 1.0, 272.73),
   Pneumologia: createSpecialtyPricing(2.5, 110.0, 2.0, 136.36, 1.0, 272.73),
