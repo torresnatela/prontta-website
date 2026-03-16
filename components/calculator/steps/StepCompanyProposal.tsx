@@ -51,7 +51,7 @@ export function StepCompanyProposal() {
   )
 
   const handleExportPDF = async () => {
-    const { generateProposalPDF } = await import('../shared/PDFDocument')
+    const { generateProposalPDF } = await import('../shared/pdf')
     generateProposalPDF(state, emptyDRE)
   }
 

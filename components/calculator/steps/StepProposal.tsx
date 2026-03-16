@@ -66,7 +66,7 @@ export function StepProposal() {
             variant="primary"
             size="md"
             onClick={async () => {
-              const { generateProposalPDF } = await import('../shared/PDFDocument')
+              const { generateProposalPDF } = await import('../shared/pdf')
               const emptyDRE = {
                 receitaDedicada: 0,
                 receitaCompartilhada: 0,

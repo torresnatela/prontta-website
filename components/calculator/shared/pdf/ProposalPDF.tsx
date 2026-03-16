@@ -6,10 +6,9 @@ import {
   Text,
   View,
   StyleSheet,
-  pdf,
 } from '@react-pdf/renderer'
 import type { ProposalState, DREResult } from '@/lib/calculator-types'
-import { CATEGORIES, INFRASTRUCTURE_OPTIONS, SOFTWARE_MONTHLY_COST } from '@/lib/pricing-data'
+import { CATEGORIES, INFRASTRUCTURE_OPTIONS } from '@/lib/pricing-data'
 import {
   calculateDedicatedPackagesCost,
   calculateSharedConsultationsCost,
@@ -161,7 +160,7 @@ function formatBRL(value: number): string {
   return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
-function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
+export function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
   const date = new Date().toLocaleDateString('pt-BR')
   const isEmpresa = state.clientCategory === 'empresa'
   const isMunicipio = state.clientCategory === 'municipio'
@@ -457,16 +456,4 @@ function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
       ) : null}
     </Document>
   )
-}
-
-export async function generateProposalPDF(state: ProposalState, dre: DREResult) {
-  const blob = await pdf(<ProposalPDF state={state} dre={dre} />).toBlob()
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `proposta-prontta-saude-${new Date().toISOString().split('T')[0]}.pdf`
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(url)
 }

@@ -53,7 +53,7 @@ export function StepProfitability() {
 
   const handleExportPDF = async () => {
     // Dynamic import to keep bundle size small
-    const { generateProposalPDF } = await import('../shared/PDFDocument')
+    const { generateProposalPDF } = await import('../shared/pdf')
     generateProposalPDF(state, dre)
   }
 
