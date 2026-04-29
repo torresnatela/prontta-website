@@ -28,7 +28,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação clínica geral, triagem e acompanhamento de queixas comuns.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 94.59 },
+      { consultsPerHour: 2.5, pricePerConsultation: 95 },
       { consultsPerHour: 2.0, pricePerConsultation: 118.24 },
       { consultsPerHour: 1.5, pricePerConsultation: 115.0 },
     ),
@@ -47,7 +47,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Cuidado longitudinal e contínuo para indivíduos e famílias.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 158.56 },
       { consultsPerHour: 1.0, pricePerConsultation: 250.91 },
     ),
@@ -65,7 +65,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Acompanhamento clínico do paciente idoso e suas comorbidades.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 158.56 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -86,7 +86,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Atendimento psicológico para adultos, com foco em ansiedade, depressão e questões do cotidiano.",
     pricing: tiers(
-      { consultsPerHour: 2.0, pricePerConsultation: 72.07 },
+      { consultsPerHour: 2.0, pricePerConsultation: 73 },
       { consultsPerHour: 1.33, pricePerConsultation: 78.62 },
       { consultsPerHour: 1.0, pricePerConsultation: 103.5 },
     ),
@@ -105,7 +105,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Atendimento psicológico voltado para crianças e adolescentes.",
     pricing: tiers(
-      { consultsPerHour: 2.0, pricePerConsultation: 121.93 },
+      { consultsPerHour: 2.0, pricePerConsultation: 122 },
       { consultsPerHour: 1.33, pricePerConsultation: 133.01 },
       { consultsPerHour: 1.0, pricePerConsultation: 199.52 },
     ),
@@ -124,7 +124,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação psiquiátrica e manejo medicamentoso para adultos.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 157.24 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -143,7 +143,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação psiquiátrica especializada para crianças e adolescentes.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 194.59 },
+      { consultsPerHour: 2.5, pricePerConsultation: 195 },
       { consultsPerHour: 2.0, pricePerConsultation: 235.86 },
       { consultsPerHour: 1.0, pricePerConsultation: 475.66 },
     ),
@@ -163,7 +163,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Cuidado clínico de crianças e adolescentes, do crescimento à doença aguda.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 162.16 },
+      { consultsPerHour: 2.5, pricePerConsultation: 163 },
       { consultsPerHour: 2.0, pricePerConsultation: 201.01 },
       { consultsPerHour: 1.0, pricePerConsultation: 313.64 },
     ),
@@ -203,7 +203,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Cuidado ginecológico preventivo e manejo de queixas comuns da saúde da mulher.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 158.56 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -225,7 +225,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação cardiovascular, ajuste de medicações e acompanhamento de hipertensão e arritmias.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 158.56 },
       { consultsPerHour: 1.5, pricePerConsultation: 253.0 },
     ),
@@ -245,7 +245,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Acompanhamento de diabetes, tireoide, obesidade e outras disfunções hormonais.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 162.16 },
+      { consultsPerHour: 2.5, pricePerConsultation: 109 },
       { consultsPerHour: 2.0, pricePerConsultation: 198.2 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -264,7 +264,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação de queixas digestivas, dispepsia, doenças hepáticas e intestinais.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 157.24 },
       { consultsPerHour: 1.0, pricePerConsultation: 250.91 },
     ),
@@ -282,7 +282,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação de alterações hematológicas e acompanhamento de doenças do sangue.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 162.16 },
+      { consultsPerHour: 2.5, pricePerConsultation: 163 },
       { consultsPerHour: 2.0, pricePerConsultation: 206.39 },
       { consultsPerHour: 1.0, pricePerConsultation: 313.64 },
     ),
@@ -300,7 +300,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Diagnóstico e manejo de doenças infecciosas e antibioticoterapia.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 129.73 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -318,7 +318,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Acompanhamento de doença renal crônica e distúrbios hidroeletrolíticos.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 162.16 },
+      { consultsPerHour: 2.5, pricePerConsultation: 163 },
       { consultsPerHour: 2.0, pricePerConsultation: 198.2 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -337,7 +337,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação de cefaleias, epilepsia, AVC e demais condições neurológicas do adulto.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 162.16 },
+      { consultsPerHour: 2.5, pricePerConsultation: 163 },
       { consultsPerHour: 2.0, pricePerConsultation: 206.39 },
       { consultsPerHour: 1.0, pricePerConsultation: 313.64 },
     ),
@@ -355,7 +355,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação de asma, DPOC, apneia do sono e demais doenças respiratórias.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 162.16 },
+      { consultsPerHour: 2.5, pricePerConsultation: 163 },
       { consultsPerHour: 2.0, pricePerConsultation: 201.01 },
       { consultsPerHour: 1.0, pricePerConsultation: 313.64 },
     ),
@@ -373,7 +373,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Diagnóstico e acompanhamento de doenças autoimunes e do sistema musculoesquelético.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 162.16 },
+      { consultsPerHour: 2.5, pricePerConsultation: 163 },
       { consultsPerHour: 2.0, pricePerConsultation: 201.01 },
       { consultsPerHour: 1.0, pricePerConsultation: 313.64 },
     ),
@@ -394,7 +394,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação de queixas musculoesqueléticas e direcionamento para procedimentos.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 158.56 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -413,7 +413,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação inicial de queixas oftalmológicas e triagem para exames presenciais.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 158.56 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -431,7 +431,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação de queixas de ouvido, nariz e garganta com encaminhamento quando necessário.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 158.56 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -449,7 +449,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação urológica masculina e feminina com manejo clínico inicial.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 157.24 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -470,7 +470,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação dermatológica com suporte de imagem para lesões e doenças de pele.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 129.73 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 158.56 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -492,7 +492,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Acompanhamento nutricional individualizado para hábitos saudáveis e metas clínicas.",
     pricing: tiers(
-      { consultsPerHour: 2.0, pricePerConsultation: 72.07 },
+      { consultsPerHour: 2.0, pricePerConsultation: 73 },
       { consultsPerHour: 1.33, pricePerConsultation: 99.1 },
       { consultsPerHour: 1.0, pricePerConsultation: 103.5 },
     ),
@@ -530,7 +530,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação e acompanhamento de distúrbios da fala, linguagem e audição.",
     pricing: tiers(
-      { consultsPerHour: 2, pricePerConsultation: 121.93 },
+      { consultsPerHour: 2, pricePerConsultation: 122 },
       { consultsPerHour: 2.0, pricePerConsultation: 184.0 },
       { consultsPerHour: 1.0, pricePerConsultation: 125.45 },
     ),
