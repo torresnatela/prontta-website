@@ -61,6 +61,7 @@ type Action =
   | { type: 'TOGGLE_SHARED_AGENDA' }
   | { type: 'TOGGLE_DEDICATED_AGENDA' }
   | { type: 'ADD_DEDICATED_PACKAGE'; specialty: string; category: ServiceCategory; quantity: number }
+  | { type: 'ADD_DEDICATED_PACKAGES'; items: Array<{ specialty: string; category: ServiceCategory; quantity: number }> }
   | { type: 'UPDATE_DEDICATED_PACKAGE'; id: string; updates: Partial<Pick<DedicatedPackage, 'category' | 'quantity'>> }
   | { type: 'REMOVE_DEDICATED_PACKAGE'; id: string }
   | { type: 'SET_INFRASTRUCTURE'; infrastructure: InfrastructureSelection }
@@ -169,6 +170,13 @@ function reducer(state: ProposalState, action: Action): ProposalState {
     case 'ADD_DEDICATED_PACKAGE': {
       const pkg = buildDedicatedPackage(action.specialty, action.category, action.quantity)
       return { ...state, dedicatedPackages: [...state.dedicatedPackages, pkg] }
+    }
+
+    case 'ADD_DEDICATED_PACKAGES': {
+      const newPkgs = action.items.map((item) =>
+        buildDedicatedPackage(item.specialty, item.category, item.quantity)
+      )
+      return { ...state, dedicatedPackages: [...state.dedicatedPackages, ...newPkgs] }
     }
 
     case 'UPDATE_DEDICATED_PACKAGE': {

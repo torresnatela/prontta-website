@@ -7,6 +7,7 @@ import { Table } from '../components/Table'
 import { formatBRL } from '../utils'
 import type { ProposalState } from '@/lib/calculator-types'
 import { CATEGORIES, INFRASTRUCTURE_OPTIONS } from '@/lib/pricing-data'
+import { CLINICAL_AREAS, getSpecialtyByLegacyKey } from '@/lib/pricing'
 import {
   calculateDedicatedPackagesCost,
   calculateTotalMonthlyConsultations,
@@ -26,20 +27,43 @@ export function EspecialidadesInvestimento({ state }: EspecialidadesInvestimento
   const infraData = state.infrastructure ? INFRASTRUCTURE_OPTIONS[state.infrastructure.option] : null
 
   const columns = [
-    { key: 'specialty', label: 'Especialidade', width: '35%' },
-    { key: 'category', label: 'Categoria', width: '18%' },
-    { key: 'packages', label: 'Pacotes', width: '12%', align: 'center' as const },
-    { key: 'consultations', label: 'Consultas/mês', width: '17%', align: 'right' as const },
-    { key: 'value', label: 'Valor Mensal', width: '18%', align: 'right' as const, bold: true },
+    { key: 'area', label: 'Área Clínica', width: '20%' },
+    { key: 'specialty', label: 'Especialidade', width: '24%' },
+    { key: 'category', label: 'Categoria', width: '15%' },
+    { key: 'packages', label: 'Pacotes', width: '10%', align: 'center' as const },
+    { key: 'consultations', label: 'Consultas/mês', width: '15%', align: 'right' as const },
+    { key: 'value', label: 'Valor Mensal', width: '16%', align: 'right' as const, bold: true },
   ]
 
-  const rows = state.dedicatedPackages.map((pkg) => ({
-    specialty: pkg.specialty,
-    category: CATEGORIES[pkg.category]?.label ?? pkg.category,
-    packages: String(pkg.quantity),
-    consultations: String(pkg.totalConsultations),
-    value: formatBRL(pkg.totalCost),
-  }))
+  const areaSortIndex: Record<string, number> = CLINICAL_AREAS.reduce(
+    (acc, area, i) => {
+      acc[area.id] = i
+      return acc
+    },
+    {} as Record<string, number>,
+  )
+
+  const sortedPackages = state.dedicatedPackages.slice().sort((a, b) => {
+    const sa = getSpecialtyByLegacyKey(a.specialty)
+    const sb = getSpecialtyByLegacyKey(b.specialty)
+    const ai = sa ? (areaSortIndex[sa.clinicalAreaId] ?? 99) : 99
+    const bi = sb ? (areaSortIndex[sb.clinicalAreaId] ?? 99) : 99
+    if (ai !== bi) return ai - bi
+    return (sa?.sortOrder ?? 0) - (sb?.sortOrder ?? 0)
+  })
+
+  const rows = sortedPackages.map((pkg) => {
+    const sp = getSpecialtyByLegacyKey(pkg.specialty)
+    const area = sp ? CLINICAL_AREAS.find((a) => a.id === sp.clinicalAreaId) : undefined
+    return {
+      area: area?.label ?? '—',
+      specialty: pkg.specialty,
+      category: CATEGORIES[pkg.category]?.label ?? pkg.category,
+      packages: String(pkg.quantity),
+      consultations: String(pkg.totalConsultations),
+      value: formatBRL(pkg.totalCost),
+    }
+  })
 
   const totalDedicatedConsultations = state.dedicatedPackages.reduce(
     (sum, pkg) => sum + pkg.totalConsultations,

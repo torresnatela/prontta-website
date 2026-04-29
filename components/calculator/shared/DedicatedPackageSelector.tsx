@@ -1,11 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Trash2, Clock, Users, Zap, Crown, ChevronDown } from 'lucide-react'
+import { Plus, Trash2, Clock, Users, Zap, Crown, ChevronDown, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useProposal } from '../ProposalContext'
 import { DEDICATED_SPECIALTIES, CATEGORIES, HOURS_PER_SHIFT } from '@/lib/pricing-data'
+import {
+  CLINICAL_AREAS,
+  SPECIALTIES,
+  BUNDLES,
+  getSpecialtyByLegacyKey,
+  getBundlesForClient,
+} from '@/lib/pricing'
 import { formatCurrency } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import type { ServiceCategory, DedicatedPackage } from '@/lib/calculator-types'
@@ -50,7 +57,23 @@ export function DedicatedPackageSelector() {
   const [quantity, setQuantity] = useState(1)
   const [isAdding, setIsAdding] = useState(false)
 
-  const specialtyNames = Object.keys(DEDICATED_SPECIALTIES)
+  // Especialidades agrupadas por area clinica para o <select>
+  const groupedSpecialties = useMemo(() => {
+    return CLINICAL_AREAS.map((area) => ({
+      area,
+      specialties: SPECIALTIES.filter(
+        (s) => s.clinicalAreaId === area.id && s.availability.dedicatedAgenda,
+      )
+        .slice()
+        .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)),
+    })).filter((g) => g.specialties.length > 0)
+  }, [])
+
+  // Bundles relevantes para o tipo de cliente atual
+  const availableBundles = useMemo(() => {
+    if (!state.clientCategory) return []
+    return getBundlesForClient(state.clientCategory)
+  }, [state.clientCategory])
 
   const currentPricing = selectedSpecialty
     ? DEDICATED_SPECIALTIES[selectedSpecialty]?.[selectedCategory]
@@ -77,8 +100,60 @@ export function DedicatedPackageSelector() {
   const totalConsultations = state.dedicatedPackages.reduce((sum, p) => sum + p.totalConsultations, 0)
   const totalCost = state.dedicatedPackages.reduce((sum, p) => sum + p.totalCost, 0)
 
+  const handleAddBundle = (bundleId: string) => {
+    const bundle = BUNDLES.find((b) => b.id === bundleId)
+    if (!bundle) return
+    const items = bundle.items
+      .map((item) => {
+        const sp = SPECIALTIES.find((s) => s.id === item.specialtyId)
+        if (!sp || !sp.availability.dedicatedAgenda) return null
+        return {
+          specialty: sp.legacyDedicatedKey,
+          category: item.defaultTier,
+          quantity: item.defaultQuantity,
+        }
+      })
+      .filter((x): x is { specialty: string; category: ServiceCategory; quantity: number } => x !== null)
+    if (items.length === 0) return
+    dispatch({ type: 'ADD_DEDICATED_PACKAGES', items })
+  }
+
   return (
     <div className="space-y-6">
+      {/* Bundles Quick-Add */}
+      {!isAdding && availableBundles.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-primary-cyan" />
+            <h4 className="font-semibold text-primary-navy text-sm">
+              Pacotes Prontos
+            </h4>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {availableBundles.map((bundle) => (
+              <button
+                key={bundle.id}
+                onClick={() => handleAddBundle(bundle.id)}
+                className="text-left rounded-xl border-2 border-accent-light bg-white p-4 hover:border-primary-cyan/50 hover:bg-primary-cyan/5 transition-all"
+              >
+                <div className="flex items-start justify-between gap-2 mb-1">
+                  <span className="font-semibold text-primary-navy text-sm">
+                    {bundle.name}
+                  </span>
+                  <Plus className="w-4 h-4 text-primary-cyan flex-shrink-0 mt-0.5" />
+                </div>
+                <p className="text-xs text-neutral-gray mb-2 leading-snug">
+                  {bundle.description}
+                </p>
+                <div className="text-xs text-neutral-gray">
+                  {bundle.items.length} especialidade{bundle.items.length > 1 ? 's' : ''}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Package List */}
       {state.dedicatedPackages.length > 0 && (
         <div className="space-y-3">
@@ -119,14 +194,23 @@ export function DedicatedPackageSelector() {
                   className="w-full px-4 py-3.5 rounded-xl border-2 border-accent-light bg-white text-lg text-primary-navy appearance-none cursor-pointer focus:outline-none focus:border-primary-cyan focus:ring-2 focus:ring-primary-cyan/20"
                 >
                   <option value="">Selecione uma especialidade</option>
-                  {specialtyNames.map((name) => (
-                    <option key={name} value={name}>
-                      {name}
-                    </option>
+                  {groupedSpecialties.map(({ area, specialties }) => (
+                    <optgroup key={area.id} label={area.label}>
+                      {specialties.map((s) => (
+                        <option key={s.id} value={s.legacyDedicatedKey}>
+                          {s.displayName}
+                        </option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-gray pointer-events-none" />
               </div>
+              {selectedSpecialty && (
+                <p className="mt-2 text-sm text-neutral-gray">
+                  {getSpecialtyByLegacyKey(selectedSpecialty)?.shortDescription}
+                </p>
+              )}
             </div>
 
             {/* Category Selection */}
@@ -280,6 +364,10 @@ function PackageCard({ pkg }: { pkg: DedicatedPackage }) {
   const { dispatch } = useProposal()
   const colors = categoryColors[pkg.category]
   const catLabel = CATEGORIES[pkg.category].label
+  const specialty = getSpecialtyByLegacyKey(pkg.specialty)
+  const area = specialty
+    ? CLINICAL_AREAS.find((a) => a.id === specialty.clinicalAreaId)
+    : undefined
 
   return (
     <motion.div
@@ -294,8 +382,13 @@ function PackageCard({ pkg }: { pkg: DedicatedPackage }) {
       )}
     >
       <div className="flex-1">
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-1 flex-wrap">
           <span className="font-bold text-primary-navy">{pkg.specialty}</span>
+          {area && (
+            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-white/70 text-neutral-gray border border-neutral-gray/20">
+              {area.label}
+            </span>
+          )}
           <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium', colors.badge)}>
             {catLabel}
           </span>
