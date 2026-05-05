@@ -28,9 +28,9 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Avaliação clínica geral, triagem e acompanhamento de queixas comuns.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 95 },
-      { consultsPerHour: 2.0, pricePerConsultation: 118.24 },
-      { consultsPerHour: 1.5, pricePerConsultation: 115.0 },
+      { consultsPerHour: 2.5, pricePerConsultation: 76 },
+      { consultsPerHour: 2.0, pricePerConsultation: 120 },
+      { consultsPerHour: 1.5, pricePerConsultation: 100 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
     recommendedFor: ["empresa", "estabelecimento"],
@@ -245,7 +245,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Acompanhamento de diabetes, tireoide, obesidade e outras disfunções hormonais.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 109 },
+      { consultsPerHour: 2.5, pricePerConsultation: 130 },
       { consultsPerHour: 2.0, pricePerConsultation: 198.2 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -300,7 +300,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Diagnóstico e manejo de doenças infecciosas e antibioticoterapia.",
     pricing: tiers(
-      { consultsPerHour: 2.5, pricePerConsultation: 130 },
+      { consultsPerHour: 2.5, pricePerConsultation: 163 },
       { consultsPerHour: 2.0, pricePerConsultation: 129.73 },
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
@@ -492,7 +492,7 @@ export const SPECIALTIES: Specialty[] = [
     shortDescription:
       "Acompanhamento nutricional individualizado para hábitos saudáveis e metas clínicas.",
     pricing: tiers(
-      { consultsPerHour: 2.0, pricePerConsultation: 73 },
+      { consultsPerHour: 2.0, pricePerConsultation: 75 },
       { consultsPerHour: 1.33, pricePerConsultation: 99.1 },
       { consultsPerHour: 1.0, pricePerConsultation: 103.5 },
     ),
