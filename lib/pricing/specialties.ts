@@ -33,7 +33,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.5, pricePerConsultation: 115.0 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     featured: true,
     sortOrder: 10,
   },
@@ -52,7 +52,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 250.91 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa"],
+    recommendedFor: ["empresa"],
     sortOrder: 20,
   },
   {
@@ -70,7 +70,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "estabelecimento"],
+    recommendedFor: ["estabelecimento"],
     sortOrder: 30,
   },
 
@@ -91,7 +91,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 103.5 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     featured: true,
     sortOrder: 110,
   },
@@ -110,7 +110,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 199.52 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa"],
+    recommendedFor: ["empresa"],
     sortOrder: 120,
   },
   {
@@ -129,7 +129,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     featured: true,
     sortOrder: 130,
   },
@@ -148,7 +148,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 475.66 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio"],
+    recommendedFor: [],
     sortOrder: 140,
   },
 
@@ -168,7 +168,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 313.64 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "estabelecimento"],
+    recommendedFor: ["estabelecimento"],
     featured: true,
     sortOrder: 210,
   },
@@ -187,7 +187,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 522.73 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio"],
+    recommendedFor: [],
     sortOrder: 220,
   },
 
@@ -208,7 +208,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     featured: true,
     sortOrder: 310,
   },
@@ -230,7 +230,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.5, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     featured: true,
     sortOrder: 410,
   },
@@ -250,7 +250,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     sortOrder: 420,
   },
   {
@@ -269,7 +269,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 250.91 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     sortOrder: 430,
   },
   {
@@ -287,7 +287,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 313.64 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio"],
+    recommendedFor: [],
     sortOrder: 440,
   },
   {
@@ -305,7 +305,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "estabelecimento"],
+    recommendedFor: ["estabelecimento"],
     sortOrder: 450,
   },
   {
@@ -323,7 +323,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio"],
+    recommendedFor: [],
     sortOrder: 460,
   },
   {
@@ -342,7 +342,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 313.64 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     sortOrder: 470,
   },
   {
@@ -360,7 +360,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 313.64 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "estabelecimento"],
+    recommendedFor: ["estabelecimento"],
     sortOrder: 480,
   },
   {
@@ -378,7 +378,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 313.64 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio"],
+    recommendedFor: [],
     sortOrder: 490,
   },
 
@@ -399,7 +399,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     featured: true,
     sortOrder: 510,
   },
@@ -418,7 +418,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "estabelecimento"],
+    recommendedFor: ["estabelecimento"],
     sortOrder: 520,
   },
   {
@@ -436,7 +436,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     sortOrder: 530,
   },
   {
@@ -454,7 +454,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa"],
+    recommendedFor: ["empresa"],
     sortOrder: 540,
   },
 
@@ -475,7 +475,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     featured: true,
     sortOrder: 610,
   },
@@ -497,7 +497,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 103.5 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     featured: true,
     sortOrder: 710,
   },
@@ -517,7 +517,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 253.0 },
     ),
     availability: { sharedAgenda: true, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "empresa", "estabelecimento"],
+    recommendedFor: ["empresa", "estabelecimento"],
     sortOrder: 720,
   },
   {
@@ -535,7 +535,7 @@ export const SPECIALTIES: Specialty[] = [
       { consultsPerHour: 1.0, pricePerConsultation: 125.45 },
     ),
     availability: { sharedAgenda: false, dedicatedAgenda: true },
-    recommendedFor: ["municipio", "estabelecimento"],
+    recommendedFor: ["estabelecimento"],
     sortOrder: 730,
   },
 ];
@@ -607,7 +607,9 @@ export function validateSpecialtyCatalog(): { ok: boolean; errors: string[] } {
     }
 
     if (!validAreas.has(s.clinicalAreaId)) {
-      errors.push(`${s.id} aponta para clinicalAreaId inexistente: ${s.clinicalAreaId}`);
+      errors.push(
+        `${s.id} aponta para clinicalAreaId inexistente: ${s.clinicalAreaId}`,
+      );
     }
 
     if (s.recommendedFor.length === 0) {

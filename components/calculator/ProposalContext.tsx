@@ -92,8 +92,7 @@ function generateId() {
 
 function getMaxStep(clientCategory: ClientCategory | null): number {
   if (clientCategory === null) return 1 // Intro, then ClientCategory
-  if (clientCategory === 'municipio') return 5 // Intro, Cat, Modelos, Infra, Implant, Proposta
-  if (clientCategory === 'estabelecimento') return 6 // + Rentabilidade
+  if (clientCategory === 'estabelecimento') return 6 // Intro, Cat, Modelos, Infra, Implant, Proposta, Rentabilidade
   return 5 // empresa: Intro, Cat, Pacotes, Infra, Implant, PropostaEmpresa
 }
 

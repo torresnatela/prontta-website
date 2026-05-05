@@ -1,23 +1,17 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Building2, Stethoscope, Users } from 'lucide-react'
+import { Stethoscope, Users } from 'lucide-react'
 import { useProposal } from '../ProposalContext'
 import type { ClientCategory } from '@/lib/calculator-types'
 import { cn } from '@/lib/utils'
 
 const categories: {
   id: ClientCategory
-  icon: typeof Building2
+  icon: typeof Stethoscope
   title: string
   description: string
 }[] = [
-  {
-    id: 'municipio',
-    icon: Building2,
-    title: 'Municípios',
-    description: 'Municípios que querem levar telemedicina para a população.',
-  },
   {
     id: 'estabelecimento',
     icon: Stethoscope,

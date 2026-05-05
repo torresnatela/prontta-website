@@ -35,14 +35,6 @@ function getStepsAndLabels(
       labels: [intro.label, cat.label].map((l) => ({ label: l })),
     }
   }
-  if (clientCategory === 'municipio') {
-    return {
-      steps: [intro.step, cat.step, modelos.step, infra.step, implant.step, proposta.step],
-      labels: [intro.label, cat.label, modelos.label, infra.label, implant.label, proposta.label].map(
-        (l) => ({ label: l })
-      ),
-    }
-  }
   if (clientCategory === 'empresa') {
     return {
       steps: [intro.step, cat.step, pacotes.step, infra.step, implant.step, propostaEmp.step],

@@ -7,7 +7,6 @@ import {
   CalendarRange,
   MonitorPlay,
   Stethoscope,
-  Users,
   TrendingUp,
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -34,7 +33,6 @@ const features = [
 const audiences = [
   { icon: Stethoscope, label: 'Clínicas' },
   { icon: Building2, label: 'Hospitais' },
-  { icon: Users, label: 'Municípios' },
   { icon: TrendingUp, label: 'Laboratórios' },
 ]
 

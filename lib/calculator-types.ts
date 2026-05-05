@@ -40,7 +40,7 @@ export interface SharedConsultation {
 }
 
 // Categoria do cliente (determina o fluxo do wizard)
-export type ClientCategory = 'municipio' | 'estabelecimento' | 'empresa'
+export type ClientCategory = 'estabelecimento' | 'empresa'
 
 // Especialidade dentro de um pacote de empresa (sempre intermediaria)
 export interface EmployeePackageItem {
@@ -99,7 +99,7 @@ export interface ProposalState {
   // Step 1 - Categoria do Cliente
   clientCategory: ClientCategory | null
 
-  // Step 2 - Modelos de Atendimento (municipio / estabelecimento)
+  // Step 2 - Modelos de Atendimento (estabelecimento)
   useSharedAgenda: boolean
   useDedicatedAgenda: boolean
   dedicatedPackages: DedicatedPackage[]

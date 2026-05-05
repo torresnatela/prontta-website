@@ -44,7 +44,7 @@ export type ProfessionalType =
 
 export type Audience = "adulto" | "infantil" | "ambos";
 
-export type ClientFocus = "municipio" | "empresa" | "estabelecimento";
+export type ClientFocus = "empresa" | "estabelecimento";
 
 export interface ClinicalArea {
   id: string;

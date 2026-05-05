@@ -163,8 +163,7 @@ function formatBRL(value: number): string {
 export function ProposalPDF({ state, dre }: { state: ProposalState; dre: DREResult }) {
   const date = new Date().toLocaleDateString('pt-BR')
   const isEmpresa = state.clientCategory === 'empresa'
-  const isMunicipio = state.clientCategory === 'municipio'
-  const showDRE = !isMunicipio && !isEmpresa && dre.receitaBruta > 0
+  const showDRE = !isEmpresa && dre.receitaBruta > 0
 
   const totalConsultations = isEmpresa
     ? calculateCompanyTotalConsultations(state.employeePackages, state.numberOfEmployees)
