@@ -19,7 +19,7 @@ export function buildSharedAgendaPrices(): Record<string, number> {
   const out: Record<string, number> = {};
   for (const s of SPECIALTIES) {
     if (!s.availability.sharedAgenda || !s.legacySharedKey) continue;
-    out[s.legacySharedKey] = s.pricing.intermediaria.pricePerConsultation;
+    out[s.legacySharedKey] = s.pricing.popular.pricePerConsultation;
   }
   return out;
 }

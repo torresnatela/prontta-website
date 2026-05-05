@@ -94,7 +94,7 @@ export function SharedAgendaTable() {
       </div>
       <div className="px-6 py-4 bg-blue-50/50 border-t border-blue-100/50">
         <p className="text-sm text-neutral-gray">
-          Defina as quantidades aqui; elas já entram na proposta final. Você pode ajustá-las depois na etapa Proposta e no Simulador de Rentabilidade. Preços da categoria Intermediária.
+          Defina as quantidades aqui; elas já entram na proposta final. Você pode ajustá-las depois na etapa Proposta e no Simulador de Rentabilidade. Preços da categoria Popular.
         </p>
       </div>
     </div>

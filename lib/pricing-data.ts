@@ -5,7 +5,7 @@
 // O catalogo unico de especialidades vive em `lib/pricing/specialties.ts`.
 // As visoes legacy (DEDICATED_SPECIALTIES, SHARED_AGENDA_PRICES) sao
 // derivadas do catalogo, garantindo que a Agenda Compartilhada tenha
-// sempre o mesmo preco do tier Intermediario.
+// sempre o mesmo preco do tier Popular.
 // ============================================
 
 import {

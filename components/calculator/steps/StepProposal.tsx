@@ -258,7 +258,7 @@ function SharedConsultationAdder() {
           2. Consultas Avulsas — Agenda Compartilhada
         </h3>
         <p className="text-sm text-neutral-gray max-w-3xl">
-          Consultas em diversas especialidades, sem compromisso de pacote. Os valores seguem a categoria Intermediária (mesmo preço e tempo médio por consulta da agenda dedicada intermediária). Ideal para complementar a operação ou atender demanda variável.
+          Consultas em diversas especialidades, sem compromisso de pacote. Os valores seguem a categoria Popular (mesmo preço por consulta da agenda dedicada popular). Ideal para complementar a operação ou atender demanda variável.
         </p>
       </div>
       <div className="p-6">
