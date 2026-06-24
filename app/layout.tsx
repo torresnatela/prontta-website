@@ -1,6 +1,10 @@
 import type { Metadata } from 'next'
 import { Outfit, Space_Grotesk } from 'next/font/google'
 import './globals.css'
+import { siteConfig } from '@/lib/site-config'
+import { organizationSchema, websiteSchema } from '@/lib/structured-data'
+import { JsonLd } from '@/components/JsonLd'
+import { CookieConsent } from '@/components/CookieConsent'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -14,33 +18,52 @@ const spaceGrotesk = Space_Grotesk({
   display: 'swap',
 })
 
+const defaultTitle = `${siteConfig.name} | ${siteConfig.shortDescription}`
+
 export const metadata: Metadata = {
-  title: 'Prontta Saúde | Soluções em Terceirização Médica',
-  description: 'Terceirização de serviços médicos especializados para clínicas e hospitais. Retorno de implante capilar, acompanhamento pós-operatório, pré-operatório cardiológico e mais.',
-  keywords: ['terceirização médica', 'retorno implante capilar', 'pós-operatório', 'pré-operatório', 'clínicas', 'hospitais', 'saúde'],
-  authors: [{ name: 'Prontta Saúde' }],
-  creator: 'Prontta Saúde',
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: defaultTitle,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  keywords: [
+    'terceirização médica',
+    'telesaúde híbrida',
+    'telemedicina',
+    'agenda médica dedicada',
+    'especialidades médicas',
+    'clínicas',
+    'hospitais',
+    'saúde',
+  ],
+  authors: [{ name: siteConfig.name }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: 'website',
-    locale: 'pt_BR',
-    url: 'https://pronttasaude.com.br',
-    siteName: 'Prontta Saúde',
-    title: 'Prontta Saúde | Soluções em Terceirização Médica',
-    description: 'Terceirização de serviços médicos especializados para clínicas e hospitais.',
+    locale: siteConfig.locale,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    title: defaultTitle,
+    description: siteConfig.description,
     images: [
       {
-        url: '/og-image.png',
+        url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'Prontta Saúde',
+        alt: siteConfig.name,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Prontta Saúde | Soluções em Terceirização Médica',
-    description: 'Terceirização de serviços médicos especializados para clínicas e hospitais.',
-    images: ['/og-image.png'],
+    title: defaultTitle,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
   },
   robots: {
     index: true,
@@ -53,6 +76,9 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  verification: siteConfig.analytics.googleVerification
+    ? { google: siteConfig.analytics.googleVerification }
+    : undefined,
 }
 
 export default function RootLayout({
@@ -61,43 +87,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className={`${outfit.variable} ${spaceGrotesk.variable}`}>
+    <html
+      lang={siteConfig.language}
+      className={`${outfit.variable} ${spaceGrotesk.variable}`}
+    >
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'MedicalOrganization',
-              name: 'Prontta Saúde',
-              description: 'Soluções em terceirização de serviços médicos especializados',
-              url: 'https://pronttasaude.com.br',
-              logo: 'https://pronttasaude.com.br/logo.png',
-              contactPoint: {
-                '@type': 'ContactPoint',
-                telephone: '+55-31-99333-3245',
-                contactType: 'sales',
-                availableLanguage: ['Portuguese'],
-              },
-              address: {
-                '@type': 'PostalAddress',
-                streetAddress: 'Av. Pres. Eurico Dutra, 608 - Belvedere',
-                addressLocality: 'Belo Horizonte',
-                addressRegion: 'MG',
-                postalCode: '30320-190',
-                addressCountry: 'BR',
-              },
-              sameAs: [
-                'https://instagram.com/pronttasaude',
-                'https://linkedin.com/company/pronttasaude',
-              ],
-            }),
-          }}
-        />
+        <JsonLd data={[organizationSchema(), websiteSchema()]} />
       </head>
       <body className="font-sans">
         {children}
+        <CookieConsent gaId={siteConfig.analytics.gaId} />
       </body>
     </html>
   )

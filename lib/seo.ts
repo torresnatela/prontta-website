@@ -1,48 +1,77 @@
 import { Metadata } from 'next'
+import { siteConfig, absoluteUrl } from './site-config'
 
-const BASE_URL = 'https://pronttasaude.com.br'
+interface SeoInput {
+  title: string
+  description: string
+  /** Path relativo da página, ex.: '/blog/meu-post'. */
+  path?: string
+  /**
+   * Imagem OG (path relativo ou URL absoluta). Default: OG do site.
+   * Passe `null` para NÃO emitir og:image/twitter:image — útil quando a rota
+   * tem um opengraph-image.tsx (file convention) cuidando disso.
+   */
+  image?: string | null
+  /** 'website' (padrão) ou 'article' para posts do blog. */
+  type?: 'website' | 'article'
+  /** Metadados extras para artigos. */
+  article?: {
+    publishedTime?: string
+    modifiedTime?: string
+    authors?: string[]
+    tags?: string[]
+  }
+  /** Define como `false` para gerar uma página com noindex. */
+  index?: boolean
+}
 
+/**
+ * Gera o objeto Metadata do Next a partir de dados de uma página.
+ * Usa siteConfig como fonte única e metadataBase (definido no layout) para
+ * resolver URLs relativas (canonical, OG image).
+ */
 export function generateMetadata({
   title,
   description,
   path = '',
-  image = '/og-image.png',
-}: {
-  title: string
-  description: string
-  path?: string
-  image?: string
-}): Metadata {
-  const url = `${BASE_URL}${path}`
+  image = siteConfig.ogImage,
+  type = 'website',
+  article,
+  index = true,
+}: SeoInput): Metadata {
+  const url = absoluteUrl(path)
+  const fullTitle = `${title} | ${siteConfig.name}`
+  const ogImages = image === null ? undefined : [{ url: image, width: 1200, height: 630, alt: title }]
 
   return {
-    title: `${title} | Prontta Saúde`,
+    title,
     description,
     alternates: {
-      canonical: url,
+      canonical: path || '/',
     },
     openGraph: {
-      title: `${title} | Prontta Saúde`,
+      title: fullTitle,
       description,
       url,
-      siteName: 'Prontta Saúde',
-      images: [
-        {
-          url: image,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
-      locale: 'pt_BR',
-      type: 'website',
+      siteName: siteConfig.name,
+      ...(ogImages ? { images: ogImages } : {}),
+      locale: siteConfig.locale,
+      type,
+      ...(type === 'article' && article
+        ? {
+            publishedTime: article.publishedTime,
+            modifiedTime: article.modifiedTime,
+            authors: article.authors,
+            tags: article.tags,
+          }
+        : {}),
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | Prontta Saúde`,
+      title: fullTitle,
       description,
-      images: [image],
+      ...(image === null ? {} : { images: [image] }),
     },
+    ...(index ? {} : { robots: { index: false, follow: true } }),
   }
 }
-

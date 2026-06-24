@@ -8,12 +8,15 @@ import { Logo } from './Logo'
 import { Button } from '../ui/Button'
 import { cn } from '@/lib/utils'
 
+// Âncoras absolutas (com "/") para que o menu funcione a partir de qualquer
+// página — inclusive /blog e /faq, não só da home.
 const navItems = [
-  { name: 'Início', href: '#' },
-  { name: 'Serviços', href: '#servicos' },
-  { name: 'Telesaúde Híbrida', href: '#telesaude' },
-  { name: 'Como Funciona', href: '#como-funciona' },
-  { name: 'Contato', href: '#contato' },
+  { name: 'Início', href: '/' },
+  { name: 'Serviços', href: '/#servicos' },
+  { name: 'Telesaúde Híbrida', href: '/#telesaude' },
+  { name: 'Como Funciona', href: '/#como-funciona' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Contato', href: '/#contato' },
 ]
 
 export function Header() {

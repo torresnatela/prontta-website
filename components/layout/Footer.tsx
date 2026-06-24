@@ -4,29 +4,30 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Mail, Phone, MapPin, Instagram, Linkedin, Clock } from 'lucide-react'
 import { Logo } from './Logo'
+import { siteConfig } from '@/lib/site-config'
 
 const footerLinks = {
   empresa: [
-    { name: 'Sobre Nós', href: '#' },
-    { name: 'Nossa Equipe', href: '#' },
-    { name: 'Carreiras', href: '#' },
+    { name: 'Sobre Nós', href: '/#contato' },
+    { name: 'Nossa Equipe', href: '/#contato' },
+    { name: 'Carreiras', href: '/#contato' },
   ],
   servicos: [
-    { name: 'Agenda On Demand', href: '#servicos' },
-    { name: 'Agenda Dedicada', href: '#servicos' },
-    { name: 'Pacotes de Atendimento', href: '#servicos' },
-    { name: 'Telesaúde Híbrida', href: '#telesaude' },
+    { name: 'Agenda On Demand', href: '/#servicos' },
+    { name: 'Agenda Dedicada', href: '/#servicos' },
+    { name: 'Pacotes de Atendimento', href: '/#servicos' },
+    { name: 'Telesaúde Híbrida', href: '/#telesaude' },
   ],
   recursos: [
     { name: 'Simulador de Proposta', href: '/proposta' },
-    { name: 'Blog', href: '#' },
-    { name: 'FAQ', href: '#' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'FAQ', href: '/faq' },
   ],
 }
 
 const socialLinks = [
-  { name: 'Instagram', icon: Instagram, href: 'https://instagram.com/pronttasaude' },
-  { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com/company/pronttasaude' },
+  { name: 'Instagram', icon: Instagram, href: siteConfig.social.instagram },
+  { name: 'LinkedIn', icon: Linkedin, href: siteConfig.social.linkedin },
 ]
 
 export function Footer() {
@@ -47,27 +48,27 @@ export function Footer() {
             
             {/* Contact Info */}
             <div className="mt-8 space-y-5">
-              <a 
-                href="tel:+5531993333245" 
+              <a
+                href={siteConfig.contact.phoneHref}
                 className="flex items-center gap-3 text-white/70 hover:text-primary-cyan transition-colors text-lg"
               >
                 <Phone className="w-6 h-6" />
-                <span>(31) 99333-3245</span>
+                <span>{siteConfig.contact.phoneDisplay}</span>
               </a>
-              <a 
-                href="mailto:contato@pronttasaude.com.br" 
+              <a
+                href={`mailto:${siteConfig.contact.email}`}
                 className="flex items-center gap-3 text-white/70 hover:text-primary-cyan transition-colors text-lg"
               >
                 <Mail className="w-6 h-6" />
-                <span>contato@pronttasaude.com.br</span>
+                <span>{siteConfig.contact.email}</span>
               </a>
               <div className="flex items-start gap-3 text-white/70 text-lg">
                 <MapPin className="w-6 h-6 shrink-0 mt-1" />
-                <span>Av. Pres. Eurico Dutra, 608 - Belvedere, Belo Horizonte - MG, 30320-190</span>
+                <span>{siteConfig.address.full}</span>
               </div>
               <div className="flex items-center gap-3 text-white/70 text-lg">
                 <Clock className="w-6 h-6" />
-                <span>Seg - Sex: 8h às 18h</span>
+                <span>{siteConfig.contact.hours}</span>
               </div>
             </div>
           </div>
