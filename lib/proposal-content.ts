@@ -1,0 +1,149 @@
+import type { ClientType } from './pricing';
+
+/**
+ * Textos narrativos da proposta digital 2.0.
+ * Fonte: export oficial da planilha "Prontta_Simulador_Precos_DRE"
+ * (aba 7. Export Landing Page) e apresentação institucional V2.
+ * Por decisão de produto, nenhum texto menciona valores ou condições
+ * financeiras entre Prontta e parceiro.
+ */
+
+interface ClientTypeContent {
+  label: string;
+  /** Trecho que personaliza a headline (ex.: "sua academia"). */
+  headlineTarget: string;
+  headline: string;
+  audienceNote: string;
+}
+
+const clientType = (label: string, headlineTarget: string, audienceNote: string): ClientTypeContent => ({
+  label,
+  headlineTarget,
+  headline: `Programas de Saúde Assistida para ${headlineTarget}`,
+  audienceNote,
+});
+
+export const PROPOSAL_CONTENT = {
+  brand: 'Prontta Saúde',
+  category: 'Healthtech B2B semipresencial · telessaúde assistida · recorrente',
+  subheadline:
+    'Cuidado recorrente em ciclos de 3, 6 e 12 meses, com IA de pré-triagem e especialistas por telessaúde.',
+  modelDescription:
+    'Um ponto de acesso digital dentro do seu espaço: o parceiro cede o local, a agenda e a recepção; a Prontta cuida da operação médica, tecnologia, treinamento e suporte.',
+  stats: [
+    { value: '+400', label: 'especialistas na rede' },
+    { value: '26', label: 'especialidades mapeadas' },
+    { value: '12', label: 'programas de saúde assistida' },
+    { value: '3·6·12', label: 'meses por ciclo de cuidado' },
+  ],
+  positioningNotIs:
+    'Não é plano de saúde, seguro-saúde, marketplace de consulta barata ou telemedicina genérica.',
+
+  clientTypes: {
+    academia: clientType(
+      'Academia',
+      'sua academia',
+      'Transforme o fluxo de alunos em uma nova linha de receita recorrente com saúde assistida.',
+    ),
+    clinica: clientType(
+      'Clínica',
+      'sua clínica',
+      'Amplie especialidades sem contratar médicos e mantenha o paciente no seu ecossistema.',
+    ),
+    farmacia: clientType(
+      'Farmácia',
+      'sua farmácia',
+      'Um ponto de cuidado especializado dentro da farmácia, com jornada recorrente.',
+    ),
+    laboratorio: clientType(
+      'Laboratório',
+      'seu laboratório',
+      'Converta exames em jornadas de cuidado contínuo com especialistas por telessaúde.',
+    ),
+    empresa: clientType(
+      'Empresa',
+      'sua empresa',
+      'Saúde assistida para colaboradores, com acesso rápido a especialistas e menos afastamento.',
+    ),
+  } satisfies Record<ClientType, ClientTypeContent>,
+
+  scope: {
+    included: [
+      'Operação médica completa: recrutamento, escala e responsabilidade técnica dos especialistas',
+      'Plataforma de telessaúde e IA de pré-triagem',
+      'Implantação, treinamento da equipe local e suporte contínuo',
+      'Gestão da jornada assistencial e curadoria da rede médica',
+    ],
+    notIncluded: [
+      'Espaço físico, mobiliário e infraestrutura local (energia, internet)',
+      'Agendamento e recepção, feitos pela equipe do parceiro',
+      'Qualquer ato de saúde presencial no ponto de acesso (vedado)',
+    ],
+  },
+
+  responsibilities: [
+    {
+      party: 'Prontta',
+      description:
+        'Plataforma, IA de pré-triagem, gestão da jornada, curadoria e responsabilidade técnica da rede médica.',
+    },
+    {
+      party: 'Parceiro',
+      description:
+        'Cede o espaço/ponto de acesso, cuida da agenda e da recepção e mantém a infraestrutura local.',
+    },
+    {
+      party: 'Médico',
+      description:
+        'Responsável pelo ato médico e pela prescrição, via telessaúde, sob seu CRM.',
+    },
+    {
+      party: 'Paciente',
+      description:
+        'Titular dos dados; adere ao programa e à jornada; consente por TCLE digital antes de qualquer coleta.',
+    },
+  ],
+
+  compliance: [
+    {
+      title: 'IA de pré-triagem, não de diagnóstico',
+      description:
+        'A IA coleta informações e organiza a jornada. Não realiza diagnóstico: o ato médico é sempre do profissional habilitado.',
+    },
+    {
+      title: 'Telessaúde pura no ponto de acesso',
+      description:
+        'No ponto de acesso não se realiza ato de saúde presencial nem aferição de sinais vitais.',
+    },
+    {
+      title: 'Dados clínicos protegidos',
+      description:
+        'O parceiro não acessa dados clínicos, prontuários ou informações de saúde: são criptografados e restritos à Prontta e ao médico assistente.',
+    },
+    {
+      title: 'LGPD e consentimento',
+      description:
+        'Dados tratados conforme a LGPD, com base legal, finalidade e retenção informadas ao titular e consentimento por TCLE digital.',
+    },
+    {
+      title: 'Independência entre as partes',
+      description:
+        'Não há vínculo empregatício, societário ou de subordinação entre Prontta e parceiro; cada parte responde por seus encargos.',
+    },
+  ],
+  legalFramework:
+    'Lei 14.510/2022 (Marco Legal da Telemedicina) · Resoluções CFM 2.314/2022 e 2.333/2023 · LGPD (Lei 13.709/2018)',
+
+  softwareRule:
+    'Software mensal apenas na compra de consultas; isento a partir de 150 consultas/mês. Os programas já incluem a plataforma.',
+  implantationNote:
+    'Taxa única de implantação (R$ 10 mil a R$ 15 mil), a combinar ou isenta conforme negociação.',
+  proposalValidity: 'Proposta válida por 30 dias a partir da emissão.',
+
+  cta: {
+    primary: 'Quero ser um ponto Prontta',
+    secondary: 'Simular meu resultado',
+  },
+} as const;
+
+export type ProposalContent = typeof PROPOSAL_CONTENT;

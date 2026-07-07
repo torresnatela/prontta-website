@@ -33,7 +33,7 @@ de saúde a ampliar a oferta de especialidades com qualidade e menor custo opera
 ## Páginas principais
 
 - [Início](${siteConfig.url}/): visão geral dos serviços de terceirização médica e telesaúde híbrida.
-- [Simulador de proposta](${siteConfig.url}/proposta): ferramenta para estimar custos e rentabilidade de uma operação.
+- [Proposta e simulador](${siteConfig.url}/proposta): monte uma proposta de Programas de Saúde Assistida e consultas por telessaúde e simule o resultado da operação.
 - [Blog](${siteConfig.url}/blog): artigos sobre telesaúde, gestão de clínicas e especialidades médicas.
 - [Perguntas frequentes](${siteConfig.url}/faq): dúvidas comuns sobre os modelos de atendimento.
 
