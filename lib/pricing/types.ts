@@ -1,87 +1,56 @@
-// ============================================
-// Tipos do dominio de pricing/especialidades
-// ============================================
+export type PlanId = 'popular' | 'intermediario' | 'premium';
 
-import type {
-  ServiceCategory,
-  SpecialtyPricing,
-} from "../calculator-types";
+export type Cycle = 3 | 6 | 12;
 
-export type SpecialtyId =
-  | "medico-generalista"
-  | "medicina-da-familia"
-  | "geriatria"
-  | "cardiologia"
-  | "dermatologia"
-  | "endocrinologia"
-  | "fonoaudiologia"
-  | "gastroenterologia"
-  | "ginecologia"
-  | "hematologia"
-  | "infectologia"
-  | "nefrologia"
-  | "neurologia-adulto"
-  | "neuropediatria"
-  | "nutricao"
-  | "nutrologia"
-  | "oftalmologia"
-  | "ortopedia"
-  | "otorrinolaringologia"
-  | "pediatria"
-  | "pneumologia"
-  | "psicologia-adulto"
-  | "psicologia-infantil"
-  | "psiquiatria-adulto"
-  | "psiquiatria-infantil"
-  | "reumatologia"
-  | "urologia";
+export type AgendaType = 'dedicada' | 'compartilhada';
 
-export type ProfessionalType =
-  | "medico"
-  | "psicologo"
-  | "nutricionista"
-  | "fonoaudiologo";
+export type ClientType = 'academia' | 'clinica' | 'farmacia' | 'laboratorio' | 'empresa';
 
-export type Audience = "adulto" | "infantil" | "ambos";
-
-export type ClientFocus = "empresa" | "estabelecimento";
-
-export interface ClinicalArea {
-  id: string;
-  label: string;
-  description: string;
-  sortOrder: number;
-}
+export const CLIENT_TYPE_IDS: readonly ClientType[] = [
+  'academia',
+  'clinica',
+  'farmacia',
+  'laboratorio',
+  'empresa',
+] as const;
 
 export interface Specialty {
-  id: SpecialtyId;
-  displayName: string;
-  legacyDedicatedKey: string;
-  legacySharedKey?: string;
-  professionalType: ProfessionalType;
-  audience: Audience;
-  clinicalAreaId: string;
-  shortDescription: string;
-  pricing: SpecialtyPricing;
-  availability: {
-    sharedAgenda: boolean;
-    dedicatedAgenda: boolean;
-  };
-  recommendedFor: ClientFocus[];
-  featured?: boolean;
-  sortOrder?: number;
+  id: string;
+  name: string;
+  /** Valor-hora médico (R$) — base da formação de preço. */
+  valorHora: number;
+  /** Consultas por hora em cada plano. */
+  consultsPerHour: Record<PlanId, number>;
 }
 
-export interface BundleItem {
-  specialtyId: SpecialtyId;
-  defaultTier: ServiceCategory;
-  defaultQuantity: number;
-}
-
-export interface Bundle {
+export interface Program {
   id: string;
   name: string;
   description: string;
-  recommendedFor: ClientFocus[];
-  items: BundleItem[];
+  /** Canais prioritários de venda (academias, clínicas, farmácias…). */
+  channels: string[];
+  /** Preço oficial V8 ao paciente por ciclo (dado, não fórmula). */
+  priceByCycle: Record<Cycle, number>;
+  /** Composição de consultas por ciclo (especialidade × quantidade). */
+  compositionByCycle: Record<Cycle, Array<{ specialtyId: string; quantity: number }>>;
 }
+
+export interface ConsultationLine {
+  id: string;
+  specialtyId: string;
+  agenda: AgendaType;
+  quantity: number;
+  cycleMonths: number;
+}
+
+export interface ProgramSelection {
+  id: string;
+  programId: string;
+  cycle: Cycle;
+  quantity: number;
+}
+
+export type Implantation =
+  | { mode: 'a_combinar' }
+  | { mode: 'isento' }
+  | { mode: 'valor'; value: number };

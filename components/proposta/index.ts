@@ -1,0 +1,9 @@
+export { ProposalProvider } from './state/ProposalProvider';
+export { HeroSection } from './sections/HeroSection';
+export { ProgramsSection } from './sections/ProgramsSection';
+export { ConsultationsSection } from './sections/ConsultationsSection';
+export { SummarySection } from './sections/SummarySection';
+export { DRESection } from './sections/DRESection';
+export { ScopeSection } from './sections/ScopeSection';
+export { ComplianceSection } from './sections/ComplianceSection';
+export { ContactSection } from './sections/ContactSection';
