@@ -1,4 +1,4 @@
-import { DRE_DEFAULTS } from '@/lib/pricing';
+import { DEFAULT_CONSULTA_MARGIN, DEFAULT_PROGRAMA_MARGIN, DRE_DEFAULTS, MARGIN_MAX, MARGIN_MIN } from '@/lib/pricing';
 import type {
   ClientType,
   ConsultationLine,
@@ -8,7 +8,6 @@ import type {
 } from '@/lib/pricing';
 
 export interface ProposalDREState {
-  proposalsPerMonth: number;
   taxPercent: number;
   expenses: {
     pessoal: number;
@@ -19,18 +18,31 @@ export interface ProposalDREState {
   };
 }
 
+/** Dados do vendedor que geram o bloco de contato do PDF. */
+export interface ProposalSeller {
+  name: string;
+  email: string;
+  phone: string;
+}
+
 export interface ProposalState {
   clientType: ClientType;
-  referencePlan: PlanId;
+  /** Margens editáveis do parceiro sobre o preço final (frações, ex.: 0.6 = 60%). */
+  margins: {
+    consulta: number;
+    programa: number;
+  };
   consultationLines: ConsultationLine[];
   programSelections: ProgramSelection[];
   implantation: Implantation;
   dre: ProposalDREState;
+  seller: ProposalSeller;
 }
 
 export type ProposalAction =
   | { type: 'SET_CLIENT_TYPE'; clientType: ClientType }
-  | { type: 'SET_REFERENCE_PLAN'; plan: PlanId }
+  | { type: 'SET_CONSULTA_MARGIN'; value: number }
+  | { type: 'SET_PROGRAMA_MARGIN'; value: number }
   | { type: 'ADD_CONSULTATION_LINE'; line: ConsultationLine }
   | { type: 'UPDATE_CONSULTATION_LINE'; id: string; patch: Partial<Omit<ConsultationLine, 'id'>> }
   | { type: 'REMOVE_CONSULTATION_LINE'; id: string }
@@ -38,46 +50,52 @@ export type ProposalAction =
   | { type: 'UPDATE_PROGRAM_SELECTION'; id: string; patch: Partial<Omit<ProgramSelection, 'id'>> }
   | { type: 'REMOVE_PROGRAM_SELECTION'; id: string }
   | { type: 'SET_IMPLANTATION'; implantation: Implantation }
-  | { type: 'SET_PROPOSALS_PER_MONTH'; value: number }
   | { type: 'SET_TAX_PERCENT'; value: number }
-  | { type: 'SET_EXPENSE'; key: keyof ProposalDREState['expenses']; value: number };
+  | { type: 'SET_EXPENSE'; key: keyof ProposalDREState['expenses']; value: number }
+  | { type: 'SET_SELLER'; patch: Partial<ProposalSeller> };
 
 /**
- * Estado inicial semeado com o mix de referência da planilha oficial
- * (total do contrato R$ 14.600 → resultado líquido R$ 23.133/mês),
- * para a página abrir já demonstrando uma proposta completa.
+ * Estado inicial semeado com o mix de referência do HTML oficial (44 consultas + 6 programas),
+ * todo em agenda dedicada fechando plantões (sem alertas ao abrir).
+ * Confere: total ao paciente R$ 28.900 → resultado líquido R$ 6.457/mês (margem ~22,3%).
  */
 export const initialProposalState: ProposalState = {
   clientType: 'clinica',
-  referencePlan: 'popular',
+  margins: {
+    consulta: DEFAULT_CONSULTA_MARGIN,
+    programa: DEFAULT_PROGRAMA_MARGIN,
+  },
   consultationLines: [
-    { id: 'seed-endocrino', specialtyId: 'endocrinologia', agenda: 'dedicada', quantity: 10, cycleMonths: 6 },
-    { id: 'seed-nutricao', specialtyId: 'nutricao', agenda: 'compartilhada', quantity: 3, cycleMonths: 6 },
-    { id: 'seed-psicologia', specialtyId: 'psicologia-adulto', agenda: 'compartilhada', quantity: 6, cycleMonths: 6 },
-    { id: 'seed-cardio', specialtyId: 'cardiologia-adulto', agenda: 'dedicada', quantity: 10, cycleMonths: 6 },
+    { id: 'seed-endocrino', specialtyId: 'endocrinologia', plan: 'popular', agenda: 'dedicada', quantity: 20 },
+    { id: 'seed-nutricao', specialtyId: 'nutricao', plan: 'popular', agenda: 'dedicada', quantity: 12 },
+    { id: 'seed-psicologia', specialtyId: 'psicologia-adulto', plan: 'popular', agenda: 'dedicada', quantity: 12 },
   ],
   programSelections: [
-    { id: 'seed-emagrecimento', programId: 'emagrecimento-inteligente', cycle: 6, quantity: 1 },
-    { id: 'seed-longevidade', programId: 'longevidade-ativa', cycle: 12, quantity: 1 },
-    { id: 'seed-capilar', programId: 'saude-capilar', cycle: 6, quantity: 1 },
+    { id: 'seed-emagrecimento', programId: 'emagrecimento-inteligente', cycle: 6, quantity: 4 },
+    { id: 'seed-longevidade', programId: 'longevidade-ativa', cycle: 6, quantity: 2 },
   ],
   implantation: { mode: 'a_combinar' },
   dre: {
-    proposalsPerMonth: DRE_DEFAULTS.proposalsPerMonth,
     taxPercent: DRE_DEFAULTS.taxPercent,
     expenses: { ...DRE_DEFAULTS.expenses },
   },
+  seller: { name: '', email: '', phone: '' },
 };
 
 const clampQuantity = (value: number) => Math.max(1, Math.floor(value));
 const clampNonNegative = (value: number) => Math.max(0, value);
+/** Recebe a margem em % (1–90) e devolve a fração travada em [0.01, 0.90]. */
+const clampMargin = (percent: number) =>
+  Math.min(MARGIN_MAX, Math.max(MARGIN_MIN, (Number.isFinite(percent) ? percent : 0) / 100));
 
 export function proposalReducer(state: ProposalState, action: ProposalAction): ProposalState {
   switch (action.type) {
     case 'SET_CLIENT_TYPE':
       return { ...state, clientType: action.clientType };
-    case 'SET_REFERENCE_PLAN':
-      return { ...state, referencePlan: action.plan };
+    case 'SET_CONSULTA_MARGIN':
+      return { ...state, margins: { ...state.margins, consulta: clampMargin(action.value) } };
+    case 'SET_PROGRAMA_MARGIN':
+      return { ...state, margins: { ...state.margins, programa: clampMargin(action.value) } };
     case 'ADD_CONSULTATION_LINE':
       return {
         ...state,
@@ -138,11 +156,6 @@ export function proposalReducer(state: ProposalState, action: ProposalAction): P
       };
     case 'SET_IMPLANTATION':
       return { ...state, implantation: action.implantation };
-    case 'SET_PROPOSALS_PER_MONTH':
-      return {
-        ...state,
-        dre: { ...state.dre, proposalsPerMonth: Math.floor(clampNonNegative(action.value)) },
-      };
     case 'SET_TAX_PERCENT':
       return { ...state, dre: { ...state.dre, taxPercent: Math.min(100, clampNonNegative(action.value)) } };
     case 'SET_EXPENSE':
@@ -153,6 +166,8 @@ export function proposalReducer(state: ProposalState, action: ProposalAction): P
           expenses: { ...state.dre.expenses, [action.key]: clampNonNegative(action.value) },
         },
       };
+    case 'SET_SELLER':
+      return { ...state, seller: { ...state.seller, ...action.patch } };
     default:
       return state;
   }

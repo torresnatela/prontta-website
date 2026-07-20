@@ -4,9 +4,9 @@ type CompositionSpec = Array<[string, number]>;
 
 /**
  * Linha Prontta Saúde Assistida — 12 programas.
- * Fonte: doc oficial "Prontta_Saude_Programas_V8" (seções 9.1–9.12) e planilha
- * "Prontta_Simulador_Precos_DRE" (aba 4. Programas de Saúde).
- * Preços ao paciente por ciclo são DADOS oficiais V8, não fórmula.
+ * Fonte: HTML oficial "Prontta_Landing_Prontta_Oficial_10" (mesmo racional da planilha oficial).
+ * Os números por ciclo são o CUSTO-BASE do programa (não o preço final). O preço ao paciente é
+ * derivado pelo engine: ceil((custoBase + fee de plataforma) ÷ (1 − margem), 50).
  * Todos os ciclos incluem a IA Prontta de pré-triagem e o fee de plataforma.
  */
 const program = (
@@ -14,7 +14,7 @@ const program = (
   name: string,
   description: string,
   channels: string[],
-  prices: [number, number, number],
+  costs: [number, number, number],
   compositions: [CompositionSpec, CompositionSpec, CompositionSpec],
 ): Program => {
   const cycles: Cycle[] = [3, 6, 12];
@@ -23,7 +23,7 @@ const program = (
     name,
     description,
     channels,
-    priceByCycle: { 3: prices[0], 6: prices[1], 12: prices[2] },
+    costByCycle: { 3: costs[0], 6: costs[1], 12: costs[2] },
     compositionByCycle: cycles.reduce(
       (acc, cycle, i) => {
         acc[cycle] = compositions[i].map(([specialtyId, quantity]) => ({ specialtyId, quantity }));
@@ -40,7 +40,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Performance',
     'Para quem treina, quer treinar melhor ou está começando. Cuidado clínico, nutricional e emocional dentro do canal onde a pessoa já é cliente.',
     ['Academias e studios', 'Cross training e centros de performance', 'Clínicas de estética corporal'],
-    [1350, 2700, 4200],
+    [844, 1485, 2532],
     [
       [['cardiologia-adulto', 1], ['endocrinologia', 1], ['nutricao', 2], ['psicologia-adulto', 6]],
       [['cardiologia-adulto', 1], ['endocrinologia', 2], ['nutricao', 3], ['psicologia-adulto', 12]],
@@ -52,7 +52,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Emagrecimento Inteligente',
     'Emagrecimento com acompanhamento médico, nutricional e emocional, sem improviso e sem abandono no meio do caminho.',
     ['Academias', 'Clínicas e farmácias', 'Empresas e centros de estética'],
-    [1200, 2400, 3900],
+    [714, 1355, 2272],
     [
       [['endocrinologia', 1], ['nutricao', 2], ['psicologia-adulto', 6]],
       [['endocrinologia', 2], ['nutricao', 3], ['psicologia-adulto', 12]],
@@ -64,7 +64,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Mente em Equilíbrio',
     'Cuidado emocional acessível, contínuo e assistido para ansiedade, estresse, esgotamento e sobrecarga.',
     ['Empresas e saúde corporativa', 'Clínicas e academias', 'Farmácias'],
-    [1050, 2100, 3300],
+    [568, 1136, 1910],
     [
       [['psicologia-adulto', 6], ['psiquiatria-adulto', 1]],
       [['psicologia-adulto', 12], ['psiquiatria-adulto', 2]],
@@ -76,7 +76,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Desenvolvimento Infantil',
     'Jornada assistida para organizar a investigação, orientar os pais e acompanhar crianças com suspeitas ou diagnósticos de autismo, TDAH, atrasos de fala e alterações comportamentais.',
     ['Clínicas e escolas', 'Farmácias com sala clínica', 'Empresas com benefício familiar'],
-    [2550, 5100, 8400],
+    [1636, 3272, 5274],
     [
       [['pediatria', 1], ['neuropediatria', 1], ['psicologia-infantil', 6], ['fonoaudiologia', 3], ['psiquiatria-infantil', 1]],
       [['pediatria', 2], ['neuropediatria', 2], ['psicologia-infantil', 12], ['fonoaudiologia', 6], ['psiquiatria-infantil', 2]],
@@ -88,7 +88,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Desenvolvimento Adolescente',
     'Apoio especializado para adolescentes com desafios emocionais, comportamentais, escolares, de atenção, autoestima e desenvolvimento.',
     ['Escolas e clínicas', 'Empresas com benefício familiar', 'Farmácias'],
-    [1950, 3900, 6000],
+    [1220, 2440, 3627],
     [
       [['pediatria', 1], ['psiquiatria-infantil', 1], ['psicologia-infantil', 6], ['endocrinologia', 1]],
       [['pediatria', 2], ['psiquiatria-infantil', 2], ['psicologia-infantil', 12], ['endocrinologia', 2]],
@@ -100,7 +100,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Mulher Plena',
     'Equilíbrio hormonal, metabólico e emocional para a mulher viver melhor em cada fase da vida.',
     ['Clínicas ginecológicas e laboratórios', 'Farmácias e academias', 'Empresas'],
-    [1350, 3000, 4800],
+    [844, 1745, 2792],
     [
       [['ginecologia-obstetricia', 1], ['endocrinologia', 1], ['nutricao', 2], ['psicologia-adulto', 6]],
       [['cardiologia-adulto', 1], ['ginecologia-obstetricia', 2], ['endocrinologia', 2], ['nutricao', 3], ['psicologia-adulto', 12]],
@@ -112,7 +112,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Fertilidade e Vida',
     'Preparação integrada para mulheres e casais que desejam cuidar da saúde antes e durante a jornada de fertilidade.',
     ['Clínicas ginecológicas e laboratórios', 'Farmácias e empresas', 'Clínicas populares e premium'],
-    [1650, 3000, 4800],
+    [974, 1745, 2792],
     [
       [['ginecologia-obstetricia', 2], ['endocrinologia', 1], ['nutricao', 2], ['psicologia-adulto', 6]],
       [['ginecologia-obstetricia', 3], ['endocrinologia', 2], ['nutricao', 3], ['psicologia-adulto', 12]],
@@ -124,7 +124,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Respirar Livre',
     'Parar de fumar com apoio médico, emocional e acompanhamento inteligente para reduzir recaídas.',
     ['Empresas e programas ocupacionais', 'Farmácias e clínicas', 'Cooperativas'],
-    [1500, 3000, 4500],
+    [877, 1681, 2631],
     [
       [['pneumologia', 1], ['psiquiatria-adulto', 1], ['psicologia-adulto', 6], ['nutricao', 2]],
       [['pneumologia', 2], ['psiquiatria-adulto', 2], ['psicologia-adulto', 12], ['nutricao', 3]],
@@ -136,7 +136,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Saúde Capilar',
     'Investigação, cuidado e autoestima: saúde dos fios de dentro para fora.',
     ['Clínicas dermatológicas e de estética', 'Hospitais de transplante capilar', 'Farmácias e laboratórios'],
-    [1050, 1800, 2700],
+    [536, 869, 1478],
     [
       [['dermatologia', 2], ['endocrinologia', 1], ['nutricao', 2]],
       [['dermatologia', 3], ['endocrinologia', 2], ['nutricao', 3]],
@@ -148,7 +148,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Longevidade Ativa',
     'Prevenção, vitalidade e acompanhamento para viver mais, melhor e com autonomia.',
     ['Academias e laboratórios', 'Clínicas e farmácias', 'Empresas e cooperativas'],
-    [1650, 3000, 4800],
+    [974, 1745, 2955],
     [
       [['geriatria', 1], ['cardiologia-adulto', 1], ['endocrinologia', 1], ['nutricao', 2], ['psicologia-adulto', 6]],
       [['geriatria', 2], ['cardiologia-adulto', 1], ['endocrinologia', 2], ['nutricao', 3], ['psicologia-adulto', 12]],
@@ -160,7 +160,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Coração em Dia',
     'Prevenção cardiovascular acessível e acompanhada: cuidar antes que a urgência apareça.',
     ['Academias e laboratórios', 'Farmácias e empresas', 'Clínicas'],
-    [1350, 2700, 3900],
+    [844, 1485, 2272],
     [
       [['cardiologia-adulto', 2], ['nutricao', 2], ['psicologia-adulto', 6]],
       [['cardiologia-adulto', 3], ['nutricao', 3], ['psicologia-adulto', 12]],
@@ -172,7 +172,7 @@ export const PROGRAMS: Program[] = [
     'Prontta Sono e Energia',
     'Cuidado integrado para recuperar disposição, foco, sono e equilíbrio.',
     ['Empresas e qualidade de vida', 'Academias e clínicas', 'Farmácias'],
-    [1350, 2700, 4500],
+    [790, 1507, 2663],
     [
       [['medico-generalista', 1], ['endocrinologia', 1], ['nutricao', 2], ['psicologia-adulto', 6]],
       [['medico-generalista', 2], ['endocrinologia', 2], ['nutricao', 3], ['psicologia-adulto', 12]],

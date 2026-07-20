@@ -29,8 +29,11 @@ export interface Program {
   description: string;
   /** Canais prioritários de venda (academias, clínicas, farmácias…). */
   channels: string[];
-  /** Preço oficial V8 ao paciente por ciclo (dado, não fórmula). */
-  priceByCycle: Record<Cycle, number>;
+  /**
+   * Custo-base do programa por ciclo (dado oficial). O preço ao paciente é DERIVADO pelo engine:
+   * ceil((custoBase + fee de plataforma) ÷ (1 − margem), 50). O fee já cobre plataforma e IA.
+   */
+  costByCycle: Record<Cycle, number>;
   /** Composição de consultas por ciclo (especialidade × quantidade). */
   compositionByCycle: Record<Cycle, Array<{ specialtyId: string; quantity: number }>>;
 }
@@ -38,9 +41,10 @@ export interface Program {
 export interface ConsultationLine {
   id: string;
   specialtyId: string;
+  /** Plano escolhido POR LINHA (define consultas/hora e, portanto, o custo). */
+  plan: PlanId;
   agenda: AgendaType;
   quantity: number;
-  cycleMonths: number;
 }
 
 export interface ProgramSelection {
