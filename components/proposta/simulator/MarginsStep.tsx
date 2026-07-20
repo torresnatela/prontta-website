@@ -18,7 +18,7 @@ export function MarginsStep() {
             min={1}
             max={90}
             step={1}
-            defaultValue={Math.round(state.margins.consulta * 100)}
+            value={Math.round(state.margins.consulta * 100)}
             onChange={(e) => dispatch({ type: 'SET_CONSULTA_MARGIN', value: Number(e.currentTarget.value) })}
           />
         </label>
@@ -29,7 +29,7 @@ export function MarginsStep() {
             min={1}
             max={90}
             step={1}
-            defaultValue={Math.round(state.margins.programa * 100)}
+            value={Math.round(state.margins.programa * 100)}
             onChange={(e) => dispatch({ type: 'SET_PROGRAMA_MARGIN', value: Number(e.currentTarget.value) })}
           />
         </label>

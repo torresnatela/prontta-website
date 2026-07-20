@@ -16,7 +16,7 @@ export function SellerFields() {
           <input
             type="text"
             placeholder="Ex.: Leonardo Diniz"
-            defaultValue={state.seller.name}
+            value={state.seller.name}
             onChange={(e) => dispatch({ type: 'SET_SELLER', patch: { name: e.currentTarget.value } })}
           />
         </label>
@@ -25,7 +25,7 @@ export function SellerFields() {
           <input
             type="email"
             placeholder="voce@pronttasaude.com.br"
-            defaultValue={state.seller.email}
+            value={state.seller.email}
             onChange={(e) => dispatch({ type: 'SET_SELLER', patch: { email: e.currentTarget.value } })}
           />
         </label>
@@ -34,7 +34,7 @@ export function SellerFields() {
           <input
             type="tel"
             placeholder="(31) 90000-0000"
-            defaultValue={state.seller.phone}
+            value={state.seller.phone}
             onChange={(e) => dispatch({ type: 'SET_SELLER', patch: { phone: e.currentTarget.value } })}
           />
         </label>

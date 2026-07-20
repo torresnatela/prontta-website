@@ -44,8 +44,8 @@ export function CostsStep() {
             type="number"
             min={0}
             step={0.5}
-            defaultValue={state.dre.taxPercent}
-            onChange={(e) => dispatch({ type: 'SET_TAX_PERCENT', value: Number(e.currentTarget.value) })}
+            value={state.dre.taxPercent}
+            onChange={(e) => dispatch({ type: 'SET_TAX_PERCENT', value: Number(e.currentTarget.value) || 0 })}
           />
         </label>
         {EXPENSE_FIELDS.slice(0, 1).map((field) => (
@@ -54,9 +54,9 @@ export function CostsStep() {
             <input
               type="number"
               min={0}
-              defaultValue={state.dre.expenses[field.key]}
+              value={state.dre.expenses[field.key]}
               onChange={(e) =>
-                dispatch({ type: 'SET_EXPENSE', key: field.key, value: Number(e.currentTarget.value) })
+                dispatch({ type: 'SET_EXPENSE', key: field.key, value: Number(e.currentTarget.value) || 0 })
               }
             />
           </label>
@@ -70,9 +70,9 @@ export function CostsStep() {
             <input
               type="number"
               min={0}
-              defaultValue={state.dre.expenses[field.key]}
+              value={state.dre.expenses[field.key]}
               onChange={(e) =>
-                dispatch({ type: 'SET_EXPENSE', key: field.key, value: Number(e.currentTarget.value) })
+                dispatch({ type: 'SET_EXPENSE', key: field.key, value: Number(e.currentTarget.value) || 0 })
               }
             />
           </label>
@@ -95,8 +95,8 @@ export function CostsStep() {
             min={0}
             step={500}
             disabled={implMode !== 'V'}
-            defaultValue={implValue}
-            onChange={(e) => setImplValue(Number(e.currentTarget.value))}
+            value={implValue}
+            onChange={(e) => setImplValue(Number(e.currentTarget.value) || 0)}
           />
         </label>
       </div>
