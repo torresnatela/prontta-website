@@ -37,14 +37,17 @@ export function useProposal(): ProposalContextValue {
 export function useConsultationsSummary(): ConsultationsSummary {
   const { state } = useProposal();
   return useMemo(
-    () => summarizeConsultations(state.consultationLines, state.referencePlan),
-    [state.consultationLines, state.referencePlan],
+    () => summarizeConsultations(state.consultationLines, state.margins.consulta),
+    [state.consultationLines, state.margins.consulta],
   );
 }
 
 export function useProgramsSummary(): ProgramsSummary {
   const { state } = useProposal();
-  return useMemo(() => summarizePrograms(state.programSelections), [state.programSelections]);
+  return useMemo(
+    () => summarizePrograms(state.programSelections, state.margins.programa),
+    [state.programSelections, state.margins.programa],
+  );
 }
 
 export function useProposalTotals(): ProposalTotals {
@@ -64,7 +67,7 @@ export function useDRE(): DREResult {
     () =>
       calculateDRE({
         totalContractValue: totals.totalContractValue,
-        proposalsPerMonth: state.dre.proposalsPerMonth,
+        repasse: totals.repasse,
         taxPercent: state.dre.taxPercent,
         expenses: state.dre.expenses,
         softwareMonthlyFee: totals.softwareMonthlyFee,

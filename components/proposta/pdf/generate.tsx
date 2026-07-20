@@ -3,7 +3,7 @@
 import { pdf } from '@react-pdf/renderer';
 import type { ProposalPDFPayload } from './types';
 
-/** Gera e baixa o PDF da proposta 2.0. Import dinâmico mantém o react-pdf fora do chunk inicial. */
+/** Gera e baixa o PDF da proposta. Import dinâmico mantém o react-pdf fora do chunk inicial. */
 export async function generateProposalPDF(payload: ProposalPDFPayload) {
   const { ProposalPDF } = await import('./ProposalPDF');
   const blob = await pdf(<ProposalPDF payload={payload} />).toBlob();

@@ -1,30 +1,26 @@
-'use client';
-
 import { PROPOSAL_CONTENT } from '@/lib/proposal-content';
-import { SectionShell } from '../shared/SectionShell';
+
+const c = PROPOSAL_CONTENT;
 
 export function ComplianceSection() {
   return (
-    <SectionShell
-      id="compliance"
-      kicker="Segurança e compliance"
-      title="Um modelo desenhado dentro das regras"
-      subtitle="Telessaúde assistida com limites claros de atuação, proteção de dados e responsabilidade técnica médica."
-      tone="muted"
-    >
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {PROPOSAL_CONTENT.compliance.map((item) => (
-          <div key={item.title} className="rounded-2xl border border-accent-light bg-white p-6">
-            <h3 className="font-display font-bold text-primary-navy mb-2">{item.title}</h3>
-            <p className="text-sm text-neutral-gray">{item.description}</p>
-          </div>
-        ))}
+    <section className="band reveal">
+      <div className="wrap">
+        <span className="eyebrow">Compliance</span>
+        <h2 style={{ marginTop: 8 }}>Feito dentro da regra, por definição</h2>
+        <p style={{ maxWidth: '60ch', color: '#BCD6E4' }}>{c.legalFramework}</p>
+        <div className="clist">
+          {c.compliance.map((item) => (
+            <div className="cli" key={item.title}>
+              <span className="mk">✓</span>
+              <span>
+                <b>{item.title}.</b> {item.description}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="notbe">{c.positioningNotIs}</div>
       </div>
-
-      <div className="mt-8 rounded-2xl border border-accent-light bg-white p-6">
-        <p className="text-xs uppercase tracking-widest text-primary-cyan font-semibold mb-2">Marco legal</p>
-        <p className="text-sm text-primary-navy">{PROPOSAL_CONTENT.legalFramework}</p>
-      </div>
-    </SectionShell>
+    </section>
   );
 }

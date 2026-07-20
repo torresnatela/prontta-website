@@ -1,55 +1,60 @@
 import { describe, expect, it } from 'vitest';
-import { getConsultationPrice, getProgramPrice, getShiftMultiple } from './engine';
+import { DEFAULT_PROGRAMA_MARGIN } from './constants';
+import {
+  getConsultationCost,
+  getProgramRepasse,
+  getProgramSellPrice,
+  getShiftMultiple,
+} from './engine';
 import { PROGRAMS } from './programs';
 import { SPECIALTIES } from './specialties';
 import type { PlanId } from './types';
 
 /**
- * Golden fixture extraído da planilha oficial "Prontta_Simulador_Precos_DRE"
- * (aba 2. Especialidades). Preços e plantões esperados por plano
- * [popular, intermediário, premium]. Trava erros de digitação em
- * valorHora/consultsPerHour do catálogo.
+ * Golden fixture da tabela oficial de especialidades
+ * (`[nome, valorHora, consH_pop, consH_int, consH_prem]`). Custo por consulta e múltiplo de
+ * plantão esperados por plano [popular, intermediário, premium]. Trava erros de digitação.
  */
-const GOLDEN: Record<string, { prices: [number, number, number]; shifts: [number, number, number] }> = {
-  'cardiologia-adulto': { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  dermatologia: { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  endocrinologia: { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  fonoaudiologia: { prices: [150, 100, 200], shifts: [6, 8, 4] },
-  gastroenterologia: { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  geriatria: { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  'ginecologia-obstetricia': { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  hematologia: { prices: [200, 250, 450], shifts: [10, 8, 4] },
-  infectologia: { prices: [200, 250, 450], shifts: [10, 8, 4] },
-  'medicina-da-familia': { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  nefrologia: { prices: [200, 250, 450], shifts: [10, 8, 4] },
-  'neurologia-adulto': { prices: [150, 250, 450], shifts: [16, 8, 4] },
-  neuropediatria: { prices: [300, 350, 700], shifts: [10, 8, 4] },
-  nutricao: { prices: [100, 100, 150], shifts: [6, 6, 4] },
-  nutrologia: { prices: [150, 200, 400], shifts: [10, 8, 4] },
-  oftalmologia: { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  ortopedia: { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  otorrinolaringologia: { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  pediatria: { prices: [200, 250, 450], shifts: [10, 8, 4] },
-  pneumologia: { prices: [150, 250, 450], shifts: [16, 8, 4] },
-  'psicologia-adulto': { prices: [100, 100, 150], shifts: [6, 8, 4] },
-  'psicologia-infantil': { prices: [150, 150, 200], shifts: [6, 6, 4] },
-  'psiquiatria-adulto': { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  'psiquiatria-infantil': { prices: [200, 250, 500], shifts: [10, 8, 4] },
-  reumatologia: { prices: [200, 250, 450], shifts: [10, 8, 4] },
-  urologia: { prices: [150, 200, 350], shifts: [10, 8, 4] },
-  'medico-generalista': { prices: [100, 100, 200], shifts: [10, 8, 4] },
+const GOLDEN: Record<string, { costs: [number, number, number]; shifts: [number, number, number] }> = {
+  'cardiologia-adulto': { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  dermatologia: { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  endocrinologia: { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  fonoaudiologia: { costs: [150, 100, 200], shifts: [6, 8, 4] },
+  gastroenterologia: { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  geriatria: { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  'ginecologia-obstetricia': { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  hematologia: { costs: [200, 250, 450], shifts: [10, 8, 4] },
+  infectologia: { costs: [200, 250, 450], shifts: [10, 8, 4] },
+  'medicina-da-familia': { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  nefrologia: { costs: [200, 250, 450], shifts: [10, 8, 4] },
+  'neurologia-adulto': { costs: [150, 250, 450], shifts: [16, 8, 4] },
+  neuropediatria: { costs: [300, 350, 700], shifts: [10, 8, 4] },
+  nutricao: { costs: [100, 100, 150], shifts: [6, 6, 4] },
+  nutrologia: { costs: [150, 200, 400], shifts: [10, 8, 4] },
+  oftalmologia: { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  ortopedia: { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  otorrinolaringologia: { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  pediatria: { costs: [200, 250, 450], shifts: [10, 8, 4] },
+  pneumologia: { costs: [150, 250, 450], shifts: [16, 8, 4] },
+  'psicologia-adulto': { costs: [100, 100, 150], shifts: [6, 8, 4] },
+  'psicologia-infantil': { costs: [150, 150, 200], shifts: [6, 6, 4] },
+  'psiquiatria-adulto': { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  'psiquiatria-infantil': { costs: [200, 250, 500], shifts: [10, 8, 4] },
+  reumatologia: { costs: [200, 250, 450], shifts: [10, 8, 4] },
+  urologia: { costs: [150, 200, 350], shifts: [10, 8, 4] },
+  'medico-generalista': { costs: [100, 100, 200], shifts: [10, 8, 4] },
 };
 
 const PLANS: PlanId[] = ['popular', 'intermediario', 'premium'];
 
-describe('catálogo de especialidades (golden da planilha)', () => {
-  it('tem exatamente as 27 especialidades da planilha', () => {
+describe('catálogo de especialidades (golden da tabela oficial)', () => {
+  it('tem exatamente as 27 especialidades da tabela', () => {
     expect(SPECIALTIES.map((s) => s.id).sort()).toEqual(Object.keys(GOLDEN).sort());
   });
 
-  it.each(Object.entries(GOLDEN))('%s: preços e plantões por plano', (id, expected) => {
+  it.each(Object.entries(GOLDEN))('%s: custos e plantões por plano', (id, expected) => {
     PLANS.forEach((plan, i) => {
-      expect(getConsultationPrice(id, plan), `preço ${id}/${plan}`).toBe(expected.prices[i]);
+      expect(getConsultationCost(id, plan), `custo ${id}/${plan}`).toBe(expected.costs[i]);
       expect(getShiftMultiple(id, plan), `plantão ${id}/${plan}`).toBe(expected.shifts[i]);
     });
   });
@@ -61,31 +66,57 @@ describe('catálogo de especialidades (golden da planilha)', () => {
   });
 });
 
-describe('catálogo de programas (golden V8)', () => {
-  /** [3m, 6m, 12m] — preços oficiais ao paciente (doc V8 / planilha aba 4). */
-  const GOLDEN_PROGRAMS: Record<string, [number, number, number]> = {
-    performance: [1350, 2700, 4200],
-    'emagrecimento-inteligente': [1200, 2400, 3900],
-    'mente-em-equilibrio': [1050, 2100, 3300],
-    'desenvolvimento-infantil': [2550, 5100, 8400],
-    'desenvolvimento-adolescente': [1950, 3900, 6000],
-    'mulher-plena': [1350, 3000, 4800],
-    'fertilidade-e-vida': [1650, 3000, 4800],
-    'respirar-livre': [1500, 3000, 4500],
-    'saude-capilar': [1050, 1800, 2700],
-    'longevidade-ativa': [1650, 3000, 4800],
-    'coracao-em-dia': [1350, 2700, 3900],
-    'sono-e-energia': [1350, 2700, 4500],
+describe('catálogo de programas (custo-base oficial)', () => {
+  /** [3m, 6m, 12m] — custo-base do programa (dado oficial que alimenta a fórmula). */
+  const GOLDEN_COSTS: Record<string, [number, number, number]> = {
+    performance: [844, 1485, 2532],
+    'emagrecimento-inteligente': [714, 1355, 2272],
+    'mente-em-equilibrio': [568, 1136, 1910],
+    'desenvolvimento-infantil': [1636, 3272, 5274],
+    'desenvolvimento-adolescente': [1220, 2440, 3627],
+    'mulher-plena': [844, 1745, 2792],
+    'fertilidade-e-vida': [974, 1745, 2792],
+    'respirar-livre': [877, 1681, 2631],
+    'saude-capilar': [536, 869, 1478],
+    'longevidade-ativa': [974, 1745, 2955],
+    'coracao-em-dia': [844, 1485, 2272],
+    'sono-e-energia': [790, 1507, 2663],
   };
-  const CYCLES = [3, 6, 12] as const;
 
-  it('tem exatamente os 12 programas da linha V8', () => {
-    expect(PROGRAMS.map((p) => p.id).sort()).toEqual(Object.keys(GOLDEN_PROGRAMS).sort());
+  /** [3m, 6m, 12m] — preço ao paciente derivado na margem padrão de 30%. */
+  const GOLDEN_SELL_30: Record<string, [number, number, number]> = {
+    performance: [1350, 2500, 4200],
+    'emagrecimento-inteligente': [1200, 2300, 3850],
+    'mente-em-equilibrio': [1000, 2000, 3300],
+    'desenvolvimento-infantil': [2500, 5050, 8150],
+    'desenvolvimento-adolescente': [1900, 3850, 5800],
+    'mulher-plena': [1350, 2850, 4600],
+    'fertilidade-e-vida': [1550, 2850, 4600],
+    'respirar-livre': [1400, 2800, 4350],
+    'saude-capilar': [950, 1600, 2700],
+    'longevidade-ativa': [1550, 2850, 4800],
+    'coracao-em-dia': [1350, 2500, 3850],
+    'sono-e-energia': [1300, 2550, 4400],
+  };
+
+  const CYCLES = [3, 6, 12] as const;
+  const FEE = { 3: 100, 6: 250, 12: 400 } as const;
+
+  it('tem exatamente os 12 programas da linha', () => {
+    expect(PROGRAMS.map((p) => p.id).sort()).toEqual(Object.keys(GOLDEN_COSTS).sort());
   });
 
-  it.each(Object.entries(GOLDEN_PROGRAMS))('%s: preços por ciclo', (id, prices) => {
+  it.each(Object.entries(GOLDEN_COSTS))('%s: repasse = custo-base + fee por ciclo', (id, costs) => {
     CYCLES.forEach((cycle, i) => {
-      expect(getProgramPrice(id, cycle), `preço ${id}/${cycle}m`).toBe(prices[i]);
+      expect(getProgramRepasse(id, cycle), `repasse ${id}/${cycle}m`).toBe(costs[i] + FEE[cycle]);
+    });
+  });
+
+  it.each(Object.entries(GOLDEN_SELL_30))('%s: preço ao paciente na margem padrão 30%', (id, sell) => {
+    CYCLES.forEach((cycle, i) => {
+      expect(getProgramSellPrice(id, cycle, DEFAULT_PROGRAMA_MARGIN), `venda ${id}/${cycle}m`).toBe(
+        sell[i],
+      );
     });
   });
 

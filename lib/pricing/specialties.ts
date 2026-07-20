@@ -46,9 +46,9 @@ export const SPECIALTIES: Specialty[] = [
 ];
 
 export const PLAN_LABELS: Record<PlanId, string> = {
-  popular: 'Popular',
-  intermediario: 'Intermediário',
-  premium: 'Premium',
+  popular: 'popular',
+  intermediario: 'intermediário',
+  premium: 'premium',
 };
 
 export function getSpecialty(specialtyId: string): Specialty {

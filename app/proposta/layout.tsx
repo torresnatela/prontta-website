@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import './proposta.css';
 
 export const metadata: Metadata = {
   title: 'Proposta e Simulador',

@@ -1,9 +1,9 @@
 export { ProposalProvider } from './state/ProposalProvider';
+export { TopBar } from './sections/TopBar';
 export { HeroSection } from './sections/HeroSection';
-export { ProgramsSection } from './sections/ProgramsSection';
-export { ConsultationsSection } from './sections/ConsultationsSection';
-export { SummarySection } from './sections/SummarySection';
-export { DRESection } from './sections/DRESection';
-export { ScopeSection } from './sections/ScopeSection';
+export { SimulatorSection } from './sections/SimulatorSection';
+export { IncludedSection } from './sections/IncludedSection';
+export { ResponsibilitiesSection } from './sections/ResponsibilitiesSection';
 export { ComplianceSection } from './sections/ComplianceSection';
+export { RisksSection } from './sections/RisksSection';
 export { ContactSection } from './sections/ContactSection';

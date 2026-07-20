@@ -1,16 +1,19 @@
 import { describe, expect, it } from 'vitest';
+import { DEFAULT_CONSULTA_MARGIN, DEFAULT_PROGRAMA_MARGIN } from './constants';
 import {
   calculateDRE,
   ceilToStep,
   consolidateProposal,
-  getConsultationPrice,
-  getProgramMonthly,
-  getProgramPrice,
+  getConsultationCost,
+  getConsultationSellPrice,
+  getProgramRepasse,
+  getProgramSellPrice,
   getShiftMultiple,
   summarizeConsultations,
   summarizePrograms,
   validateDedicatedQuantity,
 } from './engine';
+import type { ConsultationLine, PlanId } from './types';
 
 describe('ceilToStep', () => {
   it('retorna 0 para 0', () => {
@@ -31,28 +34,33 @@ describe('ceilToStep', () => {
   it('não sobe um degrau por ruído de ponto flutuante', () => {
     expect(ceilToStep(150.00000000000003)).toBe(150);
   });
-
-  it('aceita passo customizado', () => {
-    expect(ceilToStep(5.32, 1)).toBe(6);
-  });
 });
 
-describe('getConsultationPrice', () => {
-  it('deriva o preço golden da Cardiologia Adulto em cada plano', () => {
+describe('getConsultationCost', () => {
+  it('deriva o custo golden da Cardiologia Adulto em cada plano', () => {
     // valorHora 120; cons/h 2.5 / 2 / 1; divisor 0.37; ceil múltiplo de 50
-    expect(getConsultationPrice('cardiologia-adulto', 'popular')).toBe(150);
-    expect(getConsultationPrice('cardiologia-adulto', 'intermediario')).toBe(200);
-    expect(getConsultationPrice('cardiologia-adulto', 'premium')).toBe(350);
-  });
-
-  it('deriva preços de especialidades de baixo valor-hora (Médico Generalista)', () => {
-    expect(getConsultationPrice('medico-generalista', 'popular')).toBe(100);
-    expect(getConsultationPrice('medico-generalista', 'intermediario')).toBe(100);
-    expect(getConsultationPrice('medico-generalista', 'premium')).toBe(200);
+    expect(getConsultationCost('cardiologia-adulto', 'popular')).toBe(150);
+    expect(getConsultationCost('cardiologia-adulto', 'intermediario')).toBe(200);
+    expect(getConsultationCost('cardiologia-adulto', 'premium')).toBe(350);
   });
 
   it('lança erro para especialidade inexistente', () => {
-    expect(() => getConsultationPrice('inexistente', 'popular')).toThrow();
+    expect(() => getConsultationCost('inexistente', 'popular')).toThrow();
+  });
+});
+
+describe('getConsultationSellPrice', () => {
+  it('aplica a margem padrão de 60% sobre o custo (Cardiologia)', () => {
+    // custo/(1−0.6) = custo/0.4, ceil múltiplo de 50
+    expect(getConsultationSellPrice('cardiologia-adulto', 'popular', DEFAULT_CONSULTA_MARGIN)).toBe(400);
+    expect(getConsultationSellPrice('cardiologia-adulto', 'intermediario', DEFAULT_CONSULTA_MARGIN)).toBe(500);
+    expect(getConsultationSellPrice('cardiologia-adulto', 'premium', DEFAULT_CONSULTA_MARGIN)).toBe(900);
+  });
+
+  it('reflete margens editáveis diferentes', () => {
+    // Nutrição popular: custo 100. @50% → 200; @30% → 150
+    expect(getConsultationSellPrice('nutricao', 'popular', 0.5)).toBe(200);
+    expect(getConsultationSellPrice('nutricao', 'popular', 0.3)).toBe(150);
   });
 });
 
@@ -64,10 +72,8 @@ describe('getShiftMultiple', () => {
   });
 
   it('arredonda para cima consultas/hora fracionárias', () => {
-    // Fonoaudiologia popular: 1.33 × 4 = 5.32 → 6
-    expect(getShiftMultiple('fonoaudiologia', 'popular')).toBe(6);
-    // Nutrição popular: 1.5 × 4 = 6
-    expect(getShiftMultiple('nutricao', 'popular')).toBe(6);
+    expect(getShiftMultiple('fonoaudiologia', 'popular')).toBe(6); // 1.33 × 4 = 5.32 → 6
+    expect(getShiftMultiple('nutricao', 'popular')).toBe(6); // 1.5 × 4 = 6
   });
 });
 
@@ -80,15 +86,12 @@ describe('validateDedicatedQuantity', () => {
     });
   });
 
-  it('rejeita quantidade fora do múltiplo', () => {
+  it('rejeita quantidade fora do múltiplo e quantidade zero', () => {
     expect(validateDedicatedQuantity('cardiologia-adulto', 'popular', 15)).toEqual({
       ok: false,
       multiple: 10,
       shifts: 0,
     });
-  });
-
-  it('rejeita quantidade zero', () => {
     expect(validateDedicatedQuantity('cardiologia-adulto', 'popular', 0)).toEqual({
       ok: false,
       multiple: 10,
@@ -100,69 +103,68 @@ describe('validateDedicatedQuantity', () => {
 describe('summarizeConsultations', () => {
   const line = (
     specialtyId: string,
+    plan: PlanId,
     agenda: 'dedicada' | 'compartilhada',
     quantity: number,
-    cycleMonths: number,
     id = `${specialtyId}-${agenda}`,
-  ) => ({ id, specialtyId, agenda, quantity, cycleMonths });
+  ): ConsultationLine => ({ id, specialtyId, plan, agenda, quantity });
 
   it('retorna tudo zerado sem linhas (e não cobra software)', () => {
-    const s = summarizeConsultations([], 'popular');
+    const s = summarizeConsultations([], DEFAULT_CONSULTA_MARGIN);
     expect(s.lines).toEqual([]);
     expect(s.subtotalCost).toBe(0);
-    expect(s.blockCycleMonths).toBe(0);
-    expect(s.consultationsPerMonth).toBe(0);
     expect(s.patientPrice).toBe(0);
+    expect(s.totalQuantity).toBe(0);
     expect(s.softwareMonthlyFee).toBe(0);
   });
 
-  it('reproduz o cenário golden da planilha (subtotal 3.900 → paciente 5.600, software 1.499)', () => {
+  it('reproduz o mix semente das consultas (custo 5.400 → paciente 14.000, software 1.499)', () => {
     const s = summarizeConsultations(
       [
-        line('endocrinologia', 'dedicada', 10, 6),
-        line('nutricao', 'compartilhada', 3, 6),
-        line('psicologia-adulto', 'compartilhada', 6, 6),
-        line('cardiologia-adulto', 'dedicada', 10, 6),
+        line('endocrinologia', 'popular', 'dedicada', 20),
+        line('nutricao', 'popular', 'dedicada', 12),
+        line('psicologia-adulto', 'popular', 'dedicada', 12),
       ],
-      'popular',
+      DEFAULT_CONSULTA_MARGIN,
     );
-    expect(s.subtotalCost).toBe(3900);
-    expect(s.blockCycleMonths).toBe(6);
-    expect(s.consultationsPerMonth).toBeCloseTo(29 / 6, 10);
-    expect(s.patientPrice).toBe(5600);
+    expect(s.subtotalCost).toBe(5400);
+    expect(s.patientPrice).toBe(14000);
+    expect(s.totalQuantity).toBe(44);
     expect(s.softwareMonthlyFee).toBe(1499);
   });
 
-  it('precifica cada linha pelo plano de referência', () => {
-    const s = summarizeConsultations([line('cardiologia-adulto', 'dedicada', 8, 6)], 'intermediario');
-    expect(s.lines[0].unitPrice).toBe(200);
-    expect(s.lines[0].lineTotal).toBe(1600);
-  });
-
-  it('usa o MAIOR ciclo entre as linhas como ciclo do bloco', () => {
+  it('precifica cada linha pelo seu próprio plano', () => {
     const s = summarizeConsultations(
-      [line('nutricao', 'compartilhada', 2, 3), line('cardiologia-adulto', 'dedicada', 10, 12)],
-      'popular',
+      [line('cardiologia-adulto', 'intermediario', 'dedicada', 8)],
+      DEFAULT_CONSULTA_MARGIN,
     );
-    expect(s.blockCycleMonths).toBe(12);
-    expect(s.consultationsPerMonth).toBe(1);
+    expect(s.lines[0].unitCost).toBe(200);
+    expect(s.lines[0].unitSell).toBe(500);
+    expect(s.lines[0].lineSell).toBe(4000);
+    expect(s.lines[0].lineCost).toBe(1600);
   });
 
-  it('isenta o software quando consultas/mês atingem exatamente o gatilho de 150', () => {
-    const s = summarizeConsultations([line('psicologia-adulto', 'compartilhada', 900, 6)], 'popular');
-    expect(s.consultationsPerMonth).toBe(150);
+  it('isenta o software quando a quantidade bruta atinge o gatilho de 150', () => {
+    const s = summarizeConsultations(
+      [line('psicologia-adulto', 'popular', 'compartilhada', 150)],
+      DEFAULT_CONSULTA_MARGIN,
+    );
+    expect(s.totalQuantity).toBe(150);
     expect(s.softwareMonthlyFee).toBe(0);
   });
 
   it('cobra o software logo abaixo do gatilho', () => {
-    const s = summarizeConsultations([line('psicologia-adulto', 'compartilhada', 899, 6)], 'popular');
+    const s = summarizeConsultations(
+      [line('psicologia-adulto', 'popular', 'compartilhada', 149)],
+      DEFAULT_CONSULTA_MARGIN,
+    );
     expect(s.softwareMonthlyFee).toBe(1499);
   });
 
   it('valida múltiplo de plantão só em agenda dedicada', () => {
     const s = summarizeConsultations(
-      [line('cardiologia-adulto', 'dedicada', 15, 6), line('nutricao', 'compartilhada', 7, 6)],
-      'popular',
+      [line('cardiologia-adulto', 'popular', 'dedicada', 15), line('nutricao', 'popular', 'compartilhada', 7)],
+      DEFAULT_CONSULTA_MARGIN,
     );
     expect(s.lines[0].validation).toEqual({ ok: false, multiple: 10, shifts: 0 });
     expect(s.lines[1].validation).toBeNull();
@@ -170,101 +172,104 @@ describe('summarizeConsultations', () => {
 });
 
 describe('programas', () => {
-  it('retorna preço oficial e mensalidade por ciclo', () => {
-    expect(getProgramPrice('performance', 3)).toBe(1350);
-    expect(getProgramMonthly('performance', 3)).toBe(450);
-    expect(getProgramMonthly('performance', 12)).toBe(350);
+  it('repasse = custo-base + fee e preço deriva pela margem', () => {
+    expect(getProgramRepasse('performance', 6)).toBe(1735); // 1485 + 250
+    expect(getProgramSellPrice('performance', 3, DEFAULT_PROGRAMA_MARGIN)).toBe(1350);
+    expect(getProgramSellPrice('performance', 6, DEFAULT_PROGRAMA_MARGIN)).toBe(2500);
+    expect(getProgramSellPrice('longevidade-ativa', 12, DEFAULT_PROGRAMA_MARGIN)).toBe(4800);
   });
 
   it('lança erro para programa inexistente', () => {
-    expect(() => getProgramPrice('inexistente', 3)).toThrow();
+    expect(() => getProgramRepasse('inexistente', 3)).toThrow();
   });
 
-  it('summarizePrograms reproduz o mix golden da planilha (9.000)', () => {
-    const s = summarizePrograms([
-      { id: 'a', programId: 'emagrecimento-inteligente', cycle: 6, quantity: 1 },
-      { id: 'b', programId: 'longevidade-ativa', cycle: 12, quantity: 1 },
-      { id: 'c', programId: 'saude-capilar', cycle: 6, quantity: 1 },
-    ]);
-    expect(s.items.map((i) => i.total)).toEqual([2400, 4800, 1800]);
-    expect(s.items[0].monthly).toBe(400);
-    expect(s.subtotal).toBe(9000);
+  it('summarizePrograms reproduz o mix semente (venda 14.900, repasse 10.410)', () => {
+    const s = summarizePrograms(
+      [
+        { id: 'a', programId: 'emagrecimento-inteligente', cycle: 6, quantity: 4 },
+        { id: 'b', programId: 'longevidade-ativa', cycle: 6, quantity: 2 },
+      ],
+      DEFAULT_PROGRAMA_MARGIN,
+    );
+    expect(s.items[0].unitSell).toBe(2300);
+    expect(s.items[0].unitRepasse).toBe(1605);
+    expect(s.subtotalSell).toBe(14900);
+    expect(s.subtotalRepasse).toBe(10410);
   });
 
-  it('multiplica pela quantidade e aceita lista vazia', () => {
-    expect(summarizePrograms([]).subtotal).toBe(0);
-    const s = summarizePrograms([{ id: 'a', programId: 'saude-capilar', cycle: 6, quantity: 3 }]);
-    expect(s.items[0].total).toBe(5400);
-    expect(s.subtotal).toBe(5400);
+  it('aceita lista vazia', () => {
+    const s = summarizePrograms([], DEFAULT_PROGRAMA_MARGIN);
+    expect(s.subtotalSell).toBe(0);
+    expect(s.subtotalRepasse).toBe(0);
   });
 });
 
-describe('consolidateProposal', () => {
-  const goldenConsultations = summarizeConsultations(
+describe('mix semente completo (consolidação + DRE)', () => {
+  const consultations = summarizeConsultations(
     [
-      { id: '1', specialtyId: 'endocrinologia', agenda: 'dedicada', quantity: 10, cycleMonths: 6 },
-      { id: '2', specialtyId: 'nutricao', agenda: 'compartilhada', quantity: 3, cycleMonths: 6 },
-      { id: '3', specialtyId: 'psicologia-adulto', agenda: 'compartilhada', quantity: 6, cycleMonths: 6 },
-      { id: '4', specialtyId: 'cardiologia-adulto', agenda: 'dedicada', quantity: 10, cycleMonths: 6 },
+      { id: '1', specialtyId: 'endocrinologia', plan: 'popular', agenda: 'dedicada', quantity: 20 },
+      { id: '2', specialtyId: 'nutricao', plan: 'popular', agenda: 'dedicada', quantity: 12 },
+      { id: '3', specialtyId: 'psicologia-adulto', plan: 'popular', agenda: 'dedicada', quantity: 12 },
     ],
-    'popular',
+    DEFAULT_CONSULTA_MARGIN,
   );
-  const goldenPrograms = summarizePrograms([
-    { id: 'a', programId: 'emagrecimento-inteligente', cycle: 6, quantity: 1 },
-    { id: 'b', programId: 'longevidade-ativa', cycle: 12, quantity: 1 },
-    { id: 'c', programId: 'saude-capilar', cycle: 6, quantity: 1 },
-  ]);
+  const programs = summarizePrograms(
+    [
+      { id: 'a', programId: 'emagrecimento-inteligente', cycle: 6, quantity: 4 },
+      { id: 'b', programId: 'longevidade-ativa', cycle: 6, quantity: 2 },
+    ],
+    DEFAULT_PROGRAMA_MARGIN,
+  );
 
-  it('soma consultas ao paciente + programas no total do contrato (golden 14.600)', () => {
-    const t = consolidateProposal(goldenConsultations, goldenPrograms, { mode: 'a_combinar' });
-    expect(t.consultationsPatientPrice).toBe(5600);
-    expect(t.programsSubtotal).toBe(9000);
-    expect(t.totalContractValue).toBe(14600);
+  it('consolida total ao paciente 28.900 e repasse 15.810', () => {
+    const t = consolidateProposal(consultations, programs, { mode: 'a_combinar' });
+    expect(t.consultationsPatientPrice).toBe(14000);
+    expect(t.programsSubtotal).toBe(14900);
+    expect(t.totalContractValue).toBe(28900);
+    expect(t.repasse).toBe(15810);
     expect(t.softwareMonthlyFee).toBe(1499);
     expect(t.implantation).toEqual({ mode: 'a_combinar' });
   });
 
-  it('proposta só de programas não tem software mensal', () => {
-    const t = consolidateProposal(summarizeConsultations([], 'popular'), goldenPrograms, {
-      mode: 'valor',
-      value: 12000,
+  it('DRE do parceiro: resultado líquido 6.457, margem ~22,3%', () => {
+    const t = consolidateProposal(consultations, programs, { mode: 'a_combinar' });
+    const dre = calculateDRE({
+      totalContractValue: t.totalContractValue,
+      repasse: t.repasse,
+      taxPercent: 6,
+      expenses: { pessoal: 1500, aluguel: 800, fixas: 500, marketing: 600, outras: 0 },
+      softwareMonthlyFee: t.softwareMonthlyFee,
     });
-    expect(t.totalContractValue).toBe(9000);
-    expect(t.softwareMonthlyFee).toBe(0);
-    expect(t.implantation).toEqual({ mode: 'valor', value: 12000 });
+    expect(dre.receitaBruta).toBe(28900);
+    expect(dre.repasse).toBe(15810);
+    expect(dre.margemBruta).toBe(13090);
+    expect(dre.impostos).toBe(1734);
+    expect(dre.software).toBe(1499);
+    expect(dre.totalDespesas).toBe(6633);
+    expect(dre.resultadoLiquido).toBe(6457);
+    expect(dre.margemLiquidaPct).toBeCloseTo(22.34, 2);
   });
 });
 
-describe('calculateDRE', () => {
-  const goldenInputs = {
-    totalContractValue: 14600,
-    proposalsPerMonth: 8,
+describe('calculateDRE — casos de borda', () => {
+  const base = {
+    totalContractValue: 0,
+    repasse: 0,
     taxPercent: 6,
     expenses: { pessoal: 1500, aluguel: 800, fixas: 500, marketing: 600, outras: 0 },
     softwareMonthlyFee: 1499,
   };
 
-  it('reproduz a DRE golden da planilha (resultado 23.133, margem 19,8%)', () => {
-    const dre = calculateDRE(goldenInputs);
-    expect(dre.receitaBruta).toBe(116800);
-    expect(dre.custoProntta).toBe(81760);
-    expect(dre.impostos).toBe(7008);
-    expect(dre.software).toBe(1499);
-    expect(dre.totalDespesas).toBe(11907);
-    expect(dre.resultadoLiquido).toBe(23133);
-    expect(dre.margemLiquidaPct).toBeCloseTo(19.8057, 3);
-  });
-
   it('não produz NaN com receita zero e reflete despesas fixas no prejuízo', () => {
-    const dre = calculateDRE({ ...goldenInputs, proposalsPerMonth: 0 });
+    const dre = calculateDRE(base);
     expect(dre.receitaBruta).toBe(0);
     expect(dre.impostos).toBe(0);
     expect(dre.margemLiquidaPct).toBe(0);
     expect(dre.resultadoLiquido).toBe(-(3400 + 1499));
   });
 
-  it('permite resultado negativo com receita baixa', () => {
-    const dre = calculateDRE({ ...goldenInputs, totalContractValue: 1000, proposalsPerMonth: 1 });
+  it('permite resultado negativo quando o repasse+despesas superam a receita', () => {
+    const dre = calculateDRE({ ...base, totalContractValue: 1000, repasse: 700 });
     expect(dre.resultadoLiquido).toBeLessThan(0);
   });
 });

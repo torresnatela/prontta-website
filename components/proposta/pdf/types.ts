@@ -13,4 +13,6 @@ export interface ProposalPDFPayload {
   programs: ProgramsSummary;
   totals: ProposalTotals;
   dre: DREResult;
+  /** Data de emissão formatada (pt-BR). Gerada no cliente para evitar Date no render. */
+  dateLabel: string;
 }
