@@ -34,6 +34,8 @@ de saúde a ampliar a oferta de especialidades com qualidade e menor custo opera
 
 - [Início](${siteConfig.url}/): visão geral dos serviços de terceirização médica e telesaúde híbrida.
 - [Proposta e simulador](${siteConfig.url}/proposta): monte uma proposta de Programas de Saúde Assistida e consultas por telessaúde e simule o resultado da operação.
+- [Simulador para academias](${siteConfig.url}/academias/simulador): simule a receita e o lucro de uma academia que oferece Programas de Saúde Assistida aos alunos, com margem e comissão de personal configuráveis.
+- [Programas para associados](${siteConfig.url}/academias/programas): página pública com os programas de saúde que uma academia oferece aos seus associados, em ciclos de 3, 6 ou 12 meses.
 - [Blog](${siteConfig.url}/blog): artigos sobre telesaúde, gestão de clínicas e especialidades médicas.
 - [Perguntas frequentes](${siteConfig.url}/faq): dúvidas comuns sobre os modelos de atendimento.
 

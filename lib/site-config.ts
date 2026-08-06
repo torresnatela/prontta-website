@@ -57,6 +57,16 @@ export const siteConfig = {
 /** Lista de perfis sociais usada no campo `sameAs` do schema.org. */
 export const socialProfiles = [siteConfig.social.instagram, siteConfig.social.linkedin]
 
+/**
+ * Link de WhatsApp (wa.me) com mensagem opcional pré-preenchida.
+ * Deriva do telefone de `siteConfig` — não duplique o número em outro lugar.
+ */
+export function whatsappHref(message?: string): string {
+  const digits = siteConfig.contact.phone.replace(/\D/g, '')
+  const query = message ? `?text=${encodeURIComponent(message)}` : ''
+  return `https://wa.me/${digits}${query}`
+}
+
 /** Helper para montar URLs absolutas a partir de um path relativo. */
 export function absoluteUrl(path = ''): string {
   if (!path) return siteConfig.url
