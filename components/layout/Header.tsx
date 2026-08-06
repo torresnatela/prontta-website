@@ -15,6 +15,7 @@ const navItems = [
   { name: 'Serviços', href: '/#servicos' },
   { name: 'Telesaúde Híbrida', href: '/#telesaude' },
   { name: 'Como Funciona', href: '/#como-funciona' },
+  { name: 'Academias', href: '/academias/simulador' },
   { name: 'Blog', href: '/blog' },
   { name: 'Contato', href: '/#contato' },
 ]
