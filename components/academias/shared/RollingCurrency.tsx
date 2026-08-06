@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { brl, currencyDigits, percent } from './format';
 import { useRollingNumber } from './useRollingNumber';
 
@@ -8,8 +9,6 @@ interface RollingCurrencyProps {
   className?: string;
   /** Sufixo estático, ex.: "/mês". */
   suffix?: string;
-  /** Anuncia o valor final para leitores de tela (padrão: sim). */
-  announce?: boolean;
 }
 
 /**
@@ -19,30 +18,21 @@ interface RollingCurrencyProps {
  * inteiro re-renderizar a 60fps. As casas decimais vêm do valor estável (prop),
  * não do frame, senão a largura do texto pisca durante a animação.
  */
-export function RollingCurrency({
-  value,
-  className,
-  suffix = '',
-  announce = true,
-}: RollingCurrencyProps) {
+export function RollingCurrency({ value, className, suffix = '' }: RollingCurrencyProps) {
   const { value: display, rolling } = useRollingNumber(value);
   const digits = currencyDigits(value);
-  const settled = `${brl(value, digits)}${suffix}`;
 
   return (
     <>
-      <span
-        className={['roleta', rolling ? 'rolling' : '', className].filter(Boolean).join(' ')}
-        aria-hidden={announce ? 'true' : undefined}
-      >
+      <span className={cn('roleta', rolling && 'rolling', className)} aria-hidden="true">
         {brl(display, digits)}
         {suffix}
       </span>
-      {announce ? (
-        <span className="sr-only" aria-live="polite">
-          {settled}
-        </span>
-      ) : null}
+      {/* Só o valor assentado vai para o leitor de tela — anunciar cada frame
+          seria spam a 60fps. */}
+      <span className="sr-only" aria-live="polite">
+        {`${brl(value, digits)}${suffix}`}
+      </span>
     </>
   );
 }
@@ -56,10 +46,7 @@ export function RollingPercent({ value, className }: RollingPercentProps) {
   const { value: display, rolling } = useRollingNumber(value);
   return (
     <>
-      <span
-        className={['roleta', rolling ? 'rolling' : '', className].filter(Boolean).join(' ')}
-        aria-hidden="true"
-      >
+      <span className={cn('roleta', rolling && 'rolling', className)} aria-hidden="true">
         {percent(display)}
       </span>
       <span className="sr-only" aria-live="polite">

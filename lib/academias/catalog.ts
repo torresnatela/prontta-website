@@ -28,10 +28,8 @@ export interface AcademiaProgramCard {
   /** Uma linha, voz do associado (usada na página pública). */
   publicDescription: string;
   theme: AcademiaTheme;
-  /** Bullets do popover do catálogo. */
+  /** Bullets do popover do catálogo ("O que este programa cobre"). */
   audience: readonly string[];
-  /** Slot de imagem do card. `null` enquanto /public estiver vazio → cai no gradiente. */
-  image: string | null;
   /** Fonte oficial (custos + composição). Leitura, nunca cópia. */
   readonly program: Program;
 }
@@ -50,7 +48,6 @@ const card = (
   tagline,
   publicDescription,
   audience,
-  image: null,
   program: getProgram(id),
 });
 

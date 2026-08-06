@@ -1,5 +1,6 @@
 import { getProgramRepasse, type Cycle } from '@/lib/pricing';
 import { siteConfig } from '@/lib/site-config';
+import { formatCurrency } from '@/lib/utils';
 import {
   DEFAULT_ACADEMIA_CYCLE,
   DEFAULT_ACADEMIA_PROGRAM_ID,
@@ -27,12 +28,6 @@ export interface AcademiaOfferParams {
 
 /** Teto defensivo: acima disso o layout quebra e o valor é claramente lixo. */
 export const MAX_OFFER_MONTHLY_PRICE = 20_000;
-
-export const DEFAULT_OFFER_PARAMS: AcademiaOfferParams = {
-  programa: DEFAULT_ACADEMIA_PROGRAM_ID,
-  ciclo: DEFAULT_ACADEMIA_CYCLE,
-  preco: null,
-};
 
 type RawSearchParams = Record<string, string | string[] | undefined>;
 
@@ -104,10 +99,6 @@ export function buildAssociadoWhatsAppMessage(
   monthlyPrice: number,
 ): string {
   const { program } = getAcademiaProgram(params.programa);
-  const preco = monthlyPrice.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    minimumFractionDigits: 2,
-  });
+  const preco = formatCurrency(monthlyPrice);
   return `Olá! Quero participar do ${program.name} (ciclo de ${params.ciclo} meses, ${preco}/mês).`;
 }

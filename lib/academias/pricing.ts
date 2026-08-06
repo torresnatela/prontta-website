@@ -121,14 +121,28 @@ export interface OwnerSimulatorResult {
   mix: OwnerRevenueMix;
 }
 
-const clampPercent = (value: number, max: number): number => {
+/**
+ * Clamps compartilhados com o reducer da UI (`components/academias/simulador/state`).
+ * Ficam aqui para existir uma definição só: campo vazio vira NaN e nada pode
+ * envenenar nem o estado nem o cálculo.
+ */
+export const clampPercent = (value: number, max: number): number => {
   if (!Number.isFinite(value)) return 0;
   return Math.min(max, Math.max(0, value));
 };
 
-const safeCount = (value: number): number => {
+export const clampCount = (
+  value: number,
+  min = 0,
+  max: number = Number.MAX_SAFE_INTEGER,
+): number => {
+  if (!Number.isFinite(value)) return min;
+  return Math.min(max, Math.max(min, Math.floor(value)));
+};
+
+export const clampMoney = (value: number): number => {
   if (!Number.isFinite(value)) return 0;
-  return Math.max(0, Math.floor(value));
+  return Math.max(0, value);
 };
 
 export function simulateAcademiaOwner(input: OwnerSimulatorInput): OwnerSimulatorResult {
@@ -137,8 +151,8 @@ export function simulateAcademiaOwner(input: OwnerSimulatorInput): OwnerSimulato
     input.personalCommissionPercent,
     OWNER_COMMISSION_MAX_PERCENT,
   );
-  const students = safeCount(input.students);
-  const personalSales = Math.min(students, safeCount(input.personalSales));
+  const students = clampCount(input.students);
+  const personalSales = Math.min(students, clampCount(input.personalSales));
 
   const repasseCycle = getProgramRepasse(input.programId, input.cycle);
   const pronttaMonthly = repasseCycle / input.cycle;
@@ -230,7 +244,7 @@ export function buildConversionScenarios(
   baseMembers: number = DEFAULT_BASE_MEMBERS,
   ratesPercent: readonly number[] = DEFAULT_CONVERSION_RATES,
 ): ConversionScenario[] {
-  const base = safeCount(baseMembers);
+  const base = clampCount(baseMembers);
   return ratesPercent.map((ratePercent, index) => {
     const students = Math.round((base * ratePercent) / 100);
     const academyMonthlyProfit = students * result.split.academia;
@@ -338,7 +352,12 @@ export function getAssociadoBundle(
   if (offer.preco !== null && offer.preco > 0) {
     fromOwnerPrice = true;
     if (viewCycle === offer.ciclo) {
-      cycleTotal = offer.preco * offer.ciclo;
+      // Arredonda para o real cheio: `?preco=` carrega a MENSALIDADE, e um total
+      // como R$ 4.550 não é representável em 2 casas (379,1666…). Sem isto o
+      // link do simulador voltaria R$ 4.550,04 — o risco que o plano previa
+      // ("derivar totais sempre de cycleSellTotal"). Todo preço do engine é
+      // múltiplo de R$ 50, então o arredondamento recupera a intenção exata.
+      cycleTotal = Math.round(offer.preco * offer.ciclo);
     } else {
       const ownerCycleTotal = offer.preco * offer.ciclo;
       const ownerRepasse = getProgramRepasse(offer.programa, offer.ciclo);
@@ -453,7 +472,7 @@ export function priceExtras(extras: readonly ExtraSelection[]): {
   const lines = extras
     .filter((extra) => extra.quantity > 0)
     .map((extra) =>
-      buildPackageLine(extra.specialtyId, safeCount(extra.quantity), EXTRA_CONSULTATION_MARGIN),
+      buildPackageLine(extra.specialtyId, clampCount(extra.quantity), EXTRA_CONSULTATION_MARGIN),
     );
   return { lines, total: lines.reduce((sum, line) => sum + line.lineTotal, 0) };
 }
@@ -495,6 +514,9 @@ export function calculateImplantationPayback(
 
   switch (implantation.mode) {
     case 'isento':
+      // Zero independe do lucro: não há investimento a recuperar. Os outros
+      // modos devolvem `null` sem lucro porque aí o payback é indefinido —
+      // a diferença fica legível por `value` (0 vs. um valor a pagar).
       return { value: 0, paybackMonths: { min: 0, max: 0 }, label: 'Isenta' };
 
     case 'valor': {

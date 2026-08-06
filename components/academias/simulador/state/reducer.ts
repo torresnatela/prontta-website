@@ -5,6 +5,9 @@ import {
   type AcademiaProgramId,
 } from '@/lib/academias/catalog';
 import {
+  clampCount,
+  clampMoney,
+  clampPercent,
   DEFAULT_OWNER_COMMISSION_PERCENT,
   DEFAULT_OWNER_MARGIN_PERCENT,
   OWNER_COMMISSION_MAX_PERCENT,
@@ -43,28 +46,14 @@ export type SimuladorAction =
   | { type: 'SET_IMPLANTATION'; implantation: Implantation };
 
 /**
- * Todo clamp mora aqui.
+ * Os clamps vêm de `lib/academias/pricing` — uma definição só, compartilhada
+ * entre o estado da UI e o cálculo.
  *
- * Motivo: o commit `ca2561e` (“inputs controlados no simulador”) corrigiu
- * exatamente o bug de um valor fora de faixa continuar aparecendo na tela
- * enquanto o estado já estava limitado. Campo vazio vira NaN — nada pode
+ * Eles importam porque o commit `ca2561e` (“inputs controlados no simulador”)
+ * corrigiu exatamente o bug de um valor fora de faixa continuar aparecendo na
+ * tela enquanto o estado já estava limitado. Campo vazio vira NaN — nada pode
  * envenenar o estado.
  */
-const clampInt = (value: number, min: number, max = Number.MAX_SAFE_INTEGER): number => {
-  if (!Number.isFinite(value)) return min;
-  return Math.min(max, Math.max(min, Math.floor(value)));
-};
-
-const clampPercent = (value: number, max: number): number => {
-  if (!Number.isFinite(value)) return 0;
-  return Math.min(max, Math.max(0, value));
-};
-
-const clampMoney = (value: number): number => {
-  if (!Number.isFinite(value)) return 0;
-  return Math.max(0, value);
-};
-
 export const initialSimuladorState: SimuladorState = {
   programId: DEFAULT_ACADEMIA_PROGRAM_ID,
   cycle: DEFAULT_ACADEMIA_CYCLE,
@@ -92,14 +81,14 @@ export function simuladorReducer(state: SimuladorState, action: SimuladorAction)
       return { ...state, cycle: action.cycle, manualMonthlyPrice: null };
 
     case 'SET_STUDENTS': {
-      const students = clampInt(action.students, 1);
+      const students = clampCount(action.students, 1);
       // Invariante: quem tinha 25/25 e cai para 10 alunos não pode ficar com 25
       // vendas de personal.
       return { ...state, students, personalSales: Math.min(state.personalSales, students) };
     }
 
     case 'SET_PERSONAL_SALES':
-      return { ...state, personalSales: clampInt(action.personalSales, 0, state.students) };
+      return { ...state, personalSales: clampCount(action.personalSales, 0, state.students) };
 
     case 'SET_ALL_SALES':
       return { ...state, personalSales: state.students };
@@ -125,7 +114,7 @@ export function simuladorReducer(state: SimuladorState, action: SimuladorAction)
     }
 
     case 'SET_BASE_MEMBERS':
-      return { ...state, baseMembers: clampInt(action.baseMembers, 0) };
+      return { ...state, baseMembers: clampCount(action.baseMembers, 0) };
 
     case 'SET_TAX_PERCENT':
       return { ...state, taxPercent: clampPercent(action.percent, 100) };

@@ -18,12 +18,6 @@ const EXPENSE_LABELS: Array<{ key: keyof DREExpenses; label: string }> = [
   { key: 'outras', label: 'Outras' },
 ];
 
-/**
- * DRE mensal completa — recolhida por padrão para não pesar a tela.
- *
- * Reaproveita `calculateDRE` do engine. A comissão do personal aparece como
- * sub-linha de "outras despesas": ela não é repasse à Prontta.
- */
 const IMPLANTATION_MODES: Array<{ mode: Implantation['mode']; label: string }> = [
   { mode: 'a_combinar', label: 'A combinar' },
   { mode: 'isento', label: 'Isenta' },
@@ -69,7 +63,7 @@ function ImplantationBlock() {
       </div>
 
       {state.implantation.mode === 'valor' ? (
-        <div className="dre-field" style={{ marginTop: 10 }}>
+        <div className="dre-field implantation-value">
           <label htmlFor="implantationValue">Valor da implantação (R$)</label>
           <input
             id="implantationValue"
@@ -87,7 +81,7 @@ function ImplantationBlock() {
         </div>
       ) : null}
 
-      <div className="dre-line" style={{ marginTop: 10 }}>
+      <div className="dre-line implantation-payback">
         <span>Payback estimado da implantação</span>
         <strong>
           {payback === null
@@ -103,6 +97,12 @@ function ImplantationBlock() {
   );
 }
 
+/**
+ * DRE mensal completa — recolhida por padrão para não pesar a tela.
+ *
+ * Reaproveita `calculateDRE` do engine. A comissão do personal aparece como
+ * sub-linha de "outras despesas": ela não é repasse à Prontta.
+ */
 export function DREPanel() {
   const { state, dispatch } = useSimulador();
   const simulation = useSimulation();

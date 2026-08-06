@@ -24,12 +24,12 @@ export function BelowSections() {
           Conversão da base
         </div>
         <h2>Pequena adesão, lucro relevante</h2>
-        <p style={{ color: 'var(--muted)', fontSize: 14, marginTop: 6 }}>
+        <p className="panel-lead">
           Lucro líquido mensal considerando comissão em <strong>todas</strong> as vendas — o cenário
           mais conservador.
         </p>
 
-        <div className="personal-sales-row" style={{ marginTop: 14 }}>
+        <div className="personal-sales-row base-members">
           <label className="sr-only" htmlFor="baseMembers">
             Base de alunos da academia
           </label>
