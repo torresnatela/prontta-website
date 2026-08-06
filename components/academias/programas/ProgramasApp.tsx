@@ -1,12 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import {
-  ACADEMIA_CYCLES,
-  ACADEMIA_PROGRAMS,
-  CYCLE_LABELS,
-  getAcademiaProgram,
-} from '@/lib/academias/catalog';
+import { ACADEMIA_CYCLES, CYCLE_LABELS, getAcademiaProgram } from '@/lib/academias/catalog';
 import {
   buildAssociadoWhatsAppMessage,
   type AcademiaOfferParams,
@@ -23,7 +18,8 @@ import { getSpecialty, type Cycle } from '@/lib/pricing';
 import { whatsappHref } from '@/lib/site-config';
 import { AcademiaFooter, AcademiaTopBar } from '../shared/AcademiaChrome';
 import { brlAuto, plural } from '../shared/format';
-import { PROGRAM_ICONS, specialtyIcon } from '../shared/icons';
+import { specialtyIcon } from '../shared/icons';
+import { ProgramPicker } from '../shared/ProgramPicker';
 import { RollingCurrency } from '../shared/RollingCurrency';
 import { IncludedChips, SpecialistGrid } from '../shared/SpecialistGrid';
 
@@ -150,28 +146,7 @@ export function ProgramasApp({ offer }: ProgramasAppProps) {
               </p>
             </div>
           </div>
-          <div className="programs">
-            {ACADEMIA_PROGRAMS.map((entry) => {
-              const active = entry.id === programa;
-              return (
-                <button
-                  key={entry.id}
-                  type="button"
-                  className={`program${active ? ' active' : ''}`}
-                  data-card={entry.theme}
-                  aria-pressed={active}
-                  onClick={() => switchProgram(entry.id)}
-                >
-                  <span className="check" aria-hidden="true">
-                    ✓
-                  </span>
-                  <span className="icon">{PROGRAM_ICONS[entry.id]}</span>
-                  <strong>{entry.shortName}</strong>
-                  <small>{entry.tagline}</small>
-                </button>
-              );
-            })}
-          </div>
+          <ProgramPicker selectedId={programa} onSelect={switchProgram} withPopover />
         </section>
 
         <section className="main-card">
@@ -440,7 +415,9 @@ export function ProgramasApp({ offer }: ProgramasAppProps) {
       <div className="sticky-cta">
         <div className="sticky-inner">
           <div className="sticky-price">
-            <strong>{brlAuto(activeTotal)}</strong>
+            <strong>
+              <RollingCurrency value={activeTotal} />
+            </strong>
             <small>
               {mode === 'bundle' ? 'Pacote fechado' : 'Pacote personalizado'} ·{' '}
               {brlAuto(activeMonthly)}/mês · {viewCycle} meses

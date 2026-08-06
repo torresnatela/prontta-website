@@ -369,6 +369,29 @@ describe('getAssociadoBundle', () => {
     expect(bundle.fromOwnerPrice).toBe(true);
   });
 
+  it('o round-trip do simulador preserva o total do ciclo, sem centavos fantasma', () => {
+    // Ciclo 12: total 4550 → mensalidade 379,1666… → o link leva 379,17.
+    // Sem arredondar, 379,17 × 12 devolveria 4550,04.
+    for (const cycle of ACADEMIA_CYCLES) {
+      for (const entry of ACADEMIA_PROGRAMS) {
+        const simulado = simulateAcademiaOwner({
+          ...baseInput,
+          programId: entry.id,
+          cycle,
+        });
+        const precoNoLink = Math.round(simulado.monthlyPrice * 100) / 100;
+        const bundle = getAssociadoBundle(
+          { programa: entry.id, ciclo: cycle, preco: precoNoLink },
+          cycle,
+        );
+        expect(
+          bundle.cycleTotal,
+          `${entry.id}/${cycle}m: link ${precoNoLink} devolveu ${bundle.cycleTotal}`,
+        ).toBe(simulado.cycleSellTotal);
+      }
+    }
+  });
+
   it('a composição acompanha o ciclo visualizado', () => {
     const bundle = getAssociadoBundle({ programa: 'performance', ciclo: 6, preco: null }, 12);
     expect(bundle.composition.map((l) => l.quantity)).toEqual([2, 4, 6, 18]);
@@ -418,6 +441,14 @@ describe('calculateImplantationPayback', () => {
   it('sem lucro não existe payback (nunca Infinity na tela)', () => {
     expect(calculateImplantationPayback({ mode: 'valor', value: 12_500 }, 0).paybackMonths).toBeNull();
     expect(calculateImplantationPayback({ mode: 'a_combinar' }, -500).paybackMonths).toBeNull();
+  });
+
+  it('isento continua zero mesmo no prejuízo — não há investimento a recuperar', () => {
+    // Deliberado, e diferente dos outros modos: `value: 0` é o que distingue
+    // "nada a pagar" de "payback indefinido".
+    const impl = calculateImplantationPayback({ mode: 'isento' }, -500);
+    expect(impl.value).toBe(0);
+    expect(impl.paybackMonths).toEqual({ min: 0, max: 0 });
   });
 
   it('a implantação NÃO altera a DRE mensal — é investimento único', () => {

@@ -138,7 +138,9 @@ export function MobileResultBar() {
     <div className="mobile-result-bar" aria-label="Resumo do resultado atual">
       <div>
         <small>Receita mensal estimada</small>
-        <strong>{brlAuto(simulation.monthlyRevenue)}</strong>
+        <strong>
+          <RollingCurrency value={simulation.monthlyRevenue} />
+        </strong>
       </div>
       <button
         type="button"

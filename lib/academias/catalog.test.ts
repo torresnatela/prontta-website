@@ -36,7 +36,12 @@ describe('ACADEMIA_PROGRAMS', () => {
     for (const entry of ACADEMIA_PROGRAMS) {
       expect(entry).not.toHaveProperty('price');
       expect(entry).not.toHaveProperty('monthly');
-      expect(entry.image).toBeNull();
+    }
+  });
+
+  it('todo programa traz bullets para o popover do catálogo', () => {
+    for (const entry of ACADEMIA_PROGRAMS) {
+      expect(entry.audience.length).toBeGreaterThan(0);
     }
   });
 

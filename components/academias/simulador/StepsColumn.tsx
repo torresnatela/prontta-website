@@ -1,11 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ACADEMIA_CYCLES, ACADEMIA_PROGRAMS, CYCLE_LABELS, getAcademiaProgram } from '@/lib/academias/catalog';
-import { getBuilderModules, OWNER_COMMISSION_MAX_PERCENT, OWNER_MARGIN_MAX_PERCENT } from '@/lib/academias/pricing';
-import { getProgramRepasse } from '@/lib/pricing';
+import { ACADEMIA_CYCLES, CYCLE_LABELS, getAcademiaProgram } from '@/lib/academias/catalog';
+import {
+  getBuilderModules,
+  OWNER_COMMISSION_MAX_PERCENT,
+  OWNER_MARGIN_MAX_PERCENT,
+} from '@/lib/academias/pricing';
+import { getProgramRepasse, getProgramSellPrice, DEFAULT_PROGRAMA_MARGIN } from '@/lib/pricing';
 import { brl, brlAuto } from '../shared/format';
-import { PROGRAM_ICONS } from '../shared/icons';
+import { ProgramPicker } from '../shared/ProgramPicker';
 import { IncludedChips, SpecialistGrid } from '../shared/SpecialistGrid';
 import { useSimulador, useSimulation } from './state/SimuladorProvider';
 
@@ -27,28 +31,10 @@ export function ProgramStep() {
           <p>Comece pelos produtos com maior aderência ao ambiente da academia.</p>
         </div>
       </div>
-      <div className="programs">
-        {ACADEMIA_PROGRAMS.map((program) => {
-          const active = program.id === state.programId;
-          return (
-            <button
-              key={program.id}
-              type="button"
-              className={`program${active ? ' active' : ''}`}
-              data-card={program.theme}
-              aria-pressed={active}
-              onClick={() => dispatch({ type: 'SET_PROGRAM', programId: program.id })}
-            >
-              <span className="check" aria-hidden="true">
-                ✓
-              </span>
-              <span className="icon">{PROGRAM_ICONS[program.id]}</span>
-              <strong>{program.shortName}</strong>
-              <small>{program.tagline}</small>
-            </button>
-          );
-        })}
-      </div>
+      <ProgramPicker
+        selectedId={state.programId}
+        onSelect={(programId) => dispatch({ type: 'SET_PROGRAM', programId })}
+      />
     </section>
   );
 }
@@ -356,6 +342,13 @@ function PriceCard() {
       </div>
 
       <div className="info-strip">
+        <div>
+          <small>Preço sugerido Prontta</small>
+          <strong>
+            {brlAuto(getProgramSellPrice(state.programId, state.cycle, DEFAULT_PROGRAMA_MARGIN) / state.cycle)}
+            /mês
+          </strong>
+        </div>
         <div>
           <small>Margem por venda</small>
           <strong>{simulation.resolvedOwnerMarginPercent.toFixed(1).replace('.', ',')}%</strong>
