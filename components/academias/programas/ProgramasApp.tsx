@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { ACADEMIA_CYCLES, CYCLE_LABELS, getAcademiaProgram } from '@/lib/academias/catalog';
 import {
   buildAssociadoWhatsAppMessage,
+  buildOfferPath,
   type AcademiaOfferParams,
 } from '@/lib/academias/params';
 import {
@@ -14,10 +15,15 @@ import {
   priceCustomPackage,
   priceExtras,
 } from '@/lib/academias/pricing';
+import { PROGRAMAS_CHAPTERS } from '@/lib/academias/videos';
 import { getSpecialty, type Cycle } from '@/lib/pricing';
 import { whatsappHref } from '@/lib/site-config';
 import { AcademiaFooter, AcademiaTopBar } from '../shared/AcademiaChrome';
+import { ChapterCue } from '../shared/ChapterCue';
+import { ExplainerProvider, type ExplainerMedia } from '../shared/ExplainerProvider';
+import { ExplainerSection } from '../shared/ExplainerSection';
 import { brlAuto, plural } from '../shared/format';
+import { HeroMedia } from '../shared/HeroMedia';
 import { specialtyIcon } from '../shared/icons';
 import { ProgramPicker } from '../shared/ProgramPicker';
 import { RollingCurrency } from '../shared/RollingCurrency';
@@ -28,9 +34,12 @@ type OfferMode = 'bundle' | 'custom';
 interface ProgramasAppProps {
   /** Resolvido no SERVIDOR a partir da query string — nunca via useSearchParams. */
   offer: AcademiaOfferParams;
+  /** `imagem` monta a variante /sem-video: mesma explicação, sem player. */
+  media?: ExplainerMedia;
 }
 
-export function ProgramasApp({ offer }: ProgramasAppProps) {
+/** Precisa estar dentro do `ExplainerProvider` para os atalhos "▶ ver vídeo". */
+function ProgramasShell({ offer, media = 'video' }: ProgramasAppProps) {
   // Estado raso e independente: a oferta é prop do servidor, não há fonte
   // mutável compartilhada que justifique reducer ou context.
   const [programa, setPrograma] = useState(offer.programa);
@@ -110,6 +119,7 @@ export function ProgramasApp({ offer }: ProgramasAppProps) {
         <AcademiaTopBar subtitle="Programas para seus associados" pill="Escolha seu programa" />
 
         <section className="hero">
+          <HeroMedia />
           <div className="hero-content">
             <div className="eyebrow">Jornadas de saúde assistida</div>
             <h1>{program.program.name}</h1>
@@ -136,7 +146,23 @@ export function ProgramasApp({ offer }: ProgramasAppProps) {
           </div>
         </section>
 
-        <section className="catalog-section">
+        <ExplainerSection
+          kicker="Antes de escolher"
+          title={
+            media === 'video'
+              ? 'Três vídeos curtos para entender o programa'
+              : 'Três passos para entender o programa'
+          }
+          lead="O que está incluído no acompanhamento, qual programa combina com o seu objetivo e por quanto tempo dura cada ciclo."
+          // Preserva a oferta ao trocar de variante: sem isto o link cairia no
+          // programa padrão e o preço da academia sumiria.
+          variantHref={buildOfferPath(
+            { ...effectiveOffer, ciclo: viewCycle },
+            media === 'video' ? '/academias/programas/sem-video' : '/academias/programas',
+          )}
+        />
+
+        <section className="catalog-section" id="catalogo">
           <div className="section-title">
             <div>
               <h2>Escolha o programa ideal para seu objetivo</h2>
@@ -145,11 +171,12 @@ export function ProgramasApp({ offer }: ProgramasAppProps) {
                 recomendado para este programa.
               </p>
             </div>
+            <ChapterCue chapterId="programas" />
           </div>
           <ProgramPicker selectedId={programa} onSelect={switchProgram} withPopover />
         </section>
 
-        <section className="main-card">
+        <section className="main-card" id="pacote">
           <div className="main-head">
             <div className="main-head-top">
               <div>
@@ -183,6 +210,11 @@ export function ProgramasApp({ offer }: ProgramasAppProps) {
                   </div>
                 ) : null}
               </div>
+            </div>
+
+            <div className="cycle-tabs-head">
+              <span>Escolha a duração do ciclo</span>
+              <ChapterCue chapterId="ciclo" />
             </div>
 
             <div className="cycle-tabs" role="group" aria-label="Duração do ciclo">
@@ -326,9 +358,9 @@ export function ProgramasApp({ offer }: ProgramasAppProps) {
                   <div>
                     <h4>Consultas adicionais fora do pacote</h4>
                     <p>
-                      Se quiser, inclua atendimentos extras além do pacote fechado. Por serem
-                      consultas avulsas, saem pelo valor cheio — dentro do pacote o mesmo
-                      atendimento custa menos. O valor acima é atualizado automaticamente.
+                      Se quiser, inclua atendimentos extras além do pacote fechado. Cada consulta
+                      extra é cobrada à parte, somando ao valor do ciclo — o total acima é
+                      atualizado automaticamente.
                     </p>
                   </div>
                   <div className="bundle-save">
@@ -429,5 +461,13 @@ export function ProgramasApp({ offer }: ProgramasAppProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+export function ProgramasApp({ offer, media = 'video' }: ProgramasAppProps) {
+  return (
+    <ExplainerProvider chapters={PROGRAMAS_CHAPTERS} media={media}>
+      <ProgramasShell offer={offer} media={media} />
+    </ExplainerProvider>
   );
 }

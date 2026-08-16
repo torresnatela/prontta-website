@@ -20,10 +20,10 @@ describe('ceilToStep', () => {
     expect(ceilToStep(0)).toBe(0);
   });
 
-  it('arredonda para cima ao múltiplo de 50 por padrão', () => {
-    expect(ceilToStep(1)).toBe(50);
-    expect(ceilToStep(129.72)).toBe(150);
-    expect(ceilToStep(151)).toBe(200);
+  it('arredonda para cima ao múltiplo de 5 por padrão', () => {
+    expect(ceilToStep(1)).toBe(5);
+    expect(ceilToStep(129.72)).toBe(130);
+    expect(ceilToStep(151)).toBe(155);
   });
 
   it('mantém valores já múltiplos do passo', () => {
@@ -38,10 +38,10 @@ describe('ceilToStep', () => {
 
 describe('getConsultationCost', () => {
   it('deriva o custo golden da Cardiologia Adulto em cada plano', () => {
-    // valorHora 120; cons/h 2.5 / 2 / 1; divisor 0.37; ceil múltiplo de 50
-    expect(getConsultationCost('cardiologia-adulto', 'popular')).toBe(150);
-    expect(getConsultationCost('cardiologia-adulto', 'intermediario')).toBe(200);
-    expect(getConsultationCost('cardiologia-adulto', 'premium')).toBe(350);
+    // valorHora 120; cons/h 2.5 / 2 / 1; divisor 0.37; ceil múltiplo de 5
+    expect(getConsultationCost('cardiologia-adulto', 'popular')).toBe(130);
+    expect(getConsultationCost('cardiologia-adulto', 'intermediario')).toBe(165);
+    expect(getConsultationCost('cardiologia-adulto', 'premium')).toBe(325);
   });
 
   it('lança erro para especialidade inexistente', () => {
@@ -50,17 +50,17 @@ describe('getConsultationCost', () => {
 });
 
 describe('getConsultationSellPrice', () => {
-  it('aplica a margem padrão de 60% sobre o custo (Cardiologia)', () => {
-    // custo/(1−0.6) = custo/0.4, ceil múltiplo de 50
-    expect(getConsultationSellPrice('cardiologia-adulto', 'popular', DEFAULT_CONSULTA_MARGIN)).toBe(400);
-    expect(getConsultationSellPrice('cardiologia-adulto', 'intermediario', DEFAULT_CONSULTA_MARGIN)).toBe(500);
-    expect(getConsultationSellPrice('cardiologia-adulto', 'premium', DEFAULT_CONSULTA_MARGIN)).toBe(900);
+  it('aplica a margem padrão de 30% sobre o custo (Cardiologia)', () => {
+    // custo/(1−0.3) = custo/0.7, ceil múltiplo de 5
+    expect(getConsultationSellPrice('cardiologia-adulto', 'popular', DEFAULT_CONSULTA_MARGIN)).toBe(190);
+    expect(getConsultationSellPrice('cardiologia-adulto', 'intermediario', DEFAULT_CONSULTA_MARGIN)).toBe(240);
+    expect(getConsultationSellPrice('cardiologia-adulto', 'premium', DEFAULT_CONSULTA_MARGIN)).toBe(465);
   });
 
   it('reflete margens editáveis diferentes', () => {
-    // Nutrição popular: custo 100. @50% → 200; @30% → 150
-    expect(getConsultationSellPrice('nutricao', 'popular', 0.5)).toBe(200);
-    expect(getConsultationSellPrice('nutricao', 'popular', 0.3)).toBe(150);
+    // Nutrição popular: custo 75. @50% → 150; @30% → 110
+    expect(getConsultationSellPrice('nutricao', 'popular', 0.5)).toBe(150);
+    expect(getConsultationSellPrice('nutricao', 'popular', 0.3)).toBe(110);
   });
 });
 
@@ -118,7 +118,7 @@ describe('summarizeConsultations', () => {
     expect(s.softwareMonthlyFee).toBe(0);
   });
 
-  it('reproduz o mix semente das consultas (custo 5.400 → paciente 14.000, software 1.499)', () => {
+  it('reproduz o mix semente das consultas (custo 4.400 → paciente 6.440, software 1.499)', () => {
     const s = summarizeConsultations(
       [
         line('endocrinologia', 'popular', 'dedicada', 20),
@@ -127,8 +127,8 @@ describe('summarizeConsultations', () => {
       ],
       DEFAULT_CONSULTA_MARGIN,
     );
-    expect(s.subtotalCost).toBe(5400);
-    expect(s.patientPrice).toBe(14000);
+    expect(s.subtotalCost).toBe(4400);
+    expect(s.patientPrice).toBe(6440);
     expect(s.totalQuantity).toBe(44);
     expect(s.softwareMonthlyFee).toBe(1499);
   });
@@ -138,10 +138,10 @@ describe('summarizeConsultations', () => {
       [line('cardiologia-adulto', 'intermediario', 'dedicada', 8)],
       DEFAULT_CONSULTA_MARGIN,
     );
-    expect(s.lines[0].unitCost).toBe(200);
-    expect(s.lines[0].unitSell).toBe(500);
-    expect(s.lines[0].lineSell).toBe(4000);
-    expect(s.lines[0].lineCost).toBe(1600);
+    expect(s.lines[0].unitCost).toBe(165);
+    expect(s.lines[0].unitSell).toBe(240);
+    expect(s.lines[0].lineSell).toBe(1920);
+    expect(s.lines[0].lineCost).toBe(1320);
   });
 
   it('isenta o software quando a quantidade bruta atinge o gatilho de 150', () => {
@@ -175,15 +175,15 @@ describe('programas', () => {
   it('repasse = custo-base + fee e preço deriva pela margem', () => {
     expect(getProgramRepasse('performance', 6)).toBe(1735); // 1485 + 250
     expect(getProgramSellPrice('performance', 3, DEFAULT_PROGRAMA_MARGIN)).toBe(1350);
-    expect(getProgramSellPrice('performance', 6, DEFAULT_PROGRAMA_MARGIN)).toBe(2500);
-    expect(getProgramSellPrice('longevidade-ativa', 12, DEFAULT_PROGRAMA_MARGIN)).toBe(4800);
+    expect(getProgramSellPrice('performance', 6, DEFAULT_PROGRAMA_MARGIN)).toBe(2480);
+    expect(getProgramSellPrice('longevidade-ativa', 12, DEFAULT_PROGRAMA_MARGIN)).toBe(4795);
   });
 
   it('lança erro para programa inexistente', () => {
     expect(() => getProgramRepasse('inexistente', 3)).toThrow();
   });
 
-  it('summarizePrograms reproduz o mix semente (venda 14.900, repasse 10.410)', () => {
+  it('summarizePrograms reproduz o mix semente (venda 14.880, repasse 10.410)', () => {
     const s = summarizePrograms(
       [
         { id: 'a', programId: 'emagrecimento-inteligente', cycle: 6, quantity: 4 },
@@ -191,9 +191,9 @@ describe('programas', () => {
       ],
       DEFAULT_PROGRAMA_MARGIN,
     );
-    expect(s.items[0].unitSell).toBe(2300);
+    expect(s.items[0].unitSell).toBe(2295);
     expect(s.items[0].unitRepasse).toBe(1605);
-    expect(s.subtotalSell).toBe(14900);
+    expect(s.subtotalSell).toBe(14880);
     expect(s.subtotalRepasse).toBe(10410);
   });
 
@@ -221,17 +221,17 @@ describe('mix semente completo (consolidação + DRE)', () => {
     DEFAULT_PROGRAMA_MARGIN,
   );
 
-  it('consolida total ao paciente 28.900 e repasse 15.810', () => {
+  it('consolida total ao paciente 21.320 e repasse 14.810', () => {
     const t = consolidateProposal(consultations, programs, { mode: 'a_combinar' });
-    expect(t.consultationsPatientPrice).toBe(14000);
-    expect(t.programsSubtotal).toBe(14900);
-    expect(t.totalContractValue).toBe(28900);
-    expect(t.repasse).toBe(15810);
+    expect(t.consultationsPatientPrice).toBe(6440);
+    expect(t.programsSubtotal).toBe(14880);
+    expect(t.totalContractValue).toBe(21320);
+    expect(t.repasse).toBe(14810);
     expect(t.softwareMonthlyFee).toBe(1499);
     expect(t.implantation).toEqual({ mode: 'a_combinar' });
   });
 
-  it('DRE do parceiro: resultado líquido 6.457, margem ~22,3%', () => {
+  it('DRE do parceiro: resultado líquido 331,80, margem ~1,6%', () => {
     const t = consolidateProposal(consultations, programs, { mode: 'a_combinar' });
     const dre = calculateDRE({
       totalContractValue: t.totalContractValue,
@@ -240,14 +240,14 @@ describe('mix semente completo (consolidação + DRE)', () => {
       expenses: { pessoal: 1500, aluguel: 800, fixas: 500, marketing: 600, outras: 0 },
       softwareMonthlyFee: t.softwareMonthlyFee,
     });
-    expect(dre.receitaBruta).toBe(28900);
-    expect(dre.repasse).toBe(15810);
-    expect(dre.margemBruta).toBe(13090);
-    expect(dre.impostos).toBe(1734);
+    expect(dre.receitaBruta).toBe(21320);
+    expect(dre.repasse).toBe(14810);
+    expect(dre.margemBruta).toBe(6510);
+    expect(dre.impostos).toBeCloseTo(1279.2, 4);
     expect(dre.software).toBe(1499);
-    expect(dre.totalDespesas).toBe(6633);
-    expect(dre.resultadoLiquido).toBe(6457);
-    expect(dre.margemLiquidaPct).toBeCloseTo(22.34, 2);
+    expect(dre.totalDespesas).toBeCloseTo(6178.2, 4);
+    expect(dre.resultadoLiquido).toBeCloseTo(331.8, 4);
+    expect(dre.margemLiquidaPct).toBeCloseTo(1.56, 2);
   });
 });
 

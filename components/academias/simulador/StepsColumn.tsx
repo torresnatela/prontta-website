@@ -7,7 +7,8 @@ import {
   OWNER_COMMISSION_MAX_PERCENT,
   OWNER_MARGIN_MAX_PERCENT,
 } from '@/lib/academias/pricing';
-import { getProgramRepasse, getProgramSellPrice, DEFAULT_PROGRAMA_MARGIN } from '@/lib/pricing';
+import { getProgramOfficialMonthly, getProgramRepasse } from '@/lib/pricing';
+import { ChapterCue } from '../shared/ChapterCue';
 import { brl, brlAuto } from '../shared/format';
 import { ProgramPicker } from '../shared/ProgramPicker';
 import { IncludedChips, SpecialistGrid } from '../shared/SpecialistGrid';
@@ -30,6 +31,7 @@ export function ProgramStep() {
           <h2>Qual jornada combina com seus alunos?</h2>
           <p>Comece pelos produtos com maior aderência ao ambiente da academia.</p>
         </div>
+        <ChapterCue chapterId="programas" />
       </div>
       <ProgramPicker
         selectedId={state.programId}
@@ -55,6 +57,7 @@ export function CycleStep() {
           </div>
           <h2>Por quanto tempo o aluno será acompanhado?</h2>
         </div>
+        <ChapterCue chapterId="ciclo" />
       </div>
       <div className="cycles">
         {ACADEMIA_CYCLES.map((cycle) => {
@@ -344,10 +347,8 @@ function PriceCard() {
       <div className="info-strip">
         <div>
           <small>Preço sugerido Prontta</small>
-          <strong>
-            {brlAuto(getProgramSellPrice(state.programId, state.cycle, DEFAULT_PROGRAMA_MARGIN) / state.cycle)}
-            /mês
-          </strong>
+          {/* Tabela oficial V8 da planilha, não o preço derivado da margem. */}
+          <strong>{brlAuto(getProgramOfficialMonthly(state.programId, state.cycle))}/mês</strong>
         </div>
         <div>
           <small>Margem por venda</small>

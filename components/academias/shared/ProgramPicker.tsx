@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ACADEMIA_PROGRAMS, type AcademiaProgramId } from '@/lib/academias/catalog';
 import { cn } from '@/lib/utils';
 import { PROGRAM_ICONS } from './icons';
@@ -51,6 +52,15 @@ export function ProgramPicker({ selectedId, onSelect, withPopover = false }: Pro
                   <p className="program-popover-summary">{entry.program.description}</p>
                 </div>
                 <div className="program-popover-cover">
+                  {/* Decorativa: o nome e a descrição do programa já estão acima. */}
+                  <Image
+                    className="program-popover-image"
+                    src={entry.image}
+                    alt=""
+                    width={420}
+                    height={236}
+                    sizes="420px"
+                  />
                   <strong>O que este programa cobre</strong>
                   <div className="program-popover-list">
                     {entry.audience.map((item) => (

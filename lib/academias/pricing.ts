@@ -41,13 +41,12 @@ import type { AcademiaOfferParams } from './params';
 const ACADEMIA_PLAN = 'popular' as const;
 
 /**
- * Duas margens, porque são dois produtos diferentes no padrão oficial:
+ * As duas margens apontam para o mesmo 30% desde que a planilha oficial foi
+ * conferida: o modelo tem UM ganho de parceiro sobre o serviço (aba 1, item C),
+ * válido para módulos de programa e para consulta avulsa.
  *
- * - Módulos do "monte seu pacote" são COMPONENTES de um Programa de Saúde
- *   Assistida → `DEFAULT_PROGRAMA_MARGIN` (30%), a mesma do pacote fechado, para
- *   que a comparação entre montar e fechar seja maçã-com-maçã.
- * - Consultas extras fora do pacote são VENDA AVULSA de consulta →
- *   `DEFAULT_CONSULTA_MARGIN` (60%), o padrão da casa para consulta avulsa.
+ * Continuam como constantes separadas de propósito — são decisões comerciais
+ * distintas e podem divergir de novo sem que este arquivo precise mudar.
  */
 const MODULE_MARGIN = DEFAULT_PROGRAMA_MARGIN;
 const EXTRA_CONSULTATION_MARGIN = DEFAULT_CONSULTA_MARGIN;
@@ -96,7 +95,7 @@ export interface OwnerRevenueMix {
 export interface OwnerSimulatorResult {
   /** Repasse à Prontta no ciclo inteiro (custo-base + fee de plataforma). */
   repasseCycle: number;
-  /** Preço ao associado no ciclo — regra oficial: ceil R$ 50 sobre o TOTAL. */
+  /** Preço ao associado no ciclo — regra oficial: ceil R$ 5 sobre o TOTAL. */
   cycleSellTotal: number;
   monthlyPrice: number;
   pronttaMonthly: number;
@@ -334,7 +333,7 @@ export interface AssociadoBundle {
  * `viewCycle` pode diferir de `offer.ciclo` quando o visitante troca de aba. Como
  * só conhecemos a intenção do dono no ciclo original, re-derivamos a margem dele
  * ali e a reaplicamos nos outros ciclos — mantendo a oferta coerente e honrando
- * o arredondamento oficial de R$ 50.
+ * o arredondamento oficial de R$ 5.
  */
 export function getAssociadoBundle(
   offer: Pick<AcademiaOfferParams, 'programa' | 'ciclo' | 'preco'>,
@@ -356,7 +355,7 @@ export function getAssociadoBundle(
       // como R$ 4.550 não é representável em 2 casas (379,1666…). Sem isto o
       // link do simulador voltaria R$ 4.550,04 — o risco que o plano previa
       // ("derivar totais sempre de cycleSellTotal"). Todo preço do engine é
-      // múltiplo de R$ 50, então o arredondamento recupera a intenção exata.
+      // múltiplo de R$ 5, então o arredondamento recupera a intenção exata.
       cycleTotal = Math.round(offer.preco * offer.ciclo);
     } else {
       const ownerCycleTotal = offer.preco * offer.ciclo;
@@ -462,8 +461,8 @@ export const EXTRA_SPECIALTY_IDS: readonly string[] = Array.from(
 ).sort();
 
 /**
- * Consultas avulsas fora do pacote — venda avulsa, então usam a margem de
- * consulta do padrão oficial (60%), não a de programa.
+ * Consultas avulsas fora do pacote — usam a margem de consulta do padrão
+ * oficial (30%), que hoje coincide com a de programa.
  */
 export function priceExtras(extras: readonly ExtraSelection[]): {
   lines: PackageLine[];

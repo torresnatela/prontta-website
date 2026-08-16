@@ -181,7 +181,7 @@
   font-weight: 800;
 }
 
-/* --- Hero (compartilhado, sem imagem: gradiente + slot --hero-image) ------ */
+/* --- Hero (compartilhado: foto via <HeroMedia> sobre o gradiente) --------- */
 
 .academias-root .hero {
   position: relative;
@@ -201,6 +201,33 @@
   background-size: cover;
   background-position: center right;
 }
+
+/* A foto entra por <Image fill> (AVIF/WebP + srcset), não pelo --hero-image:
+   o arquivo é um PNG de ~1,1 MB e o background-image o serviria cru. */
+.academias-root .hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.academias-root .hero-media img {
+  object-fit: cover;
+  /* A pessoa e o tablet ficam à direita; a esquerda da arte já é quase lisa. */
+  object-position: center right;
+}
+/* Véu que devolve contraste aos 720px de texto sem apagar a foto. */
+.academias-root .hero-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    #f7fcff 0%,
+    rgba(247, 252, 255, 0.94) 32%,
+    rgba(247, 252, 255, 0.55) 52%,
+    rgba(247, 252, 255, 0) 68%
+  );
+}
+
 .academias-root .hero-content {
   max-width: 720px;
   position: relative;
@@ -2343,6 +2370,347 @@
 }
 
 /* =========================================================================
+   Camada explicativa (capítulos + vídeo) — usada pelas DUAS páginas
+   ========================================================================= */
+
+.academias-root .explainer {
+  background: rgba(255, 255, 255, 0.93);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  padding: 26px;
+  margin-bottom: 22px;
+  /* O hub é alvo de scrollIntoView vindo dos atalhos: a margem impede que ele
+     encoste no topo da viewport. */
+  scroll-margin-top: 18px;
+}
+.academias-root .explainer-head {
+  margin-bottom: 20px;
+}
+.academias-root .explainer-head-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+/* Alternador entre as variantes com e sem vídeo (páginas de teste). */
+.academias-root .variant-switch {
+  flex: 0 0 auto;
+  padding: 9px 14px;
+  border: 1px dashed var(--accent-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--accent-strong);
+  font-size: 12px;
+  font-weight: 900;
+  transition: 0.2s ease;
+}
+.academias-root .variant-switch:hover {
+  border-style: solid;
+  background: var(--accent-soft);
+}
+.academias-root .explainer-head .panel-lead {
+  margin-top: 6px;
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.academias-root .explainer-grid {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.academias-root .chapter-list {
+  display: grid;
+  gap: 8px;
+}
+.academias-root .chapter-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  width: 100%;
+  text-align: left;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.academias-root .chapter-item:hover {
+  border-color: var(--accent-border);
+}
+.academias-root .chapter-item.active {
+  border-color: var(--accent-strong);
+  background: var(--accent-soft);
+  box-shadow: 0 10px 24px rgba(18, 63, 102, 0.08);
+}
+.academias-root .chapter-item .step-dot {
+  flex: 0 0 26px;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--brand-2);
+}
+.academias-root .chapter-item.active .step-dot {
+  background: var(--accent-strong);
+  color: #fff;
+}
+.academias-root .chapter-item strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.25;
+  color: var(--navy);
+}
+.academias-root .chapter-item small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.academias-root .chapter-body {
+  min-width: 0;
+}
+.academias-root .chapter-body:focus {
+  outline: none;
+}
+.academias-root .chapter-body h3 {
+  margin-top: 18px;
+  font-size: 21px;
+  letter-spacing: -0.6px;
+  color: var(--navy);
+}
+.academias-root .chapter-body > p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.academias-root .chapter-bullets {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.academias-root .chapter-bullets li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 10px 12px;
+  border: 1px solid rgba(16, 42, 67, 0.08);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.85);
+  color: #39566d;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.academias-root .chapter-bullets b {
+  display: grid;
+  place-items: center;
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: var(--accent-strong);
+  color: #fff;
+  font-size: 11px;
+}
+
+/* Galeria do capítulo "programas": garante as capas no celular, onde o popover
+   do catálogo é escondido (ver @media hover:none mais abaixo). */
+.academias-root .chapter-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+.academias-root .chapter-gallery figure {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fff;
+}
+.academias-root .chapter-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.academias-root .chapter-gallery figcaption {
+  padding: 9px 10px 11px;
+}
+.academias-root .chapter-gallery strong {
+  display: block;
+  font-size: 12px;
+  color: var(--navy);
+}
+.academias-root .chapter-gallery small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.academias-root .chapter-cta {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 16px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: 0 12px 26px rgba(10, 109, 180, 0.22);
+}
+
+/* --- Player (facade + embed) --------------------------------------------- */
+
+.academias-root .video-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--navy);
+  padding: 0;
+}
+.academias-root .video-embed {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.academias-root .video-facade {
+  cursor: pointer;
+}
+/* Variante sem vídeo: a mesma moldura, sem play e sem interação. */
+.academias-root .chapter-illustration {
+  cursor: default;
+}
+.academias-root .video-poster {
+  object-fit: cover;
+}
+.academias-root .video-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--brand-2);
+  box-shadow: 0 16px 34px rgba(13, 33, 55, 0.35);
+  transition: 0.2s ease;
+}
+.academias-root .video-play svg {
+  width: 30px;
+  height: 30px;
+  margin-left: 3px;
+}
+.academias-root .video-facade:hover .video-play {
+  transform: translate(-50%, -50%) scale(1.07);
+}
+/* À direita de propósito: a capa usa o canto inferior esquerdo para o título. */
+.academias-root .video-meta {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: rgba(13, 33, 55, 0.62);
+  backdrop-filter: blur(6px);
+  color: #fff;
+}
+.academias-root .video-meta strong {
+  font-size: 12px;
+  font-weight: 900;
+}
+.academias-root .video-meta small {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+/* --- Atalho "▶ ver vídeo" nos passos ------------------------------------- */
+
+.academias-root .chapter-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  padding: 9px 13px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.academias-root .chapter-cue:hover {
+  background: #fff;
+  border-color: var(--accent-strong);
+}
+.academias-root .chapter-cue span {
+  font-size: 10px;
+}
+/* Dentro da DRE o atalho é bloco próprio, acima dos campos. */
+.academias-root .dre-body .chapter-cue {
+  margin-bottom: 16px;
+}
+
+/* Linha "Escolha a duração do ciclo" + atalho, na página do associado. */
+.academias-root .cycle-tabs-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+.academias-root .cycle-tabs-head span {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.academias-root .cycle-tabs-head + .cycle-tabs {
+  margin-top: 10px;
+}
+
+/* Capa do programa dentro do popover do catálogo.
+   Faixa 5:2 em vez do 16:9 do arquivo: a capa inteira somaria ~215px à altura
+   do popover, que já é alto e abre para baixo. */
+.academias-root .program-popover-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 2;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+
+/* =========================================================================
    Responsivo
    ========================================================================= */
 
@@ -2372,8 +2740,35 @@
   .academias-root .main-grid,
   .academias-root .builder-grid,
   .academias-root .below,
-  .academias-root .controls-grid {
+  .academias-root .controls-grid,
+  .academias-root .explainer-grid {
     grid-template-columns: 1fr;
+  }
+  .academias-root .explainer {
+    padding: 17px;
+    border-radius: 20px;
+  }
+  /* Capítulos viram chips roláveis: empilhados, empurrariam o player para fora
+     da primeira tela. */
+  .academias-root .chapter-list {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+  .academias-root .chapter-item {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 230px;
+  }
+  .academias-root .chapter-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .academias-root .cycle-tabs-head,
+  .academias-root .explainer-head-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
   .academias-root .result-panel,
   .academias-root .builder-side {
@@ -2386,6 +2781,19 @@
   .academias-root .hero {
     min-height: 380px;
     padding: 36px 28px;
+  }
+  /* Sem os 720px de coluna, o texto ocupa a largura toda: a foto recua a
+     textura de fundo em vez de disputar espaço com ele. */
+  .academias-root .hero-media {
+    opacity: 0.3;
+  }
+  .academias-root .hero-media::after {
+    background: linear-gradient(
+      100deg,
+      rgba(247, 252, 255, 0.92) 0%,
+      rgba(247, 252, 255, 0.8) 60%,
+      rgba(247, 252, 255, 0.6) 100%
+    );
   }
   .academias-root .specialist-grid,
   .academias-root .extras-grid {
@@ -2639,12 +3047,41 @@
     padding: 12px 15px;
     font-size: 13px;
   }
+  /* Sem largura para título e atalho lado a lado: o "▶ ver vídeo" desce. */
+  .academias-root .section-head,
+  .academias-root .section-title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .academias-root .chapter-body h3 {
+    font-size: 19px;
+  }
+  .academias-root .video-play {
+    width: 58px;
+    height: 58px;
+  }
+  .academias-root .video-play svg {
+    width: 24px;
+    height: 24px;
+  }
+  /* Sai da capa: disputaria o rodapé com o título dela, e a duração já aparece
+     no capítulo selecionado logo acima. */
+  .academias-root .video-meta {
+    display: none;
+  }
+  /* Acompanha .hero-cta e .hero-link, que já viram bloco aqui. */
+  .academias-root .hero-actions .chapter-cue {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
 }
 
 @media (max-width: 360px) {
   .academias-root .programs,
   .academias-root .specialist-grid,
-  .academias-root .journey {
+  .academias-root .journey,
+  .academias-root .chapter-gallery {
     grid-template-columns: 1fr;
   }
 }

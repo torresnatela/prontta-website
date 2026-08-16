@@ -43,13 +43,21 @@ export const PROPOSAL_CONTENT = {
   aiDisclaimer:
     'A inteligência artificial da Prontta realiza a pré-triagem e organiza a jornada do paciente. Ela não realiza diagnóstico: o ato médico é sempre do profissional habilitado, por telessaúde, sob seu CRM.',
 
-  /** Card ilustrativo do hero — reflete o mix padrão que abre no simulador. */
+  /**
+   * Card ilustrativo do hero — reflete o mix padrão que abre no simulador.
+   *
+   * ⚠️ Estes três números precisam acompanhar o mix semente de
+   * `components/proposta/state/reducer.ts`; `reducer.test.ts` trava os totais.
+   * A margem é magra porque o mix semente é pequeno: o software mensal de
+   * R$ 1.499 e as despesas fixas comem quase toda a margem bruta. Vender mais
+   * de uma proposta por mês muda a foto — é o efeito que o simulador mostra.
+   */
   heroExample: {
     title: 'Exemplo real de simulação',
     note: '44 consultas especializadas + 6 Programas de Saúde no mês, com as margens recomendadas',
-    receita: 28900,
-    resultadoLiquido: 6457,
-    margemLiquida: 22.3,
+    receita: 21320,
+    resultadoLiquido: 332,
+    margemLiquida: 1.6,
     disclaimer:
       'Exemplo calculado pelo simulador abaixo, já descontando software, equipe, espaço e impostos. Simulação ilustrativa; resultado varia por operação.',
   },

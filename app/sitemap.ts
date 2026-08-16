@@ -23,6 +23,9 @@ const STATIC_ROUTES: {
   // A variante com ?programa/?ciclo/?preco é link de distribuição (noindex);
   // aqui entra só a URL limpa, que é a canônica.
   { path: '/academias/programas', changeFrequency: 'monthly', priority: 0.8 },
+  // 👉 `/academias/{simulador,programas}/sem-video` ficam FORA daqui de
+  // propósito: são variantes de teste A/B, duplicatas das canônicas acima e
+  // marcadas noindex. Listá-las seria pedir indexação de conteúdo duplicado.
   { path: '/faq', changeFrequency: 'monthly', priority: 0.7 },
 ]
 

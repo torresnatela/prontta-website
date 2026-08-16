@@ -11,13 +11,13 @@ describe('initialProposalState', () => {
   it('nasce com o mix semente válido e reproduz os totais oficiais', () => {
     const s = initialProposalState;
     expect(s.clientType).toBe('clinica');
-    expect(s.margins).toEqual({ consulta: 0.6, programa: 0.3 });
+    expect(s.margins).toEqual({ consulta: 0.3, programa: 0.3 });
     expect(s.implantation).toEqual({ mode: 'a_combinar' });
 
     const consultations = summarizeConsultations(s.consultationLines, s.margins.consulta);
     const programs = summarizePrograms(s.programSelections, s.margins.programa);
     const totals = consolidateProposal(consultations, programs, s.implantation);
-    expect(totals.totalContractValue).toBe(28900);
+    expect(totals.totalContractValue).toBe(21320);
 
     // toda linha semente fecha plantão (sem alertas ao abrir)
     for (const line of consultations.lines) {
@@ -31,7 +31,7 @@ describe('initialProposalState', () => {
       expenses: s.dre.expenses,
       softwareMonthlyFee: totals.softwareMonthlyFee,
     });
-    expect(dre.resultadoLiquido).toBe(6457);
+    expect(dre.resultadoLiquido).toBeCloseTo(331.8, 4);
   });
 });
 

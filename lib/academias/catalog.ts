@@ -30,6 +30,11 @@ export interface AcademiaProgramCard {
   theme: AcademiaTheme;
   /** Bullets do popover do catálogo ("O que este programa cobre"). */
   audience: readonly string[];
+  /**
+   * Capa 16:9 do programa. Hoje é um placeholder em SVG gerado na paleta do
+   * tema — ver `public/academias/README.md` para trocar por foto real.
+   */
+  image: string;
   /** Fonte oficial (custos + composição). Leitura, nunca cópia. */
   readonly program: Program;
 }
@@ -48,6 +53,7 @@ const card = (
   tagline,
   publicDescription,
   audience,
+  image: `/academias/programas/${id}.svg`,
   program: getProgram(id),
 });
 

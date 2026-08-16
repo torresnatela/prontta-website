@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-label="Longevidade">
+  <title>Longevidade</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eaf9f0"/>
+      <stop offset="0.55" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#8ce0a9"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.22" r="0.6">
+      <stop offset="0" stop-color="#8ce0a9" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#8ce0a9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <rect width="1280" height="720" fill="url(#glow)"/>
+
+  <g fill="none" stroke="#28b76b" stroke-opacity="0.16" stroke-width="2">
+    <circle cx="1010" cy="250" r="150"/>
+    <circle cx="1010" cy="250" r="230"/>
+    <circle cx="1010" cy="250" r="310"/>
+  </g>
+
+  <path d="M0 560 L300 560 L340 500 L380 620 L430 470 L470 560 L1280 560"
+        fill="none" stroke="#28b76b" stroke-opacity="0.3" stroke-width="4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g transform="translate(830 90) scale(15)" fill="none" stroke="#28b76b"
+     stroke-opacity="0.85" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 20s-6.5-3.9-8.5-8A4.9 4.9 0 0 1 12 6a4.9 4.9 0 0 1 8.5 6C18.5 16.1 12 20 12 20z"/>
+    <path d="M8.5 12h2.2l1-2.2 1.6 4.4 1.1-2.2h1.9"/>
+  </g>
+
+  <g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif">
+    <text x="90" y="300" font-size="34" font-weight="700" letter-spacing="6"
+          fill="#28b76b" fill-opacity="0.85">PRONTTA SAÚDE</text>
+    <text x="90" y="392" font-size="82" font-weight="800" letter-spacing="-2"
+          fill="#0f2740">Longevidade</text>
+    <text x="90" y="452" font-size="32" font-weight="600" fill="#65768a">Programa de Saúde Assistida</text>
+  </g>
+
+  <rect x="90" y="516" width="230" height="8" rx="4" fill="#28b76b" fill-opacity="0.6"/>
+</svg>

@@ -2,6 +2,7 @@
 
 import { IMPLANTATION_RANGE, type DREExpenses, type Implantation } from '@/lib/pricing';
 import { PROPOSAL_CONTENT } from '@/lib/proposal-content';
+import { ChapterCue } from '../shared/ChapterCue';
 import { brl, brlAuto, percent } from '../shared/format';
 import {
   useAcademiaDRE,
@@ -113,6 +114,10 @@ export function DREPanel() {
     <details className="dre">
       <summary>Ver DRE completa do mês (impostos e despesas fixas)</summary>
       <div className="dre-body">
+        {/* O atalho fica aqui dentro: quem abriu a DRE é exatamente quem tem a
+            dúvida que o vídeo responde. */}
+        <ChapterCue chapterId="dre" label="Ver como ler esta DRE · 4 min" />
+
         <div className="dre-fields">
           <div className="dre-field">
             <label htmlFor="taxPercent">Impostos (%)</label>

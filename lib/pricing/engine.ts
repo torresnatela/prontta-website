@@ -13,7 +13,7 @@ import type { ConsultationLine, Cycle, Implantation, PlanId, ProgramSelection } 
 /** Compensa ruído de ponto flutuante antes do arredondamento para cima. */
 const FLOAT_EPSILON = 1e-9;
 
-/** Arredonda para cima ao múltiplo de `step` (padrão R$ 50), como o CEILING da planilha. */
+/** Arredonda para cima ao múltiplo de `step` (padrão R$ 5), como o CEILING da planilha. */
 export function ceilToStep(value: number, step: number = PRICE_STEP): number {
   if (value <= 0) return 0;
   return Math.ceil(value / step - FLOAT_EPSILON) * step;
@@ -125,6 +125,22 @@ export function getProgramRepasse(programId: string, cycle: Cycle): number {
 /** Preço do programa ao paciente no ciclo: repasse ÷ (1 − margem), arred. p/ cima. */
 export function getProgramSellPrice(programId: string, cycle: Cycle, programaMargin: number): number {
   return ceilToStep(getProgramRepasse(programId, cycle) / (1 - programaMargin));
+}
+
+/**
+ * Preço de tabela oficial ao paciente (coluna "Preço paciente V8" da planilha).
+ *
+ * Diferente de `getProgramSellPrice`, que deriva o preço da margem escolhida pelo
+ * parceiro: este é o número comercial fechado, com mensalidade redonda. Use-o
+ * como REFERÊNCIA sugerida, nunca como o preço cobrado.
+ */
+export function getProgramOfficialPrice(programId: string, cycle: Cycle): number {
+  return getProgram(programId).patientPriceByCycle[cycle];
+}
+
+/** Mensalidade de tabela oficial: preço V8 do ciclo ÷ meses do ciclo. */
+export function getProgramOfficialMonthly(programId: string, cycle: Cycle): number {
+  return getProgramOfficialPrice(programId, cycle) / cycle;
 }
 
 export interface ProgramItemSummary {

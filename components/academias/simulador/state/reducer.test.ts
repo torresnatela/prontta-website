@@ -22,9 +22,9 @@ describe('initialSimuladorState', () => {
       personalCommissionPercent: s.personalCommissionPercent,
       manualMonthlyPrice: s.manualMonthlyPrice,
     });
-    expect(result.monthlyPrice).toBe(450);
-    expect(result.monthlyRevenue).toBe(11_250);
-    expect(result.academyProfitMonthly).toBeCloseTo(3458.3333, 4);
+    expect(result.monthlyPrice).toBe(445);
+    expect(result.monthlyRevenue).toBe(11_125);
+    expect(result.academyProfitMonthly).toBeCloseTo(3339.5833, 4);
   });
 
   it('começa com despesas zeradas — a academia já paga aluguel e equipe', () => {

@@ -1,17 +1,23 @@
 import type { Cycle } from './types';
 
 /**
- * Premissas do modelo de precificação 3.0.
- * Fonte: HTML oficial "Prontta_Landing_Prontta_Oficial_10" (mesmo racional da planilha oficial).
+ * Premissas do modelo de precificação 3.1.
+ * Fonte: planilha oficial "Prontta_Simulador_Precos_DRE" (aba 1. Premissas).
  * As margens são EDITÁVEIS pelo usuário; o restante é fixo e versionado.
  */
-export const PRICING_MODEL_VERSION = '3.0';
+export const PRICING_MODEL_VERSION = '3.1';
 
 /** Divisor de formação do custo da consulta: 1 − margem 0,40 − infra 0,08 − imposto 0,15 */
 export const PRICE_FORMATION_DIVISOR = 0.37;
 
-/** Preços sempre arredondados para cima ao múltiplo de R$ 50. */
-export const PRICE_STEP = 50;
+/**
+ * Preços sempre arredondados para cima ao múltiplo de R$ 5 (aba 1. Premissas, item E).
+ *
+ * ⚠️ Já foi 50 por engano, o que inflava toda consulta em até R$ 49 — Cardiologia
+ * Popular saía R$ 150 em vez dos R$ 130 da planilha, e Nutrição R$ 100 em vez de
+ * R$ 75. `lib/pricing/data.test.ts` trava a tabela inteira contra a planilha.
+ */
+export const PRICE_STEP = 5;
 
 /** Horas médicas por plantão na agenda dedicada. */
 export const HOURS_PER_SHIFT = 4;
@@ -28,10 +34,16 @@ export const PLATFORM_FEE_BY_CYCLE: Record<Cycle, number> = { 3: 100, 6: 250, 12
 /** Faixa de referência da taxa única de implantação. */
 export const IMPLANTATION_RANGE = { min: 10_000, max: 15_000 };
 
-/** Margem padrão do parceiro sobre o preço final das consultas (recomendado: 60%). */
-export const DEFAULT_CONSULTA_MARGIN = 0.6;
+/**
+ * Ganho do parceiro B2B sobre o serviço: 30% (aba 1. Premissas, item C — divisor 0,70).
+ *
+ * A planilha tem UMA margem de parceiro, válida para consultas e para programas.
+ * A constante de consultas já foi 60%, valor que não existe em lugar nenhum do
+ * modelo oficial e encarecia toda consulta avulsa em ~75%.
+ */
+export const DEFAULT_CONSULTA_MARGIN = 0.3;
 
-/** Margem padrão do parceiro sobre o preço final dos Programas de Saúde (recomendado: 30%). */
+/** Margem padrão do parceiro sobre o preço final dos Programas de Saúde (30%). */
 export const DEFAULT_PROGRAMA_MARGIN = 0.3;
 
 /** Limites das margens editáveis (1% a 90%). */

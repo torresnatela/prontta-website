@@ -71,7 +71,13 @@ export function hasOfferParams(searchParams: RawSearchParams): boolean {
   return ['programa', 'ciclo', 'preco'].some((key) => firstValue(searchParams[key]) !== undefined);
 }
 
-export function buildOfferPath(params: AcademiaOfferParams): string {
+/** Rota padrão do associado. A variante sem vídeo passa o próprio basePath. */
+export const ASSOCIADO_BASE_PATH = '/academias/programas';
+
+export function buildOfferPath(
+  params: AcademiaOfferParams,
+  basePath: string = ASSOCIADO_BASE_PATH,
+): string {
   const query = new URLSearchParams({
     programa: params.programa,
     ciclo: String(params.ciclo),
@@ -79,7 +85,7 @@ export function buildOfferPath(params: AcademiaOfferParams): string {
   if (params.preco !== null) {
     query.set('preco', String(Math.round(params.preco * 100) / 100));
   }
-  return `/academias/programas?${query.toString()}`;
+  return `${basePath}?${query.toString()}`;
 }
 
 /**

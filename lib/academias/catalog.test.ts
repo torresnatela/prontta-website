@@ -45,6 +45,13 @@ describe('ACADEMIA_PROGRAMS', () => {
     }
   });
 
+  it('aponta cada capa para o arquivo do próprio programa', () => {
+    // O arquivo precisa existir em public/ — ver public/academias/README.md.
+    for (const entry of ACADEMIA_PROGRAMS) {
+      expect(entry.image).toBe(`/academias/programas/${entry.id}.svg`);
+    }
+  });
+
   it('mantém todas as especialidades das composições resolvíveis', () => {
     // Guarda contra uma edição em programs.ts que órfã uma especialidade.
     for (const entry of ACADEMIA_PROGRAMS) {
