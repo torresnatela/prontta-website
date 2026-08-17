@@ -1,10 +1,10 @@
 'use client';
 
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
-import { getProgram, getSpecialty, PLAN_LABELS, PRICING_MODEL_VERSION } from '@/lib/pricing';
+import { getMargin, getProgram, getSpecialty, PLAN_LABELS, PRICING_MODEL_VERSION } from '@/lib/pricing';
 import { PROPOSAL_CONTENT } from '@/lib/proposal-content';
 import { siteConfig } from '@/lib/site-config';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatPercent } from '@/lib/utils';
 import type { ProposalPDFPayload } from './types';
 
 const NAVY = '#00204D';
@@ -62,6 +62,23 @@ const styles = StyleSheet.create({
   cellRight: { fontSize: 9, color: NAVY, textAlign: 'right', fontFamily: 'Helvetica-Bold' },
   totRow: { flexDirection: 'row', paddingVertical: 5, paddingHorizontal: 5, backgroundColor: '#F4FAFC' },
   totRowLabel: { fontSize: 9, fontFamily: 'Helvetica-Bold', color: NAVY },
+
+  /* Variantes compactas — só as tabelas de 9 colunas da página "Sua proposta" usam.
+     O paddingLeft garante a calha entre colunas numéricas: sem ele, um subtotal de 6
+     dígitos encosta no valor da coluna seguinte. */
+  thSm: { fontSize: 7, fontFamily: 'Helvetica-Bold', color: MUT, textTransform: 'uppercase', paddingLeft: 4 },
+  cellSm: { fontSize: 7.5, color: '#374151' },
+  cellRightSm: {
+    fontSize: 7.5,
+    color: NAVY,
+    textAlign: 'right',
+    fontFamily: 'Helvetica-Bold',
+    paddingLeft: 4,
+  },
+  cellRightMut: { fontSize: 7.5, color: '#374151', textAlign: 'right', paddingLeft: 4 },
+  /* A margem é o texto mais longo da linha (`R$ 39.020,00 · 30,3%`) e é info secundária. */
+  cellMargin: { fontSize: 7, color: '#374151', textAlign: 'right', paddingLeft: 4 },
+  totRowLabelSm: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: NAVY },
 
   kvRow: {
     flexDirection: 'row',
@@ -121,10 +138,34 @@ const styles = StyleSheet.create({
   },
 });
 
+/** Curtos de propósito: a coluna é estreita e a legenda sob a tabela explica cada um. */
 const AGENDA_LABEL: Record<string, string> = {
-  dedicada: 'dedicada (plantão 4h)',
-  compartilhada: 'compartilhada (avulso)',
+  dedicada: 'dedicada',
+  compartilhada: 'avulsa',
 };
+
+/** Pesos de coluna compartilhados pelas duas tabelas, para alinharem na página. */
+const COL = {
+  nome: 2.3,
+  meio: 1.25,
+  agenda: 1.1,
+  qtd: 0.6,
+  custoUnit: 1.25,
+  custoTotal: 1.35,
+  precoUnit: 1.25,
+  subtotal: 1.45,
+  margem: 1.85,
+} as const;
+
+/** Rótulo das linhas de total: tudo à esquerda da coluna de subtotal. */
+const TOT_LABEL_FLEX =
+  COL.nome + COL.meio + COL.agenda + COL.qtd + COL.custoUnit + COL.custoTotal + COL.precoUnit;
+
+/** Célula de margem: `R$ 90,00 · 60,0%`. */
+function marginLabel(sell: number, cost: number): string {
+  const margin = getMargin(sell, cost);
+  return `${formatCurrency(margin.amount)} · ${formatPercent(margin.percent)}`;
+}
 
 function implantationText(payload: ProposalPDFPayload): string {
   const { implantation } = payload.state;
@@ -135,10 +176,7 @@ function implantationText(payload: ProposalPDFPayload): string {
 
 export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
   const { state, consultations, programs, totals, dre, dateLabel } = payload;
-  const percent = `${dre.margemLiquidaPct.toLocaleString('pt-BR', {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  })}%`;
+  const percent = formatPercent(dre.margemLiquidaPct);
   const softwareText =
     totals.softwareMonthlyFee === 0 && consultations.totalQuantity > 0
       ? 'ISENTO'
@@ -223,35 +261,69 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
           <View>
             <Text style={styles.h2}>Consultas especializadas</Text>
             <View style={styles.tableHead}>
-              <Text style={[styles.th, { flex: 3 }]}>Especialidade</Text>
-              <Text style={[styles.th, { flex: 1.5 }]}>Plano</Text>
-              <Text style={[styles.th, { flex: 2.5 }]}>Agenda</Text>
-              <Text style={[styles.th, { flex: 1, textAlign: 'right' }]}>Qtd.</Text>
-              <Text style={[styles.th, { flex: 1.6, textAlign: 'right' }]}>Preço unit.</Text>
-              <Text style={[styles.th, { flex: 1.6, textAlign: 'right' }]}>Subtotal</Text>
+              <Text style={[styles.thSm, { flex: COL.nome }]}>Especialidade</Text>
+              <Text style={[styles.thSm, { flex: COL.meio }]}>Plano</Text>
+              <Text style={[styles.thSm, { flex: COL.agenda }]}>Agenda</Text>
+              <Text style={[styles.thSm, { flex: COL.qtd, textAlign: 'right' }]}>Qtd.</Text>
+              <Text style={[styles.thSm, { flex: COL.custoUnit, textAlign: 'right' }]}>
+                Custo unit. (Prontta)
+              </Text>
+              <Text style={[styles.thSm, { flex: COL.custoTotal, textAlign: 'right' }]}>
+                Custo total
+              </Text>
+              <Text style={[styles.thSm, { flex: COL.precoUnit, textAlign: 'right' }]}>
+                Preço unit.
+              </Text>
+              <Text style={[styles.thSm, { flex: COL.subtotal, textAlign: 'right' }]}>Subtotal</Text>
+              <Text style={[styles.thSm, { flex: COL.margem, textAlign: 'right' }]}>Sua margem</Text>
             </View>
             {state.consultationLines.map((line) => {
               const detail = consultations.lines.find((l) => l.lineId === line.id);
               return (
                 <View key={line.id} style={styles.row}>
-                  <Text style={[styles.cell, { flex: 3 }]}>{getSpecialty(line.specialtyId).name}</Text>
-                  <Text style={[styles.cell, { flex: 1.5 }]}>{PLAN_LABELS[line.plan]}</Text>
-                  <Text style={[styles.cell, { flex: 2.5 }]}>{AGENDA_LABEL[line.agenda]}</Text>
-                  <Text style={[styles.cellRight, { flex: 1 }]}>{line.quantity}</Text>
-                  <Text style={[styles.cellRight, { flex: 1.6 }]}>
+                  <Text style={[styles.cellSm, { flex: COL.nome }]}>
+                    {getSpecialty(line.specialtyId).name}
+                  </Text>
+                  <Text style={[styles.cellSm, { flex: COL.meio }]}>{PLAN_LABELS[line.plan]}</Text>
+                  <Text style={[styles.cellSm, { flex: COL.agenda }]}>{AGENDA_LABEL[line.agenda]}</Text>
+                  <Text style={[styles.cellRightSm, { flex: COL.qtd }]}>{line.quantity}</Text>
+                  <Text style={[styles.cellRightMut, { flex: COL.custoUnit }]}>
+                    {detail ? formatCurrency(detail.unitCost) : '—'}
+                  </Text>
+                  <Text style={[styles.cellRightMut, { flex: COL.custoTotal }]}>
+                    {detail ? formatCurrency(detail.lineCost) : '—'}
+                  </Text>
+                  <Text style={[styles.cellRightSm, { flex: COL.precoUnit }]}>
                     {detail ? formatCurrency(detail.unitSell) : '—'}
                   </Text>
-                  <Text style={[styles.cellRight, { flex: 1.6 }]}>
+                  <Text style={[styles.cellRightSm, { flex: COL.subtotal }]}>
                     {detail ? formatCurrency(detail.lineSell) : '—'}
+                  </Text>
+                  <Text style={[styles.cellMargin, { flex: COL.margem }]}>
+                    {detail ? marginLabel(detail.unitSell, detail.unitCost) : '—'}
                   </Text>
                 </View>
               );
             })}
             <View style={styles.totRow}>
-              <Text style={[styles.totRowLabel, { flex: 6 }]}>Preço das consultas ao paciente</Text>
-              <Text style={[styles.cellRight, { flex: 1.6 }]}>
+              <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>
+                Custo das consultas (repasse à Prontta)
+              </Text>
+              <Text style={[styles.cellRightMut, { flex: COL.subtotal }]}>
+                {formatCurrency(consultations.subtotalCost)}
+              </Text>
+              <Text style={[styles.cellMargin, { flex: COL.margem }]}>
+                {marginLabel(consultations.patientPrice, consultations.subtotalCost)}
+              </Text>
+            </View>
+            <View style={styles.totRow}>
+              <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>
+                Preço das consultas ao paciente
+              </Text>
+              <Text style={[styles.cellRightSm, { flex: COL.subtotal }]}>
                 {formatCurrency(consultations.patientPrice)}
               </Text>
+              <Text style={[styles.cellRightSm, { flex: COL.margem }]} />
             </View>
           </View>
         )}
@@ -260,33 +332,69 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
           <View>
             <Text style={styles.h2}>Programas de Saúde Assistida</Text>
             <View style={styles.tableHead}>
-              <Text style={[styles.th, { flex: 4 }]}>Programa</Text>
-              <Text style={[styles.th, { flex: 1.4, textAlign: 'right' }]}>Ciclo</Text>
-              <Text style={[styles.th, { flex: 1, textAlign: 'right' }]}>Qtd.</Text>
-              <Text style={[styles.th, { flex: 1.6, textAlign: 'right' }]}>Preço</Text>
-              <Text style={[styles.th, { flex: 1.6, textAlign: 'right' }]}>Subtotal</Text>
+              <Text style={[styles.thSm, { flex: COL.nome + COL.agenda }]}>Programa</Text>
+              <Text style={[styles.thSm, { flex: COL.meio, textAlign: 'right' }]}>Ciclo</Text>
+              <Text style={[styles.thSm, { flex: COL.qtd, textAlign: 'right' }]}>Qtd.</Text>
+              <Text style={[styles.thSm, { flex: COL.custoUnit, textAlign: 'right' }]}>
+                Custo unit. (Prontta)
+              </Text>
+              <Text style={[styles.thSm, { flex: COL.custoTotal, textAlign: 'right' }]}>
+                Custo total
+              </Text>
+              <Text style={[styles.thSm, { flex: COL.precoUnit, textAlign: 'right' }]}>Preço</Text>
+              <Text style={[styles.thSm, { flex: COL.subtotal, textAlign: 'right' }]}>Subtotal</Text>
+              <Text style={[styles.thSm, { flex: COL.margem, textAlign: 'right' }]}>Sua margem</Text>
             </View>
             {state.programSelections.map((selection) => {
               const item = programs.items.find((i) => i.selectionId === selection.id);
               return (
                 <View key={selection.id} style={styles.row}>
-                  <Text style={[styles.cell, { flex: 4 }]}>{getProgram(selection.programId).name}</Text>
-                  <Text style={[styles.cellRight, { flex: 1.4 }]}>{selection.cycle} meses</Text>
-                  <Text style={[styles.cellRight, { flex: 1 }]}>{selection.quantity}</Text>
-                  <Text style={[styles.cellRight, { flex: 1.6 }]}>
+                  <Text style={[styles.cellSm, { flex: COL.nome + COL.agenda }]}>
+                    {getProgram(selection.programId).name}
+                  </Text>
+                  <Text style={[styles.cellRightSm, { flex: COL.meio }]}>{selection.cycle} meses</Text>
+                  <Text style={[styles.cellRightSm, { flex: COL.qtd }]}>{selection.quantity}</Text>
+                  <Text style={[styles.cellRightMut, { flex: COL.custoUnit }]}>
+                    {item ? formatCurrency(item.unitRepasse) : '—'}
+                  </Text>
+                  <Text style={[styles.cellRightMut, { flex: COL.custoTotal }]}>
+                    {item ? formatCurrency(item.totalRepasse) : '—'}
+                  </Text>
+                  <Text style={[styles.cellRightSm, { flex: COL.precoUnit }]}>
                     {item ? formatCurrency(item.unitSell) : '—'}
                   </Text>
-                  <Text style={[styles.cellRight, { flex: 1.6 }]}>
+                  <Text style={[styles.cellRightSm, { flex: COL.subtotal }]}>
                     {item ? formatCurrency(item.totalSell) : '—'}
+                  </Text>
+                  <Text style={[styles.cellMargin, { flex: COL.margem }]}>
+                    {item ? marginLabel(item.unitSell, item.unitRepasse) : '—'}
                   </Text>
                 </View>
               );
             })}
             <View style={styles.totRow}>
-              <Text style={[styles.totRowLabel, { flex: 8 }]}>Subtotal programas</Text>
-              <Text style={[styles.cellRight, { flex: 1.6 }]}>{formatCurrency(programs.subtotalSell)}</Text>
+              <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>
+                Custo dos programas (repasse à Prontta)
+              </Text>
+              <Text style={[styles.cellRightMut, { flex: COL.subtotal }]}>
+                {formatCurrency(programs.subtotalRepasse)}
+              </Text>
+              <Text style={[styles.cellMargin, { flex: COL.margem }]}>
+                {marginLabel(programs.subtotalSell, programs.subtotalRepasse)}
+              </Text>
+            </View>
+            <View style={styles.totRow}>
+              <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>Subtotal programas</Text>
+              <Text style={[styles.cellRightSm, { flex: COL.subtotal }]}>
+                {formatCurrency(programs.subtotalSell)}
+              </Text>
+              <Text style={[styles.cellRightSm, { flex: COL.margem }]} />
             </View>
           </View>
+        )}
+
+        {(consultations.lines.length > 0 || programs.items.length > 0) && (
+          <Text style={styles.legal}>{c.legalNotes.custoRepasse}</Text>
         )}
 
         <View style={styles.totalBox}>
@@ -306,6 +414,16 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
           <Text style={styles.kvValue}>{implantationText(payload)}</Text>
         </View>
 
+        <View style={styles.footer} fixed>
+          <Text>{c.brand} · Programas de Saúde Assistida</Text>
+          <Text>Emitida em {dateLabel}</Text>
+        </View>
+      </Page>
+
+      {/* Resultado do parceiro — página própria: com as colunas de custo, as tabelas de
+          "Sua proposta" ocupam a folha inteira e este bloco não cabe mais junto. */}
+      <Page size="A4" style={styles.page}>
+        <Text style={styles.eyebrow}>Seu resultado</Text>
         <Text style={styles.h2}>Simulação de resultado do parceiro</Text>
         <View style={styles.kvRow}>
           <Text style={styles.kvLabel}>Receita estimada no mês (com este mix)</Text>

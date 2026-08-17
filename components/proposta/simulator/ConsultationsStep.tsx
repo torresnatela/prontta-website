@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react';
 import {
+  getMargin,
   getShiftMultiple,
   PLAN_LABELS,
   SPECIALTIES,
@@ -9,7 +10,7 @@ import {
   type ConsultationLineSummary,
   type PlanId,
 } from '@/lib/pricing';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatPercent } from '@/lib/utils';
 import { newEntryId, useConsultationsSummary, useProposal } from '../state/ProposalProvider';
 
 const PLAN_ORDER: PlanId[] = ['popular', 'intermediario', 'premium'];
@@ -55,6 +56,7 @@ export function ConsultationsStep() {
   }
 
   const software = summary.softwareMonthlyFee;
+  const blockMargin = getMargin(summary.patientPrice, summary.subtotalCost);
 
   return (
     <div className="sc">
@@ -120,6 +122,11 @@ export function ConsultationsStep() {
       </div>
 
       {hint && <p className="hint">{hint}</p>}
+      <p className="hint">
+        <b>Custo unit. (Prontta)</b> é o que você paga à Prontta por consulta.{' '}
+        <b>Preço venda</b> é o que o paciente paga. <b>Sua margem</b> é a diferença entre os
+        dois.
+      </p>
 
       <div className="tscroll">
         <table className="st">
@@ -129,9 +136,11 @@ export function ConsultationsStep() {
               <th>Plano</th>
               <th>Agenda</th>
               <th>Qtd.</th>
-              <th>Custo unit.</th>
+              <th>Custo unit. (Prontta)</th>
+              <th>Custo total</th>
               <th>Preço venda</th>
               <th>Subtotal</th>
+              <th>Sua margem</th>
               <th>Plantão</th>
               <th />
             </tr>
@@ -141,6 +150,7 @@ export function ConsultationsStep() {
               const detail = summaryById.get(line.id);
               if (!detail) return null;
               const specialty = SPECIALTIES.find((s) => s.id === line.specialtyId);
+              const margin = getMargin(detail.unitSell, detail.unitCost);
               const validation = detail.validation;
               let pillClass = 'mut';
               let pillText = 'avulso';
@@ -156,12 +166,16 @@ export function ConsultationsStep() {
                   <td data-l="Plano">{PLAN_LABELS[line.plan]}</td>
                   <td data-l="Agenda">{line.agenda === 'dedicada' ? 'dedicada' : 'compartilhada'}</td>
                   <td data-l="Qtd.">{line.quantity}</td>
-                  <td data-l="Custo unit.">{formatCurrency(detail.unitCost)}</td>
+                  <td data-l="Custo unit. (Prontta)">{formatCurrency(detail.unitCost)}</td>
+                  <td data-l="Custo total">{formatCurrency(detail.lineCost)}</td>
                   <td data-l="Preço venda">
                     <b>{formatCurrency(detail.unitSell)}</b>
                   </td>
                   <td data-l="Subtotal">
                     <b>{formatCurrency(detail.lineSell)}</b>
+                  </td>
+                  <td data-l="Sua margem">
+                    {formatCurrency(margin.amount)} · {formatPercent(margin.percent)}
                   </td>
                   <td data-l="Plantão">
                     <span className={`pill ${pillClass}`}>{pillText}</span>
@@ -184,8 +198,14 @@ export function ConsultationsStep() {
       </div>
 
       <div className="trow">
-        <span>Custo das consultas</span>
+        <span>Custo das consultas (repasse à Prontta)</span>
         <b>{formatCurrency(summary.subtotalCost)}</b>
+      </div>
+      <div className="trow">
+        <span>Sua margem nas consultas</span>
+        <b>
+          {formatCurrency(blockMargin.amount)} · {formatPercent(blockMargin.percent)}
+        </b>
       </div>
       <div className="trow">
         <span>Preço das consultas ao paciente</span>

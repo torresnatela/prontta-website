@@ -200,6 +200,8 @@ export const PROPOSAL_CONTENT = {
 
   /** Avisos legais reproduzidos no PDF. */
   legalNotes: {
+    custoRepasse:
+      'Custo unit. (Prontta) é o repasse por consulta ou por ciclo de programa devido à Prontta, já incluídos plataforma e IA. Preço unit. é o valor cobrado do paciente. Sua margem é a diferença entre os dois, sobre o preço de venda. Agenda dedicada é vendida em plantões fechados de 4h; agenda avulsa usa o tempo ocioso da rede.',
     totalSimulado: 'Valor simulado a partir do mix escolhido. Não constitui valor contratual.',
     resultadoParceiro:
       'Todos os números apresentados são uma simulação, elaborada para que o parceiro tenha noção das possibilidades de ganho e de escala do modelo. Não representam o total de um contrato nem constituem compromisso de volume, faturamento ou resultado: as vendas são variáveis e dependem da operação de cada parceiro. Não há garantia de resultado comercial ou de saúde. As condições definitivas serão formalizadas em contrato.',

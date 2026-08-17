@@ -34,6 +34,21 @@ export function getConsultationSellPrice(
   return ceilToStep(getConsultationCost(specialtyId, plan) / (1 - consultaMargin));
 }
 
+export interface MarginBreakdown {
+  /** Preço de venda − custo, em R$. */
+  amount: number;
+  /** Margem sobre o preço de venda, em % (0 quando o preço é 0). */
+  percent: number;
+}
+
+/**
+ * Margem de uma linha, item ou bloco — o que sobra para o parceiro depois do repasse.
+ * Fonte única da fórmula: consumida pela UI do simulador e pelo template de PDF.
+ */
+export function getMargin(sell: number, cost: number): MarginBreakdown {
+  return { amount: sell - cost, percent: sell > 0 ? ((sell - cost) / sell) * 100 : 0 };
+}
+
 /** Múltiplo de compra na agenda dedicada: consultas/hora × 4h do plantão, arred. p/ cima. */
 export function getShiftMultiple(specialtyId: string, plan: PlanId): number {
   const specialty = getSpecialty(specialtyId);

@@ -1,6 +1,6 @@
 'use client';
 
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, formatPercent } from '@/lib/utils';
 import { useDRE } from '../state/ProposalProvider';
 
 export function DREStep() {
@@ -29,7 +29,7 @@ export function DREStep() {
       </div>
       <div className="trow">
         <span>Margem líquida</span>
-        <b>{dre.margemLiquidaPct.toFixed(1).replace('.', ',')}%</b>
+        <b>{formatPercent(dre.margemLiquidaPct)}</b>
       </div>
     </div>
   );

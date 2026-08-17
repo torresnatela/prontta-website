@@ -6,6 +6,7 @@ import {
   consolidateProposal,
   getConsultationCost,
   getConsultationSellPrice,
+  getMargin,
   getProgramRepasse,
   getProgramSellPrice,
   getShiftMultiple,
@@ -14,6 +15,33 @@ import {
   validateDedicatedQuantity,
 } from './engine';
 import type { ConsultationLine, PlanId } from './types';
+
+describe('getMargin', () => {
+  it('devolve o ganho em R$ e o % sobre o preço de venda', () => {
+    expect(getMargin(150, 60)).toEqual({ amount: 90, percent: 60 });
+  });
+
+  it('devolve margem zero quando o preço iguala o custo', () => {
+    expect(getMargin(130, 130)).toEqual({ amount: 0, percent: 0 });
+  });
+
+  it('não divide por zero quando não há preço de venda', () => {
+    expect(getMargin(0, 0)).toEqual({ amount: 0, percent: 0 });
+    expect(getMargin(0, 80)).toEqual({ amount: -80, percent: 0 });
+  });
+
+  it('aceita margem negativa quando o custo supera o preço', () => {
+    expect(getMargin(100, 130)).toEqual({ amount: -30, percent: -30 });
+  });
+
+  it('bate com a margem embutida em getConsultationSellPrice', () => {
+    const cost = getConsultationCost('endocrinologia', 'popular');
+    const sell = getConsultationSellPrice('endocrinologia', 'popular', 0.3);
+    // O arredondamento de R$ 5 empurra a margem efetiva um pouco acima da nominal.
+    expect(getMargin(sell, cost).percent).toBeGreaterThanOrEqual(30);
+    expect(getMargin(sell, cost).amount).toBe(sell - cost);
+  });
+});
 
 describe('ceilToStep', () => {
   it('retorna 0 para 0', () => {

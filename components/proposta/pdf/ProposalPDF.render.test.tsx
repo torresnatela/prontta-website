@@ -31,8 +31,8 @@ describe('ProposalPDF (render real via @react-pdf)', () => {
     const buffer = await renderToBuffer(<ProposalPDF payload={buildPayload()} />);
     // Cabeçalho de arquivo PDF.
     expect(buffer.subarray(0, 5).toString('latin1')).toBe('%PDF-');
-    // 4 páginas (capa, quem somos, sua proposta, segurança jurídica).
+    // 5 páginas (capa, quem somos, sua proposta, seu resultado, segurança jurídica).
     const pageCount = buffer.toString('latin1').match(/\/Type\s*\/Page[^s]/g)?.length ?? 0;
-    expect(pageCount).toBe(4);
+    expect(pageCount).toBe(5);
   }, 30000);
 });
