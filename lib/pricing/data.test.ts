@@ -26,6 +26,7 @@ const GOLDEN: Record<string, { costs: [number, number, number]; shifts: [number,
   geriatria: { costs: [130, 165, 325], shifts: [10, 8, 4] },
   'ginecologia-obstetricia': { costs: [130, 165, 325], shifts: [10, 8, 4] },
   hematologia: { costs: [165, 205, 410], shifts: [10, 8, 4] },
+  hepatologia: { costs: [220, 275, 545], shifts: [10, 8, 4] },
   infectologia: { costs: [165, 205, 410], shifts: [10, 8, 4] },
   'medicina-da-familia': { costs: [130, 165, 325], shifts: [10, 8, 4] },
   nefrologia: { costs: [165, 205, 410], shifts: [10, 8, 4] },
@@ -38,6 +39,7 @@ const GOLDEN: Record<string, { costs: [number, number, number]; shifts: [number,
   otorrinolaringologia: { costs: [130, 165, 325], shifts: [10, 8, 4] },
   pediatria: { costs: [165, 205, 410], shifts: [10, 8, 4] },
   pneumologia: { costs: [105, 205, 410], shifts: [16, 8, 4] },
+  proctologia: { costs: [165, 205, 410], shifts: [10, 8, 4] },
   'psicologia-adulto': { costs: [75, 55, 110], shifts: [6, 8, 4] },
   'psicologia-infantil': { costs: [125, 125, 165], shifts: [6, 6, 4] },
   'psiquiatria-adulto': { costs: [130, 165, 325], shifts: [10, 8, 4] },
@@ -50,7 +52,7 @@ const GOLDEN: Record<string, { costs: [number, number, number]; shifts: [number,
 const PLANS: PlanId[] = ['popular', 'intermediario', 'premium'];
 
 describe('catálogo de especialidades (golden da tabela oficial)', () => {
-  it('tem exatamente as 27 especialidades da tabela', () => {
+  it('tem exatamente as 29 especialidades da tabela', () => {
     expect(SPECIALTIES.map((s) => s.id).sort()).toEqual(Object.keys(GOLDEN).sort());
   });
 
