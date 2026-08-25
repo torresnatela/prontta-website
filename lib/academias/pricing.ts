@@ -1,6 +1,9 @@
 import {
   calculateDRE,
   ceilToStep,
+  clampCount,
+  clampMoney,
+  clampPercent,
   getConsultationSellPrice,
   getProgramRepasse,
   getProgramSellPrice,
@@ -121,28 +124,11 @@ export interface OwnerSimulatorResult {
 }
 
 /**
- * Clamps compartilhados com o reducer da UI (`components/academias/simulador/state`).
- * Ficam aqui para existir uma definição só: campo vazio vira NaN e nada pode
- * envenenar nem o estado nem o cálculo.
+ * Reexportados de `lib/pricing/clamps` — nasceram aqui e foram promovidos
+ * quando `lib/empresa` passou a precisar dos mesmos guardas. O reducer da UI
+ * (`components/academias/simulador/state`) continua importando daqui.
  */
-export const clampPercent = (value: number, max: number): number => {
-  if (!Number.isFinite(value)) return 0;
-  return Math.min(max, Math.max(0, value));
-};
-
-export const clampCount = (
-  value: number,
-  min = 0,
-  max: number = Number.MAX_SAFE_INTEGER,
-): number => {
-  if (!Number.isFinite(value)) return min;
-  return Math.min(max, Math.max(min, Math.floor(value)));
-};
-
-export const clampMoney = (value: number): number => {
-  if (!Number.isFinite(value)) return 0;
-  return Math.max(0, value);
-};
+export { clampCount, clampMoney, clampPercent } from '@/lib/pricing';
 
 export function simulateAcademiaOwner(input: OwnerSimulatorInput): OwnerSimulatorResult {
   const ownerMarginPercent = clampPercent(input.ownerMarginPercent, OWNER_MARGIN_MAX_PERCENT);

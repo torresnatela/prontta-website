@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { getMargin, PROGRAMS, type Cycle, type ProgramItemSummary } from '@/lib/pricing';
+import { summarizeProgramsMonthly } from '@/lib/empresa/pricing';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { newEntryId, useProgramsSummary, useProposal } from '../state/ProposalProvider';
 import { StepHeader } from './StepHeader';
@@ -23,6 +24,16 @@ export function ProgramsStep() {
   }, [summary]);
 
   const blockMargin = getMargin(summary.subtotalSell, summary.subtotalRepasse);
+  const beneficio = state.mode === 'beneficio';
+  // Rateio do ciclo no mês — o orçamento do RH é mensal, o contrato é por ciclo.
+  const monthly = useMemo(
+    () => summarizeProgramsMonthly(state.programSelections),
+    [state.programSelections],
+  );
+  const monthlyById = useMemo(
+    () => new Map(monthly.items.map((item) => [item.selectionId, item])),
+    [monthly],
+  );
 
   function addProgram() {
     const quantity = Number(qtyRef.current?.value) || 0;
@@ -39,7 +50,11 @@ export function ProgramsStep() {
         step={3}
         tag="Some os programas"
         title="Programas de Saúde Assistida"
-        lead="Jornadas fechadas em ciclos de 3, 6 ou 12 meses, com a composição de especialistas já definida."
+        lead={
+          beneficio
+            ? 'Jornadas fechadas de 3, 6 ou 12 meses por colaborador. O contrato é o ciclo cheio; a coluna mensal é o rateio dele no orçamento.'
+            : 'Jornadas fechadas em ciclos de 3, 6 ou 12 meses, com a composição de especialistas já definida.'
+        }
         chapterId="programas"
       />
 
@@ -77,8 +92,18 @@ export function ProgramsStep() {
       </div>
 
       <p className="field-note">
-        <b>Custo unit. (Prontta)</b> é o repasse do ciclo à Prontta (já inclui plataforma e
-        IA). <b>Preço</b> é o que o paciente paga no ciclo. <b>Sua margem</b> é a diferença.
+        {beneficio ? (
+          <>
+            <b>Preço do ciclo</b> é o valor devido à Prontta por colaborador no ciclo inteiro, já
+            com plataforma e IA. <b>Equiv. mensal</b> é esse valor dividido pelos meses do ciclo —
+            serve para orçar, mas o compromisso contratual é o ciclo cheio.
+          </>
+        ) : (
+          <>
+            <b>Custo unit. (Prontta)</b> é o repasse do ciclo à Prontta (já inclui plataforma e IA).{' '}
+            <b>Preço</b> é o que o paciente paga no ciclo. <b>Sua margem</b> é a diferença.
+          </>
+        )}
       </p>
 
       <div className="tscroll">
@@ -88,11 +113,21 @@ export function ProgramsStep() {
               <th>Programa</th>
               <th>Ciclo</th>
               <th>Qtd.</th>
-              <th>Custo unit. (Prontta)</th>
-              <th>Custo total</th>
-              <th>Preço (sua margem)</th>
-              <th>Subtotal</th>
-              <th>Sua margem</th>
+              {beneficio ? (
+                <>
+                  <th>Preço do ciclo</th>
+                  <th>Total do ciclo</th>
+                  <th>Equiv. mensal</th>
+                </>
+              ) : (
+                <>
+                  <th>Custo unit. (Prontta)</th>
+                  <th>Custo total</th>
+                  <th>Preço (sua margem)</th>
+                  <th>Subtotal</th>
+                  <th>Sua margem</th>
+                </>
+              )}
               <th />
             </tr>
           </thead>
@@ -107,17 +142,33 @@ export function ProgramsStep() {
                   <td data-l="Programa">{program?.name}</td>
                   <td data-l="Ciclo">{selection.cycle} meses</td>
                   <td data-l="Qtd.">{selection.quantity}</td>
-                  <td data-l="Custo unit. (Prontta)">{formatCurrency(detail.unitRepasse)}</td>
-                  <td data-l="Custo total">{formatCurrency(detail.totalRepasse)}</td>
-                  <td data-l="Preço">
-                    <b>{formatCurrency(detail.unitSell)}</b>
-                  </td>
-                  <td data-l="Subtotal">
-                    <b>{formatCurrency(detail.totalSell)}</b>
-                  </td>
-                  <td data-l="Sua margem">
-                    {formatCurrency(margin.amount)} · {formatPercent(margin.percent)}
-                  </td>
+                  {beneficio ? (
+                    <>
+                      <td data-l="Preço do ciclo">
+                        <b>{formatCurrency(detail.unitRepasse)}</b>
+                      </td>
+                      <td data-l="Total do ciclo">
+                        <b>{formatCurrency(detail.totalRepasse)}</b>
+                      </td>
+                      <td data-l="Equiv. mensal">
+                        {formatCurrency(monthlyById.get(selection.id)?.monthlyEquivalent ?? 0)}
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td data-l="Custo unit. (Prontta)">{formatCurrency(detail.unitRepasse)}</td>
+                      <td data-l="Custo total">{formatCurrency(detail.totalRepasse)}</td>
+                      <td data-l="Preço">
+                        <b>{formatCurrency(detail.unitSell)}</b>
+                      </td>
+                      <td data-l="Subtotal">
+                        <b>{formatCurrency(detail.totalSell)}</b>
+                      </td>
+                      <td data-l="Sua margem">
+                        {formatCurrency(margin.amount)} · {formatPercent(margin.percent)}
+                      </td>
+                    </>
+                  )}
                   <td className="tdel">
                     <button
                       className="xdel"
@@ -135,20 +186,35 @@ export function ProgramsStep() {
         </table>
       </div>
 
-      <div className="dre-line">
-        <span>Custo dos programas (repasse à Prontta)</span>
-        <strong>{formatCurrency(summary.subtotalRepasse)}</strong>
-      </div>
-      <div className="dre-line">
-        <span>Sua margem nos programas</span>
-        <strong>
-          {formatCurrency(blockMargin.amount)} · {formatPercent(blockMargin.percent)}
-        </strong>
-      </div>
-      <div className="dre-line">
-        <span>Subtotal programas</span>
-        <strong>{formatCurrency(summary.subtotalSell)}</strong>
-      </div>
+      {beneficio ? (
+        <>
+          <div className="dre-line">
+            <span>Compromisso dos programas (ciclo cheio)</span>
+            <strong>{formatCurrency(monthly.cycleCommitment)}</strong>
+          </div>
+          <div className="dre-line">
+            <span>Equivalente mensal dos programas</span>
+            <strong>{formatCurrency(monthly.monthlyTotal)}</strong>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="dre-line">
+            <span>Custo dos programas (repasse à Prontta)</span>
+            <strong>{formatCurrency(summary.subtotalRepasse)}</strong>
+          </div>
+          <div className="dre-line">
+            <span>Sua margem nos programas</span>
+            <strong>
+              {formatCurrency(blockMargin.amount)} · {formatPercent(blockMargin.percent)}
+            </strong>
+          </div>
+          <div className="dre-line">
+            <span>Subtotal programas</span>
+            <strong>{formatCurrency(summary.subtotalSell)}</strong>
+          </div>
+        </>
+      )}
     </section>
   );
 }

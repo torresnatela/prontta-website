@@ -1,8 +1,11 @@
-import { PROPOSAL_CONTENT } from '@/lib/proposal-content';
+'use client';
 
-const c = PROPOSAL_CONTENT;
+import { useProposalNarrative } from '../state/ProposalProvider';
+
 
 export function ResponsibilitiesSection() {
+  const c = useProposalNarrative();
+
   return (
     <section className="panel">
       <div className="section-head">

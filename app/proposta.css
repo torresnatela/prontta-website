@@ -565,3 +565,39 @@
     content: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODO BENEFÍCIO — /proposta/empresa
+   Modificador extra em cima de .proposta: tudo acima continua valendo, e aqui
+   moram só as diferenças. ⚠️ SÓ px, nunca rem (ver o cabeçalho do arquivo).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* A largura de 1560px existe para a tabela de 11 colunas da revenda. No
+   benefício não há colunas de custo nem de margem — sobram 7 — e manter a
+   folha larga só estica a linha de leitura. */
+.sim-root.proposta.empresa .shell {
+  max-width: 1380px;
+}
+
+/* A barra de custeio é uma divisão entre duas partes que somam 100%, não um mix
+   de receita: a fatia da empresa é a "boa" e vem primeiro. Sem isto ela herda
+   as cores do mixbar de revenda, onde .cost é o repasse. */
+.sim-root.proposta.empresa .mixbar .profit {
+  background: var(--brand);
+}
+.sim-root.proposta.empresa .mixbar .cost {
+  background: var(--yellow);
+}
+
+/* O card de destaque do painel mostra um CUSTO, não um lucro. Mantém a forma do
+   .profit-card mas troca o verde por navy, para ninguém ler R$ 20,71 por
+   colaborador como se fosse dinheiro entrando. */
+.sim-root.proposta.empresa .profit-card {
+  background: linear-gradient(135deg, var(--navy), var(--brand-2));
+}
+
+/* A nota de premissas do retorno é a mais longa da página e precisa parecer o
+   que é: ressalva, não resultado. */
+.sim-root.proposta.empresa .riskbox {
+  margin-top: 18px;
+}

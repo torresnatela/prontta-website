@@ -1,13 +1,11 @@
 'use client';
 
-import { PROPOSAL_CONTENT } from '@/lib/proposal-content';
 import { siteConfig } from '@/lib/site-config';
-import { useProposal } from '../state/ProposalProvider';
-
-const c = PROPOSAL_CONTENT;
+import { useProposal, useProposalNarrative } from '../state/ProposalProvider';
 
 export function ContactSection() {
   const { state } = useProposal();
+  const c = useProposalNarrative();
   // Sem consultor preenchido a proposta sai com os dados institucionais.
   const name = state.seller.name.trim() || siteConfig.name;
   const email = state.seller.email.trim() || siteConfig.contact.email;
@@ -23,11 +21,8 @@ export function ContactSection() {
             </span>{' '}
             Próximo passo
           </div>
-          <h2>Vamos abrir o seu ponto Prontta?</h2>
-          <p>
-            Responda a esta proposta para agendarmos o alinhamento, formalizar o contrato e iniciar
-            a implantação do seu ponto de acesso.
-          </p>
+          <h2>{c.contact.title}</h2>
+          <p>{c.contact.lead}</p>
         </div>
       </div>
       <div className="contact">

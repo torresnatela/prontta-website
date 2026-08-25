@@ -11,7 +11,8 @@ export async function generateProposalPDF(payload: ProposalPDFPayload) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `proposta-prontta-saude-${new Date().toISOString().split('T')[0]}.pdf`;
+  const slug = payload.state.mode === 'beneficio' ? 'beneficio-prontta-saude' : 'proposta-prontta-saude';
+  link.download = `${slug}-${new Date().toISOString().split('T')[0]}.pdf`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

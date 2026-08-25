@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   getMargin,
   getShiftMultiple,
@@ -10,11 +10,60 @@ import {
   type ConsultationLineSummary,
   type PlanId,
 } from '@/lib/pricing';
+import type { ProposalMode } from '@/lib/proposta/mode';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { newEntryId, useConsultationsSummary, useProposal } from '../state/ProposalProvider';
 import { StepHeader } from './StepHeader';
 
 const PLAN_ORDER: PlanId[] = ['popular', 'intermediario', 'premium'];
+
+type ColumnId =
+  | 'especialidade'
+  | 'plano'
+  | 'agenda'
+  | 'qtd'
+  | 'custoUnit'
+  | 'custoTotal'
+  | 'precoUnit'
+  | 'subtotal'
+  | 'margem'
+  | 'plantao'
+  | 'del';
+
+/**
+ * As colunas de cada modo, declaradas de uma vez.
+ *
+ * No modo benefício não existe margem: a empresa paga o repasse, então "custo
+ * unitário" e "preço de venda" seriam a MESMA coluna repetida, e "sua margem"
+ * seria uma coluna de zeros. Some as três em vez de renderizá-las vazias.
+ */
+const COLUMNS: Record<ProposalMode, readonly ColumnId[]> = {
+  revenda: [
+    'especialidade', 'plano', 'agenda', 'qtd',
+    'custoUnit', 'custoTotal', 'precoUnit', 'subtotal', 'margem',
+    'plantao', 'del',
+  ],
+  beneficio: ['especialidade', 'plano', 'agenda', 'qtd', 'precoUnit', 'subtotal', 'plantao', 'del'],
+};
+
+const HEADERS: Record<ProposalMode, Partial<Record<ColumnId, string>>> = {
+  revenda: { precoUnit: 'Preço venda', subtotal: 'Subtotal' },
+  beneficio: { precoUnit: 'Preço unit. (empresa)', subtotal: 'Total no mês' },
+};
+
+const BASE_HEADERS: Record<ColumnId, string> = {
+  especialidade: 'Especialidade',
+  plano: 'Plano',
+  agenda: 'Agenda',
+  qtd: 'Qtd.',
+  custoUnit: 'Custo unit. (Prontta)',
+  custoTotal: 'Custo total',
+  precoUnit: 'Preço venda',
+  subtotal: 'Subtotal',
+  margem: 'Sua margem',
+  plantao: 'Plantão',
+  del: '',
+};
 
 export function ConsultationsStep() {
   const { state, dispatch } = useProposal();
@@ -24,6 +73,10 @@ export function ConsultationsStep() {
   const [draftPlan, setDraftPlan] = useState<PlanId>('popular');
   const [draftAgenda, setDraftAgenda] = useState<AgendaType>('compartilhada');
   const [draftSpecialty, setDraftSpecialty] = useState<string>(SPECIALTIES[0].id);
+
+  const beneficio = state.mode === 'beneficio';
+  const columns = COLUMNS[state.mode];
+  const headerFor = (id: ColumnId) => HEADERS[state.mode][id] ?? BASE_HEADERS[id];
 
   const summaryById = useMemo(() => {
     const map = new Map<string, ConsultationLineSummary>();
@@ -65,7 +118,11 @@ export function ConsultationsStep() {
         step={2}
         tag="Monte as consultas"
         title="Pacotes em agenda dedicada e avulsas na compartilhada"
-        lead="Cada linha tem plano e agenda próprios — é o plano que define quantas consultas cabem numa hora médica."
+        lead={
+          beneficio
+            ? 'A bolsa de consultas que a empresa contrata por mês. Cada linha tem plano e agenda próprios — é o plano que define quantas consultas cabem numa hora médica.'
+            : 'Cada linha tem plano e agenda próprios — é o plano que define quantas consultas cabem numa hora médica.'
+        }
         chapterId="consultas"
       />
 
@@ -128,26 +185,27 @@ export function ConsultationsStep() {
 
       {hint && <p className="field-note">{hint}</p>}
       <p className="field-note">
-        <b>Custo unit. (Prontta)</b> é o que você paga à Prontta por consulta.{' '}
-        <b>Preço venda</b> é o que o paciente paga. <b>Sua margem</b> é a diferença entre os
-        dois.
+        {beneficio ? (
+          <>
+            <b>Preço unit. (empresa)</b> é o valor devido à Prontta por consulta, já com plataforma
+            e IA. Não há margem de intermediação nesta proposta.
+          </>
+        ) : (
+          <>
+            <b>Custo unit. (Prontta)</b> é o que você paga à Prontta por consulta.{' '}
+            <b>Preço venda</b> é o que o paciente paga. <b>Sua margem</b> é a diferença entre os
+            dois.
+          </>
+        )}
       </p>
 
       <div className="tscroll">
         <table className="st">
           <thead>
             <tr>
-              <th>Especialidade</th>
-              <th>Plano</th>
-              <th>Agenda</th>
-              <th>Qtd.</th>
-              <th>Custo unit. (Prontta)</th>
-              <th>Custo total</th>
-              <th>Preço venda</th>
-              <th>Subtotal</th>
-              <th>Sua margem</th>
-              <th>Plantão</th>
-              <th />
+              {columns.map((id) =>
+                id === 'del' ? <th key={id} /> : <th key={id}>{headerFor(id)}</th>,
+              )}
             </tr>
           </thead>
           <tbody>
@@ -165,36 +223,43 @@ export function ConsultationsStep() {
                   ? `${validation.shifts} plantão`
                   : `múltiplo de ${validation.multiple}`;
               }
+
+              const cells: Record<ColumnId, ReactNode> = {
+                especialidade: specialty?.name,
+                plano: PLAN_LABELS[line.plan],
+                agenda: line.agenda === 'dedicada' ? 'dedicada' : 'compartilhada',
+                qtd: line.quantity,
+                custoUnit: formatCurrency(detail.unitCost),
+                custoTotal: formatCurrency(detail.lineCost),
+                precoUnit: <b>{formatCurrency(detail.unitSell)}</b>,
+                subtotal: <b>{formatCurrency(detail.lineSell)}</b>,
+                margem: `${formatCurrency(margin.amount)} · ${formatPercent(margin.percent)}`,
+                plantao: <span className={`pill ${pillClass}`}>{pillText}</span>,
+                del: (
+                  <button
+                    className="xdel"
+                    type="button"
+                    aria-label="Remover linha"
+                    onClick={() => dispatch({ type: 'REMOVE_CONSULTATION_LINE', id: line.id })}
+                  >
+                    ×
+                  </button>
+                ),
+              };
+
               return (
                 <tr key={line.id}>
-                  <td data-l="Especialidade">{specialty?.name}</td>
-                  <td data-l="Plano">{PLAN_LABELS[line.plan]}</td>
-                  <td data-l="Agenda">{line.agenda === 'dedicada' ? 'dedicada' : 'compartilhada'}</td>
-                  <td data-l="Qtd.">{line.quantity}</td>
-                  <td data-l="Custo unit. (Prontta)">{formatCurrency(detail.unitCost)}</td>
-                  <td data-l="Custo total">{formatCurrency(detail.lineCost)}</td>
-                  <td data-l="Preço venda">
-                    <b>{formatCurrency(detail.unitSell)}</b>
-                  </td>
-                  <td data-l="Subtotal">
-                    <b>{formatCurrency(detail.lineSell)}</b>
-                  </td>
-                  <td data-l="Sua margem">
-                    {formatCurrency(margin.amount)} · {formatPercent(margin.percent)}
-                  </td>
-                  <td data-l="Plantão">
-                    <span className={`pill ${pillClass}`}>{pillText}</span>
-                  </td>
-                  <td className="tdel">
-                    <button
-                      className="xdel"
-                      type="button"
-                      aria-label="Remover linha"
-                      onClick={() => dispatch({ type: 'REMOVE_CONSULTATION_LINE', id: line.id })}
-                    >
-                      ×
-                    </button>
-                  </td>
+                  {columns.map((id) =>
+                    id === 'del' ? (
+                      <td className="tdel" key={id}>
+                        {cells.del}
+                      </td>
+                    ) : (
+                      <td data-l={headerFor(id)} key={id}>
+                        {cells[id]}
+                      </td>
+                    ),
+                  )}
                 </tr>
               );
             })}
@@ -202,20 +267,29 @@ export function ConsultationsStep() {
         </table>
       </div>
 
-      <div className="dre-line">
-        <span>Custo das consultas (repasse à Prontta)</span>
-        <strong>{formatCurrency(summary.subtotalCost)}</strong>
-      </div>
-      <div className="dre-line">
-        <span>Sua margem nas consultas</span>
-        <strong>
-          {formatCurrency(blockMargin.amount)} · {formatPercent(blockMargin.percent)}
-        </strong>
-      </div>
-      <div className="dre-line">
-        <span>Preço das consultas ao paciente</span>
-        <strong>{formatCurrency(summary.patientPrice)}</strong>
-      </div>
+      {beneficio ? (
+        <div className="dre-line">
+          <span>Consultas no mês ({summary.totalQuantity})</span>
+          <strong>{formatCurrency(summary.patientPrice)}</strong>
+        </div>
+      ) : (
+        <>
+          <div className="dre-line">
+            <span>Custo das consultas (repasse à Prontta)</span>
+            <strong>{formatCurrency(summary.subtotalCost)}</strong>
+          </div>
+          <div className="dre-line">
+            <span>Sua margem nas consultas</span>
+            <strong>
+              {formatCurrency(blockMargin.amount)} · {formatPercent(blockMargin.percent)}
+            </strong>
+          </div>
+          <div className="dre-line">
+            <span>Preço das consultas ao paciente</span>
+            <strong>{formatCurrency(summary.patientPrice)}</strong>
+          </div>
+        </>
+      )}
       <div className="dre-line">
         <span>Software mensal</span>
         <strong>

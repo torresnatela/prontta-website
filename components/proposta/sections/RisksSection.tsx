@@ -1,8 +1,11 @@
-import { PROPOSAL_CONTENT } from '@/lib/proposal-content';
+'use client';
 
-const c = PROPOSAL_CONTENT;
+import { useProposalNarrative } from '../state/ProposalProvider';
+
 
 export function RisksSection() {
+  const c = useProposalNarrative();
+
   return (
     <section className="panel">
       <div className="twocol">
@@ -11,7 +14,7 @@ export function RisksSection() {
           <p>{c.risks}</p>
         </div>
         <div className="riskbox">
-          <b>Responsabilidade por infraestrutura.</b>
+          <b>{c.holdHarmlessTitle}.</b>
           <p>{c.holdHarmless}</p>
         </div>
       </div>

@@ -3,23 +3,18 @@
 import { ChapterCue } from '@/components/simulador/shared/ChapterCue';
 import { HeroMedia } from '@/components/simulador/shared/HeroMedia';
 import { PROPOSTA_HERO_IMAGE } from '@/lib/proposta/videos';
-import { PROPOSAL_CONTENT } from '@/lib/proposal-content';
-import { formatCurrency, formatPercent } from '@/lib/utils';
-import { useProposal } from '../state/ProposalProvider';
-
-const c = PROPOSAL_CONTENT;
+import { useProposalNarrative } from '../state/ProposalProvider';
 
 /**
  * Hero da proposta.
  *
- * A manchete muda conforme `state.clientType` (academia, clínica, farmácia…):
- * o mesmo link serve a todos os canais, e quem abre vê o vocabulário do seu.
- * O card à direita mostra o exemplo de `PROPOSAL_CONTENT.heroExample`, que
- * espelha o mix semente já carregado no simulador logo abaixo.
+ * A manchete e o card de exemplo vêm da narrativa já resolvida pelo modo e pelo
+ * canal: na revenda o card mostra receita e margem, no benefício mostra
+ * investimento e custo por colaborador. Os dois espelham o mix semente
+ * carregado no simulador logo abaixo.
  */
 export function ProposalHero() {
-  const { state } = useProposal();
-  const clientType = c.clientTypes[state.clientType];
+  const c = useProposalNarrative();
   const example = c.heroExample;
 
   return (
@@ -27,7 +22,7 @@ export function ProposalHero() {
       <HeroMedia src={PROPOSTA_HERO_IMAGE} />
       <div className="hero-content">
         <div className="eyebrow">{c.category}</div>
-        <h1>{clientType.headline}</h1>
+        <h1>{c.headline}</h1>
         <p>{c.subheadline}</p>
 
         <div className="hero-actions">
@@ -62,18 +57,12 @@ export function ProposalHero() {
             <small>{example.note}</small>
           </div>
           <div className="hero-example-grid">
-            <div>
-              <small>Receita estimada / mês</small>
-              <strong>{formatCurrency(example.receita)}</strong>
-            </div>
-            <div>
-              <small>Resultado líquido / mês</small>
-              <strong>{formatCurrency(example.resultadoLiquido)}</strong>
-            </div>
-            <div>
-              <small>Margem líquida</small>
-              <strong>{formatPercent(example.margemLiquida)}</strong>
-            </div>
+            {example.stats.map((stat) => (
+              <div key={stat.label}>
+                <small>{stat.label}</small>
+                <strong>{stat.value}</strong>
+              </div>
+            ))}
           </div>
           <p>{example.disclaimer}</p>
         </div>

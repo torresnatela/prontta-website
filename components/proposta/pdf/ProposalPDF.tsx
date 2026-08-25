@@ -3,7 +3,6 @@
 import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
 import { BRAND_LOCKUP_RATIO, BRAND_LOCKUP_WHITE_DATA_URI } from '@/lib/brand-assets';
 import { getMargin, getProgram, getSpecialty, PLAN_LABELS, PRICING_MODEL_VERSION } from '@/lib/pricing';
-import { PROPOSAL_CONTENT } from '@/lib/proposal-content';
 import { siteConfig } from '@/lib/site-config';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import type { ProposalPDFPayload } from './types';
@@ -13,8 +12,6 @@ const CYAN = '#00B3F0';
 const MUT = '#5F6B7A';
 const LINE = '#EEF3F7';
 const INK = '#00204D';
-
-const c = PROPOSAL_CONTENT;
 
 const styles = StyleSheet.create({
   page: { padding: 40, fontSize: 10, fontFamily: 'Helvetica', color: INK, lineHeight: 1.5 },
@@ -164,6 +161,13 @@ const COL = {
 const TOT_LABEL_FLEX =
   COL.nome + COL.meio + COL.agenda + COL.qtd + COL.custoUnit + COL.custoTotal + COL.precoUnit;
 
+/**
+ * O mesmo rótulo no modo benefício, que não tem as colunas de custo nem a de
+ * margem. Como `flex` é relativo, omitir as colunas já faz as restantes
+ * crescerem sozinhas — só o rótulo de total precisa saber a diferença.
+ */
+const TOT_LABEL_FLEX_BENEFIT = COL.nome + COL.meio + COL.agenda + COL.qtd + COL.precoUnit;
+
 /** Célula de margem: `R$ 90,00 · 60,0%`. */
 function marginLabel(sell: number, cost: number): string {
   const margin = getMargin(sell, cost);
@@ -178,7 +182,9 @@ function implantationText(payload: ProposalPDFPayload): string {
 }
 
 export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
-  const { state, consultations, programs, totals, dre, dateLabel } = payload;
+  const { state, consultations, programs, totals, dre, narrative: c, benefit, dateLabel } = payload;
+  const beneficio = state.mode === 'beneficio' && benefit !== undefined;
+  const totLabelFlex = beneficio ? TOT_LABEL_FLEX_BENEFIT : TOT_LABEL_FLEX;
   const percent = formatPercent(dre.margemLiquidaPct);
   const softwareText =
     totals.softwareMonthlyFee === 0 && consultations.totalQuantity > 0
@@ -195,8 +201,8 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
       <Page size="A4" style={styles.cover}>
         <Image src={BRAND_LOCKUP_WHITE_DATA_URI} style={styles.coverLogo} />
         <View>
-          <Text style={styles.eyebrow}>Proposta Comercial</Text>
-          <Text style={styles.coverTitle}>Programas de Saúde Assistida{'\n'}e Consultas Especializadas</Text>
+          <Text style={styles.eyebrow}>{c.cover.eyebrow}</Text>
+          <Text style={styles.coverTitle}>{c.cover.title}</Text>
           <Text style={styles.coverSub}>{c.subheadline}</Text>
           <View style={styles.chipRow}>
             <Text style={styles.chip}>{c.numEspecialistas}</Text>
@@ -268,17 +274,25 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
               <Text style={[styles.thSm, { flex: COL.meio }]}>Plano</Text>
               <Text style={[styles.thSm, { flex: COL.agenda }]}>Agenda</Text>
               <Text style={[styles.thSm, { flex: COL.qtd, textAlign: 'right' }]}>Qtd.</Text>
-              <Text style={[styles.thSm, { flex: COL.custoUnit, textAlign: 'right' }]}>
-                Custo unit. (Prontta)
-              </Text>
-              <Text style={[styles.thSm, { flex: COL.custoTotal, textAlign: 'right' }]}>
-                Custo total
-              </Text>
+              {!beneficio && (
+                <>
+                  <Text style={[styles.thSm, { flex: COL.custoUnit, textAlign: 'right' }]}>
+                    Custo unit. (Prontta)
+                  </Text>
+                  <Text style={[styles.thSm, { flex: COL.custoTotal, textAlign: 'right' }]}>
+                    Custo total
+                  </Text>
+                </>
+              )}
               <Text style={[styles.thSm, { flex: COL.precoUnit, textAlign: 'right' }]}>
-                Preço unit.
+                {beneficio ? 'Preço unit. (empresa)' : 'Preço unit.'}
               </Text>
-              <Text style={[styles.thSm, { flex: COL.subtotal, textAlign: 'right' }]}>Subtotal</Text>
-              <Text style={[styles.thSm, { flex: COL.margem, textAlign: 'right' }]}>Sua margem</Text>
+              <Text style={[styles.thSm, { flex: COL.subtotal, textAlign: 'right' }]}>
+                {beneficio ? 'Total no mês' : 'Subtotal'}
+              </Text>
+              {!beneficio && (
+                <Text style={[styles.thSm, { flex: COL.margem, textAlign: 'right' }]}>Sua margem</Text>
+              )}
             </View>
             {state.consultationLines.map((line) => {
               const detail = consultations.lines.find((l) => l.lineId === line.id);
@@ -290,43 +304,53 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
                   <Text style={[styles.cellSm, { flex: COL.meio }]}>{PLAN_LABELS[line.plan]}</Text>
                   <Text style={[styles.cellSm, { flex: COL.agenda }]}>{AGENDA_LABEL[line.agenda]}</Text>
                   <Text style={[styles.cellRightSm, { flex: COL.qtd }]}>{line.quantity}</Text>
-                  <Text style={[styles.cellRightMut, { flex: COL.custoUnit }]}>
-                    {detail ? formatCurrency(detail.unitCost) : '—'}
-                  </Text>
-                  <Text style={[styles.cellRightMut, { flex: COL.custoTotal }]}>
-                    {detail ? formatCurrency(detail.lineCost) : '—'}
-                  </Text>
+                  {!beneficio && (
+                    <>
+                      <Text style={[styles.cellRightMut, { flex: COL.custoUnit }]}>
+                        {detail ? formatCurrency(detail.unitCost) : '—'}
+                      </Text>
+                      <Text style={[styles.cellRightMut, { flex: COL.custoTotal }]}>
+                        {detail ? formatCurrency(detail.lineCost) : '—'}
+                      </Text>
+                    </>
+                  )}
                   <Text style={[styles.cellRightSm, { flex: COL.precoUnit }]}>
                     {detail ? formatCurrency(detail.unitSell) : '—'}
                   </Text>
                   <Text style={[styles.cellRightSm, { flex: COL.subtotal }]}>
                     {detail ? formatCurrency(detail.lineSell) : '—'}
                   </Text>
-                  <Text style={[styles.cellMargin, { flex: COL.margem }]}>
-                    {detail ? marginLabel(detail.unitSell, detail.unitCost) : '—'}
-                  </Text>
+                  {!beneficio && (
+                    <Text style={[styles.cellMargin, { flex: COL.margem }]}>
+                      {detail ? marginLabel(detail.unitSell, detail.unitCost) : '—'}
+                    </Text>
+                  )}
                 </View>
               );
             })}
+            {!beneficio && (
+              <View style={styles.totRow}>
+                <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>
+                  Custo das consultas (repasse à Prontta)
+                </Text>
+                <Text style={[styles.cellRightMut, { flex: COL.subtotal }]}>
+                  {formatCurrency(consultations.subtotalCost)}
+                </Text>
+                <Text style={[styles.cellMargin, { flex: COL.margem }]}>
+                  {marginLabel(consultations.patientPrice, consultations.subtotalCost)}
+                </Text>
+              </View>
+            )}
             <View style={styles.totRow}>
-              <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>
-                Custo das consultas (repasse à Prontta)
-              </Text>
-              <Text style={[styles.cellRightMut, { flex: COL.subtotal }]}>
-                {formatCurrency(consultations.subtotalCost)}
-              </Text>
-              <Text style={[styles.cellMargin, { flex: COL.margem }]}>
-                {marginLabel(consultations.patientPrice, consultations.subtotalCost)}
-              </Text>
-            </View>
-            <View style={styles.totRow}>
-              <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>
-                Preço das consultas ao paciente
+              <Text style={[styles.totRowLabelSm, { flex: totLabelFlex }]}>
+                {beneficio
+                  ? `Consultas no mês (${consultations.totalQuantity})`
+                  : 'Preço das consultas ao paciente'}
               </Text>
               <Text style={[styles.cellRightSm, { flex: COL.subtotal }]}>
                 {formatCurrency(consultations.patientPrice)}
               </Text>
-              <Text style={[styles.cellRightSm, { flex: COL.margem }]} />
+              {!beneficio && <Text style={[styles.cellRightSm, { flex: COL.margem }]} />}
             </View>
           </View>
         )}
@@ -338,15 +362,25 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
               <Text style={[styles.thSm, { flex: COL.nome + COL.agenda }]}>Programa</Text>
               <Text style={[styles.thSm, { flex: COL.meio, textAlign: 'right' }]}>Ciclo</Text>
               <Text style={[styles.thSm, { flex: COL.qtd, textAlign: 'right' }]}>Qtd.</Text>
-              <Text style={[styles.thSm, { flex: COL.custoUnit, textAlign: 'right' }]}>
-                Custo unit. (Prontta)
+              {!beneficio && (
+                <>
+                  <Text style={[styles.thSm, { flex: COL.custoUnit, textAlign: 'right' }]}>
+                    Custo unit. (Prontta)
+                  </Text>
+                  <Text style={[styles.thSm, { flex: COL.custoTotal, textAlign: 'right' }]}>
+                    Custo total
+                  </Text>
+                </>
+              )}
+              <Text style={[styles.thSm, { flex: COL.precoUnit, textAlign: 'right' }]}>
+                {beneficio ? 'Preço do ciclo' : 'Preço'}
               </Text>
-              <Text style={[styles.thSm, { flex: COL.custoTotal, textAlign: 'right' }]}>
-                Custo total
+              <Text style={[styles.thSm, { flex: COL.subtotal, textAlign: 'right' }]}>
+                {beneficio ? 'Total do ciclo' : 'Subtotal'}
               </Text>
-              <Text style={[styles.thSm, { flex: COL.precoUnit, textAlign: 'right' }]}>Preço</Text>
-              <Text style={[styles.thSm, { flex: COL.subtotal, textAlign: 'right' }]}>Subtotal</Text>
-              <Text style={[styles.thSm, { flex: COL.margem, textAlign: 'right' }]}>Sua margem</Text>
+              <Text style={[styles.thSm, { flex: COL.margem, textAlign: 'right' }]}>
+                {beneficio ? 'Equiv. mensal' : 'Sua margem'}
+              </Text>
             </View>
             {state.programSelections.map((selection) => {
               const item = programs.items.find((i) => i.selectionId === selection.id);
@@ -357,52 +391,85 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
                   </Text>
                   <Text style={[styles.cellRightSm, { flex: COL.meio }]}>{selection.cycle} meses</Text>
                   <Text style={[styles.cellRightSm, { flex: COL.qtd }]}>{selection.quantity}</Text>
-                  <Text style={[styles.cellRightMut, { flex: COL.custoUnit }]}>
-                    {item ? formatCurrency(item.unitRepasse) : '—'}
-                  </Text>
-                  <Text style={[styles.cellRightMut, { flex: COL.custoTotal }]}>
-                    {item ? formatCurrency(item.totalRepasse) : '—'}
-                  </Text>
+                  {!beneficio && (
+                    <>
+                      <Text style={[styles.cellRightMut, { flex: COL.custoUnit }]}>
+                        {item ? formatCurrency(item.unitRepasse) : '—'}
+                      </Text>
+                      <Text style={[styles.cellRightMut, { flex: COL.custoTotal }]}>
+                        {item ? formatCurrency(item.totalRepasse) : '—'}
+                      </Text>
+                    </>
+                  )}
                   <Text style={[styles.cellRightSm, { flex: COL.precoUnit }]}>
-                    {item ? formatCurrency(item.unitSell) : '—'}
+                    {item ? formatCurrency(beneficio ? item.unitRepasse : item.unitSell) : '—'}
                   </Text>
                   <Text style={[styles.cellRightSm, { flex: COL.subtotal }]}>
-                    {item ? formatCurrency(item.totalSell) : '—'}
+                    {item ? formatCurrency(beneficio ? item.totalRepasse : item.totalSell) : '—'}
                   </Text>
-                  <Text style={[styles.cellMargin, { flex: COL.margem }]}>
-                    {item ? marginLabel(item.unitSell, item.unitRepasse) : '—'}
+                  <Text style={[beneficio ? styles.cellRightMut : styles.cellMargin, { flex: COL.margem }]}>
+                    {beneficio
+                      ? formatCurrency(
+                          benefit.programsMonthly.items.find((i) => i.selectionId === selection.id)
+                            ?.monthlyEquivalent ?? 0,
+                        )
+                      : item
+                        ? marginLabel(item.unitSell, item.unitRepasse)
+                        : '—'}
                   </Text>
                 </View>
               );
             })}
-            <View style={styles.totRow}>
-              <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>
-                Custo dos programas (repasse à Prontta)
-              </Text>
-              <Text style={[styles.cellRightMut, { flex: COL.subtotal }]}>
-                {formatCurrency(programs.subtotalRepasse)}
-              </Text>
-              <Text style={[styles.cellMargin, { flex: COL.margem }]}>
-                {marginLabel(programs.subtotalSell, programs.subtotalRepasse)}
-              </Text>
-            </View>
-            <View style={styles.totRow}>
-              <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>Subtotal programas</Text>
-              <Text style={[styles.cellRightSm, { flex: COL.subtotal }]}>
-                {formatCurrency(programs.subtotalSell)}
-              </Text>
-              <Text style={[styles.cellRightSm, { flex: COL.margem }]} />
-            </View>
+            {beneficio ? (
+              <View style={styles.totRow}>
+                <Text style={[styles.totRowLabelSm, { flex: totLabelFlex }]}>
+                  Compromisso dos programas (ciclo cheio)
+                </Text>
+                <Text style={[styles.cellRightSm, { flex: COL.subtotal }]}>
+                  {formatCurrency(benefit.programsMonthly.cycleCommitment)}
+                </Text>
+                <Text style={[styles.cellRightSm, { flex: COL.margem }]}>
+                  {formatCurrency(benefit.programsMonthly.monthlyTotal)}
+                </Text>
+              </View>
+            ) : (
+              <>
+                <View style={styles.totRow}>
+                  <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>
+                    Custo dos programas (repasse à Prontta)
+                  </Text>
+                  <Text style={[styles.cellRightMut, { flex: COL.subtotal }]}>
+                    {formatCurrency(programs.subtotalRepasse)}
+                  </Text>
+                  <Text style={[styles.cellMargin, { flex: COL.margem }]}>
+                    {marginLabel(programs.subtotalSell, programs.subtotalRepasse)}
+                  </Text>
+                </View>
+                <View style={styles.totRow}>
+                  <Text style={[styles.totRowLabelSm, { flex: TOT_LABEL_FLEX }]}>
+                    Subtotal programas
+                  </Text>
+                  <Text style={[styles.cellRightSm, { flex: COL.subtotal }]}>
+                    {formatCurrency(programs.subtotalSell)}
+                  </Text>
+                  <Text style={[styles.cellRightSm, { flex: COL.margem }]} />
+                </View>
+              </>
+            )}
           </View>
         )}
 
         {(consultations.lines.length > 0 || programs.items.length > 0) && (
-          <Text style={styles.legal}>{c.legalNotes.custoRepasse}</Text>
+          <Text style={styles.legal}>{c.legalNotes.precoUnitario}</Text>
         )}
 
         <View style={styles.totalBox}>
-          <Text style={styles.totalLabel}>Valor total simulado ao paciente</Text>
-          <Text style={styles.totalValue}>{formatCurrency(totals.totalContractValue)}</Text>
+          <Text style={styles.totalLabel}>
+            {beneficio ? 'Investimento mensal do benefício' : 'Valor total simulado ao paciente'}
+          </Text>
+          <Text style={styles.totalValue}>
+            {formatCurrency(beneficio ? benefit.cost.monthlyTotal : totals.totalContractValue)}
+          </Text>
         </View>
         <Text style={styles.legal}>{c.legalNotes.totalSimulado}</Text>
 
@@ -413,8 +480,16 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
           <Text style={styles.kvValue}>{softwareText}</Text>
         </View>
         <View style={styles.kvRow}>
-          <Text style={styles.kvLabel}>Investimento de implantação (único)</Text>
-          <Text style={styles.kvValue}>{implantationText(payload)}</Text>
+          <Text style={styles.kvLabel}>
+            {beneficio && state.benefit.serviceModel === 'remoto'
+              ? 'Investimento de implantação'
+              : 'Investimento de implantação (único)'}
+          </Text>
+          <Text style={styles.kvValue}>
+            {beneficio && state.benefit.serviceModel === 'remoto'
+              ? 'Não aplicável'
+              : implantationText(payload)}
+          </Text>
         </View>
 
         <View style={styles.footer} fixed>
@@ -423,31 +498,141 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
         </View>
       </Page>
 
-      {/* Resultado do parceiro — página própria: com as colunas de custo, as tabelas de
-          "Sua proposta" ocupam a folha inteira e este bloco não cabe mais junto. */}
+      {/* O bloco que fecha a conta. Na revenda é a DRE do parceiro; no benefício é
+          o custo por colaborador e o retorno estimado — a empresa não revende,
+          logo não tem P&L para ler. Página própria porque, com as colunas de
+          custo, as tabelas de "Sua proposta" ocupam a folha inteira. */}
       <Page size="A4" style={styles.page}>
-        <Text style={styles.eyebrow}>Seu resultado</Text>
-        <Text style={styles.h2}>Simulação de resultado do parceiro</Text>
-        <View style={styles.kvRow}>
-          <Text style={styles.kvLabel}>Receita estimada no mês (com este mix)</Text>
-          <Text style={styles.kvValue}>{formatCurrency(dre.receitaBruta)}</Text>
-        </View>
-        <View style={styles.kvRow}>
-          <Text style={styles.kvLabel}>Repasse à Prontta</Text>
-          <Text style={styles.kvValue}>{formatCurrency(dre.repasse)}</Text>
-        </View>
-        <View style={styles.kvRow}>
-          <Text style={styles.kvLabel}>Despesas operacionais estimadas</Text>
-          <Text style={styles.kvValue}>{formatCurrency(dre.totalDespesas)}</Text>
-        </View>
-        <View style={styles.kvTotal}>
-          <Text style={styles.totRowLabel}>Resultado líquido estimado no mês ({percent})</Text>
-          <Text style={styles.kvValue}>{formatCurrency(dre.resultadoLiquido)}</Text>
-        </View>
-        <Text style={styles.legal}>
-          <Text style={styles.strong}>Sobre os valores desta proposta: </Text>
-          {c.legalNotes.resultadoParceiro}
-        </Text>
+        {beneficio ? (
+          <>
+            <Text style={styles.eyebrow}>Custo do benefício</Text>
+            <Text style={styles.h2}>O que a empresa investe</Text>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>Colaboradores elegíveis</Text>
+              <Text style={styles.kvValue}>{benefit.cost.eligible}</Text>
+            </View>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>
+                Aderentes estimados ({formatPercent(state.benefit.adhesionPercent)})
+              </Text>
+              <Text style={styles.kvValue}>{benefit.cost.adherents}</Text>
+            </View>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>Investimento mensal do benefício</Text>
+              <Text style={styles.kvValue}>{formatCurrency(benefit.cost.monthlyTotal)}</Text>
+            </View>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>Investimento no ano</Text>
+              <Text style={styles.kvValue}>{formatCurrency(benefit.cost.annualTotal)}</Text>
+            </View>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>
+                A empresa paga ({formatPercent(100 - benefit.cost.employeeSharePercent)})
+              </Text>
+              <Text style={styles.kvValue}>{formatCurrency(benefit.cost.companyMonthly)}</Text>
+            </View>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>
+                Os colaboradores pagam ({formatPercent(benefit.cost.employeeSharePercent)})
+              </Text>
+              <Text style={styles.kvValue}>{formatCurrency(benefit.cost.employeeMonthly)}</Text>
+            </View>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>Cada aderente paga por mês</Text>
+              <Text style={styles.kvValue}>{formatCurrency(benefit.cost.employeeOutOfPocket)}</Text>
+            </View>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>Custo por aderente</Text>
+              <Text style={styles.kvValue}>{formatCurrency(benefit.cost.costPerAdherent)}</Text>
+            </View>
+            <View style={styles.kvTotal}>
+              <Text style={styles.totRowLabel}>Custo por colaborador elegível, no mês</Text>
+              <Text style={styles.kvValue}>{formatCurrency(benefit.cost.costPerEligible)}</Text>
+            </View>
+            <Text style={styles.legal}>{c.legalNotes.totalSimulado}</Text>
+
+            <Text style={styles.h2}>Retorno estimado</Text>
+            {benefit.roi.hasAbsenceEstimate ? (
+              <>
+                <View style={styles.kvRow}>
+                  <Text style={styles.kvLabel}>
+                    Custo do afastamento entre os aderentes, no mês
+                  </Text>
+                  <Text style={styles.kvValue}>
+                    {formatCurrency(benefit.roi.absenceCostMonthly)}
+                  </Text>
+                </View>
+                <View style={styles.kvRow}>
+                  <Text style={styles.kvLabel}>
+                    Absenteísmo evitado com a redução de{' '}
+                    {formatPercent(state.benefit.roi.absenceReductionPercent)}
+                  </Text>
+                  <Text style={styles.kvValue}>
+                    {formatCurrency(benefit.roi.absenceSavedMonthly)}
+                  </Text>
+                </View>
+                <View style={styles.kvRow}>
+                  <Text style={styles.kvLabel}>Resultado no mês, para a empresa</Text>
+                  <Text style={styles.kvValue}>{formatCurrency(benefit.roi.netMonthly)}</Text>
+                </View>
+              </>
+            ) : (
+              <Text style={styles.p}>
+                Nenhuma projeção de retorno foi incluída nesta proposta: as premissas de salário
+                médio, dias de afastamento e redução esperada não foram informadas pela empresa.
+              </Text>
+            )}
+            {benefit.roi.breakEvenReductionPercent !== null && (
+              <View style={styles.kvRow}>
+                <Text style={styles.kvLabel}>
+                  Redução de afastamento necessária para o benefício se pagar
+                </Text>
+                <Text style={styles.kvValue}>
+                  {formatPercent(benefit.roi.breakEvenReductionPercent)}
+                </Text>
+              </View>
+            )}
+            {benefit.roi.hasHealthPlanComparison && (
+              <View style={styles.kvRow}>
+                <Text style={styles.kvLabel}>
+                  O benefício representa, do gasto atual com plano de saúde
+                </Text>
+                <Text style={styles.kvValue}>
+                  {formatPercent(benefit.roi.benefitShareOfHealthPlanPercent)}
+                </Text>
+              </View>
+            )}
+            <Text style={styles.legal}>
+              <Text style={styles.strong}>Sobre esta estimativa: </Text>
+              {c.legalNotes.fechamento}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text style={styles.eyebrow}>Seu resultado</Text>
+            <Text style={styles.h2}>Simulação de resultado do parceiro</Text>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>Receita estimada no mês (com este mix)</Text>
+              <Text style={styles.kvValue}>{formatCurrency(dre.receitaBruta)}</Text>
+            </View>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>Repasse à Prontta</Text>
+              <Text style={styles.kvValue}>{formatCurrency(dre.repasse)}</Text>
+            </View>
+            <View style={styles.kvRow}>
+              <Text style={styles.kvLabel}>Despesas operacionais estimadas</Text>
+              <Text style={styles.kvValue}>{formatCurrency(dre.totalDespesas)}</Text>
+            </View>
+            <View style={styles.kvTotal}>
+              <Text style={styles.totRowLabel}>Resultado líquido estimado no mês ({percent})</Text>
+              <Text style={styles.kvValue}>{formatCurrency(dre.resultadoLiquido)}</Text>
+            </View>
+            <Text style={styles.legal}>
+              <Text style={styles.strong}>Sobre os valores desta proposta: </Text>
+              {c.legalNotes.fechamento}
+            </Text>
+          </>
+        )}
 
         <View style={styles.footer} fixed>
           <Text>{c.brand} · Programas de Saúde Assistida</Text>
@@ -478,10 +663,7 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
         ))}
 
         <Text style={styles.h2}>Próximos passos</Text>
-        <Text style={styles.p}>
-          Para avançar, basta responder esta proposta. Agendamos o alinhamento, formalizamos o
-          contrato e iniciamos a implantação do seu ponto Prontta.
-        </Text>
+        <Text style={styles.p}>{c.contact.lead}</Text>
 
         <View style={styles.contactBox}>
           <View>
