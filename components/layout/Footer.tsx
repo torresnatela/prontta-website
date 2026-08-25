@@ -40,7 +40,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Logo size="lg" className="[&_span]:text-white [&_.text-primary-cyan]:text-primary-cyan" />
+            <Logo size="lg" variant="white" />
             <p className="mt-6 text-white/70 max-w-md leading-relaxed text-lg">
               Soluções inovadoras em terceirização de serviços médicos. 
               Conectamos clínicas e hospitais aos melhores profissionais de saúde.

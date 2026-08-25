@@ -19,7 +19,6 @@ export default function OgImage() {
         subtitle="Médicos, nutrição e psicologia acompanhando você no ciclo inteiro"
         path="/academias/programas"
         background="linear-gradient(135deg, #0f2740 0%, #123e62 55%, #2c97e8 165%)"
-        markBackground="#ebf7ff"
       />
     ),
     { ...size },

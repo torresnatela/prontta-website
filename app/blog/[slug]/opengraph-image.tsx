@@ -1,6 +1,9 @@
 import { ImageResponse } from 'next/og'
+import { BRAND_LOCKUP_RATIO, BRAND_LOCKUP_WHITE_DATA_URI } from '@/lib/brand-assets'
 import { getAllSlugs, getPostBySlug } from '@/lib/blog'
 import { siteConfig } from '@/lib/site-config'
+
+const LOGO_HEIGHT = 84
 
 export const runtime = 'nodejs'
 export const alt = 'Prontta Saúde'
@@ -38,28 +41,13 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
           fontFamily: 'sans-serif',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: 9999,
-              background: '#E6F9FF',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#0D2137',
-              fontSize: 34,
-              fontWeight: 800,
-            }}
-          >
-            P
-          </div>
-          <div style={{ display: 'flex', gap: 8, fontSize: 30, fontWeight: 700 }}>
-            <span>prontta</span>
-            <span style={{ color: '#00B4E6' }}>saúde</span>
-          </div>
-        </div>
+        {/* Data URI: o Satori não busca arquivos de `public/` — ver lib/brand-assets.ts. */}
+        <img
+          src={BRAND_LOCKUP_WHITE_DATA_URI}
+          width={Math.round(LOGO_HEIGHT * BRAND_LOCKUP_RATIO)}
+          height={LOGO_HEIGHT}
+          alt={siteConfig.name}
+        />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div

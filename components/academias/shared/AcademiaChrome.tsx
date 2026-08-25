@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Logo } from '@/components/layout/Logo';
 import { siteConfig } from '@/lib/site-config';
 
 interface AcademiaTopBarProps {
@@ -12,13 +13,8 @@ export function AcademiaTopBar({ subtitle, pill }: AcademiaTopBarProps) {
   return (
     <header className="topbar">
       <Link href="/" className="brand" aria-label={`${siteConfig.name} — voltar ao site`}>
-        <div className="brand-mark" aria-hidden="true">
-          P+
-        </div>
-        <div>
-          <div className="brand-name">{siteConfig.name}</div>
-          <div className="brand-sub">{subtitle}</div>
-        </div>
+        <Logo size="md" priority />
+        <span className="brand-sub">{subtitle}</span>
       </Link>
       {pill ? <div className="top-pill">{pill}</div> : null}
     </header>

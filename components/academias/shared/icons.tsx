@@ -4,9 +4,8 @@ import type { AcademiaProgramId } from '@/lib/academias/catalog';
 /**
  * SVGs inline dos modelos comerciais.
  *
- * Inline de propósito: `components/layout/Logo.tsx` puxa framer-motion e roda uma
- * animação infinita ignorando prefers-reduced-motion — peso e ruído que estas
- * páginas públicas não precisam.
+ * Inline de propósito: são ícones de conteúdo, um por modelo comercial, e não
+ * valem nem um sprite nem uma dependência de biblioteca de ícones.
  */
 
 const stroke = {

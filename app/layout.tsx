@@ -92,7 +92,8 @@ export default function RootLayout({
       className={`${outfit.variable} ${spaceGrotesk.variable}`}
     >
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        {/* Favicons vêm de app/icon.png, app/apple-icon.png e app/favicon.ico,
+            que o App Router injeta sozinho — não declare <link> aqui. */}
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
       </head>
       <body className="font-sans">

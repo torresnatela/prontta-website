@@ -1,4 +1,7 @@
+import { BRAND_LOCKUP_RATIO, BRAND_LOCKUP_WHITE_DATA_URI } from '@/lib/brand-assets';
 import { siteConfig } from '@/lib/site-config';
+
+const LOGO_HEIGHT = 84;
 
 interface AcademiaOgProps {
   kicker: string;
@@ -6,28 +9,21 @@ interface AcademiaOgProps {
   subtitle: string;
   /** Path exibido no rodapé, ex.: '/academias/simulador'. */
   path: string;
-  /** Gradiente de fundo e cor da pílula do logo. */
+  /** Gradiente de fundo. */
   background: string;
-  markBackground: string;
 }
 
 /**
  * Template das OG images das duas rotas /academias.
  *
- * `public/` está vazio, então `siteConfig.ogImage` daria 404 — as pages passam
- * `image: null` e a imagem vem daqui via `next/og`.
+ * Cada rota tem a sua arte em vez de cair no `siteConfig.ogImage` genérico — as
+ * pages passam `image: null` e a imagem vem daqui via `next/og`.
  *
  * ⚠️ O Satori exige `display: flex` em qualquer div com mais de um filho, e o
- * rodapé é uma string só por isso.
+ * rodapé é uma string só por isso. A logomarca entra como data URI
+ * (`lib/brand-assets.ts`) porque o Satori não busca arquivos de `public/`.
  */
-export function AcademiaOg({
-  kicker,
-  title,
-  subtitle,
-  path,
-  background,
-  markBackground,
-}: AcademiaOgProps) {
+export function AcademiaOg({ kicker, title, subtitle, path, background }: AcademiaOgProps) {
   return (
     <div
       style={{
@@ -42,28 +38,12 @@ export function AcademiaOg({
         fontFamily: 'sans-serif',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        <div
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: 18,
-            background: markBackground,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#0a6db4',
-            fontSize: 30,
-            fontWeight: 800,
-          }}
-        >
-          P+
-        </div>
-        <div style={{ display: 'flex', gap: 8, fontSize: 30, fontWeight: 700 }}>
-          <span>prontta</span>
-          <span style={{ color: '#7cc8ff' }}>saúde</span>
-        </div>
-      </div>
+      <img
+        src={BRAND_LOCKUP_WHITE_DATA_URI}
+        width={Math.round(LOGO_HEIGHT * BRAND_LOCKUP_RATIO)}
+        height={LOGO_HEIGHT}
+        alt={siteConfig.name}
+      />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div

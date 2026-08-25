@@ -46,7 +46,7 @@ export function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="relative z-10">
-            <Logo size={isScrolled ? 'sm' : 'md'} />
+            <Logo size={isScrolled ? 'sm' : 'md'} priority />
           </Link>
 
           {/* Desktop Navigation */}

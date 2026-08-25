@@ -1,6 +1,7 @@
 'use client';
 
-import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
+import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
+import { BRAND_LOCKUP_RATIO, BRAND_LOCKUP_WHITE_DATA_URI } from '@/lib/brand-assets';
 import { getMargin, getProgram, getSpecialty, PLAN_LABELS, PRICING_MODEL_VERSION } from '@/lib/pricing';
 import { PROPOSAL_CONTENT } from '@/lib/proposal-content';
 import { siteConfig } from '@/lib/site-config';
@@ -24,7 +25,9 @@ const styles = StyleSheet.create({
     backgroundColor: NAVY,
     justifyContent: 'space-between',
   },
-  logoChip: { fontSize: 18, fontFamily: 'Helvetica-Bold', color: '#FFFFFF' },
+  /* Logomarca branca da capa. A altura sai da proporção do arquivo para o
+     lockup não distorcer — ver lib/brand-assets.ts. */
+  coverLogo: { width: 150, height: 150 / BRAND_LOCKUP_RATIO },
   eyebrow: {
     fontSize: 9,
     letterSpacing: 2,
@@ -190,7 +193,7 @@ export function ProposalPDF({ payload }: { payload: ProposalPDFPayload }) {
     <Document>
       {/* Capa */}
       <Page size="A4" style={styles.cover}>
-        <Text style={styles.logoChip}>{c.brand}</Text>
+        <Image src={BRAND_LOCKUP_WHITE_DATA_URI} style={styles.coverLogo} />
         <View>
           <Text style={styles.eyebrow}>Proposta Comercial</Text>
           <Text style={styles.coverTitle}>Programas de Saúde Assistida{'\n'}e Consultas Especializadas</Text>

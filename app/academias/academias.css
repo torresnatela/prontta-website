@@ -136,24 +136,10 @@
   align-items: center;
   gap: 12px;
 }
-.academias-root .brand-mark {
-  width: 44px;
-  height: 44px;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, var(--brand), var(--brand-2));
-  color: #fff;
-  font-weight: 900;
-  font-size: 21px;
-  box-shadow: 0 10px 24px rgba(10, 109, 180, 0.25);
-}
-.academias-root .brand-name {
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: -0.6px;
-}
+/* A logomarca já traz o nome — a legenda vira um rótulo ao lado dela. */
 .academias-root .brand-sub {
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
   font-size: 12px;
   color: var(--muted);
   font-weight: 700;
@@ -2863,16 +2849,8 @@
   .academias-root .top-pill {
     display: none;
   }
-  .academias-root .brand-mark {
-    width: 40px;
-    height: 40px;
-    border-radius: 13px;
-    font-size: 18px;
-  }
-  .academias-root .brand-name {
-    font-size: 19px;
-  }
   .academias-root .brand-sub {
+    padding-left: 10px;
     font-size: 10px;
     letter-spacing: 0.07em;
   }

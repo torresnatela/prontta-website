@@ -21,7 +21,8 @@ export const siteConfig = {
     'Terceirização de serviços médicos especializados para clínicas e hospitais. Telesaúde híbrida, agenda dedicada e on demand para ampliar a oferta de especialidades com qualidade e redução de custos.',
   /** Imagem OG padrão (precisa existir em /public). */
   ogImage: '/og-image.png',
-  logo: '/logo.png',
+  /** Logomarca para JSON-LD. Gerada por `npm run brand:assets`. */
+  logo: '/logo-prontta.png',
   locale: 'pt_BR',
   language: 'pt-BR',
 
