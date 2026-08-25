@@ -1,0 +1,30 @@
+# Postgres local para desenvolvimento/teste da área de parceiros.
+# Em produção usamos Neon Postgres (a connection string vem de DATABASE_URL).
+#
+#   docker compose up -d      # sobe o banco
+#   npm run db:migrate        # aplica as migrations
+#   npm run db:seed           # cria o admin inicial (lê SEED_ADMIN_* do .env.local)
+#   docker compose down       # derruba (mantém o volume/dados)
+#   docker compose down -v    # derruba e APAGA os dados
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: prontta_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: prontta
+      POSTGRES_PASSWORD: prontta
+      POSTGRES_DB: prontta
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U prontta -d prontta']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
