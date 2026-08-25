@@ -3,38 +3,20 @@
  *
  * Camada de CONTEÚDO, no mesmo espírito de `lib/academias/catalog.ts`: só dados
  * declarativos, nenhuma regra. Quem renderiza é
- * `components/academias/shared/ExplainerSection.tsx`.
+ * `components/simulador/shared/ExplainerSection.tsx`.
+ *
+ * A forma (`ExplainerChapter`) e o id placeholder são compartilhados com
+ * /proposta — moram em `lib/simulador/explainer.ts`.
  *
  * ⚠️ Os vídeos ainda são PLACEHOLDER. Para publicar os definitivos, troque o
  * `youtubeId` de cada capítulo — nenhum componente precisa mudar.
  * Ver `public/academias/README.md` para a lista de pendências de mídia.
  */
 
-export interface ExplainerChapter {
-  /** Também é o alvo do `<ChapterCue chapterId="…">` espalhado pelos passos. */
-  id: string;
-  /** Título do capítulo — muda conforme o público (dono x associado). */
-  title: string;
-  /** Uma ou duas linhas, exibidas abaixo do player. */
-  summary: string;
-  /** Três pontos-chave. No capítulo `programas` dão lugar à galeria de capas. */
-  bullets: readonly string[];
-  /** ID do vídeo no YouTube (o player usa youtube-nocookie). */
-  youtubeId: string;
-  /** Rótulo humano da duração, ex.: "2 min". Aparece na lista e no play. */
-  durationLabel: string;
-  /** Capa 16:9 local. `next/image` serve .svg sem otimizar (as-is). */
-  poster: string;
-  /** Atalho para a parte da página que o capítulo explica. */
-  cta?: { label: string; href: string };
-}
+import { PLACEHOLDER_YOUTUBE_ID, type ExplainerChapter } from '@/lib/simulador/explainer';
 
-/**
- * Vídeo genérico enquanto os oficiais não existem: "Big Buck Bunny", da Blender
- * Foundation (Creative Commons). Escolhido por ser estável, público e
- * obviamente placeholder — ninguém confunde com material comercial da Prontta.
- */
-export const PLACEHOLDER_YOUTUBE_ID = 'aqz-KE-bpKQ';
+export { PLACEHOLDER_YOUTUBE_ID };
+export type { ExplainerChapter };
 
 const poster = (id: string) => `/academias/capitulos/${id}.svg`;
 

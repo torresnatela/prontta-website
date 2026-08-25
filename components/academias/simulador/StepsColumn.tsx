@@ -8,8 +8,8 @@ import {
   OWNER_MARGIN_MAX_PERCENT,
 } from '@/lib/academias/pricing';
 import { getProgramOfficialMonthly, getProgramRepasse } from '@/lib/pricing';
-import { ChapterCue } from '../shared/ChapterCue';
-import { brl, brlAuto } from '../shared/format';
+import { ChapterCue } from '@/components/simulador/shared/ChapterCue';
+import { brl, brlAuto } from '@/components/simulador/shared/format';
 import { ProgramPicker } from '../shared/ProgramPicker';
 import { IncludedChips, SpecialistGrid } from '../shared/SpecialistGrid';
 import { useSimulador, useSimulation } from './state/SimuladorProvider';

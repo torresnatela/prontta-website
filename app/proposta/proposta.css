@@ -1,735 +1,567 @@
 /*
- * Estilos da página /proposta — portados do HTML oficial
- * "Prontta_Landing_Prontta_Oficial_10", com a paleta exata do modelo.
- * Tudo escopado sob .proposta-root para não vazar no restante do site.
+ * Peças EXCLUSIVAS da página /proposta.
+ *
+ * O grosso do visual vem de `app/simulador-ui.css`, o design system que esta
+ * página divide com /academias: hero, .panel, .step-tag, camada explicativa,
+ * painel de resultado e barra móvel saem de lá. Aqui ficam só as peças que a
+ * proposta tem e o simulador de academias não:
+ *
+ *   - as tabelas densas de consultas e programas (9 a 11 colunas);
+ *   - os formulários de linha (.frow), que montam essas tabelas;
+ *   - os blocos institucionais: escopo, responsabilidades, compliance, riscos.
+ *
+ * Escopado em `.sim-root.proposta` para não alcançar /academias.
+ *
+ * ⚠️ SÓ px, nunca rem — mesma regra do simulador-ui.css: app/globals.css define
+ * html { font-size: 18px } e qualquer rem sairia 12,5% maior.
  */
-.proposta-root {
-  --navy: #00204d;
-  --ciano: #00b3f0;
-  --navy-2: #001632;
-  --ink: #00204d;
-  --mut: #5f6b7a;
-  --line: #eef3f7;
-  --bg: #f4fafc;
-  --ok: #00a676;
-  --warn: #f2a900;
-  --card: #ffffff;
-  --maxw: 1080px;
 
-  background: var(--bg);
-  color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+/* A proposta pede mais largura que o simulador de academias: a tabela de
+   consultas tem 11 colunas e, no shell de 1380px com painel de 420, a coluna
+   esquerda sobra ~890px e a tabela rola horizontalmente já no desktop. */
+.sim-root.proposta .shell {
+  max-width: 1560px;
+}
+.sim-root.proposta .main-grid {
+  grid-template-columns: minmax(0, 1fr) 380px;
 }
 
-.proposta-root *,
-.proposta-root *::before,
-.proposta-root *::after {
-  box-sizing: border-box;
-}
-.proposta-root a {
-  color: inherit;
-}
-.proposta-root .wrap {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 24px;
-}
-.proposta-root .eyebrow {
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ciano);
-  font-weight: 700;
-}
-.proposta-root h1,
-.proposta-root h2,
-.proposta-root h3 {
-  margin: 0;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-}
-.proposta-root h2 {
-  font-size: clamp(22px, 3vw, 30px);
-  color: var(--navy);
-}
-.proposta-root p {
-  margin: 0.5em 0;
-}
-.proposta-root .muted {
-  color: var(--mut);
-}
-
-/* Top bar */
-.proposta-root .top {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: saturate(140%) blur(8px);
-  color: var(--navy);
-  border-bottom: 1px solid var(--line);
-}
-.proposta-root .top .wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 60px;
-}
-.proposta-root .top a.cta {
-  background: var(--ciano);
-  color: #fff;
-  text-decoration: none;
-  font-weight: 700;
-  padding: 9px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-}
-.proposta-root .top a.back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--mut);
-  text-decoration: none;
-}
-.proposta-root .top a.back:hover {
-  color: var(--ciano);
-}
-
-/* Hero */
-.proposta-root .hero {
-  background:
-    radial-gradient(1200px 380px at 78% -10%, rgba(12, 173, 225, 0.28), transparent 60%),
-    linear-gradient(180deg, var(--navy), var(--navy-2));
-  color: #fff;
-  padding: 64px 0 52px;
-}
-.proposta-root .hero .grid {
-  display: grid;
-  grid-template-columns: 1.3fr 0.9fr;
-  gap: 40px;
-  align-items: center;
-}
-.proposta-root .hero h1 {
-  font-size: clamp(28px, 4.4vw, 46px);
-  font-weight: 800;
-}
-.proposta-root .hero .sub {
-  font-size: clamp(16px, 1.7vw, 19px);
-  color: #cde3f0;
-  max-width: 40ch;
-}
-.proposta-root .hero .desc {
-  color: #afc9db;
-  font-size: 15px;
-  max-width: 44ch;
-}
-.proposta-root .chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 18px 0 22px;
-}
-.proposta-root .chip {
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 13px;
-  color: #e8f4fa;
-}
-.proposta-root .hero .btns {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-.proposta-root .btn {
-  border-radius: 10px;
-  padding: 13px 20px;
-  font-weight: 700;
-  font-size: 15px;
-  text-decoration: none;
-  display: inline-block;
-  cursor: pointer;
-  border: 0;
-}
-.proposta-root .btn.primary {
-  background: var(--ciano);
-  color: #fff;
-}
-.proposta-root .btn.ghost {
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-}
-.proposta-root .simcard {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 16px;
-  padding: 22px;
-}
-.proposta-root .simcard h3 {
-  font-size: 14px;
-  color: #cde3f0;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.proposta-root .simrow {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 10px 0;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.14);
-}
-.proposta-root .simrow:last-child {
-  border-bottom: 0;
-}
-.proposta-root .simrow .k {
-  color: #afc9db;
-  font-size: 14px;
-}
-.proposta-root .simrow .v {
-  font-weight: 800;
-  font-size: 20px;
-}
-.proposta-root .simrow .v.big {
-  color: var(--ciano);
-}
-
-.proposta-root section {
-  padding: 56px 0;
-}
-.proposta-root .section-head {
-  max-width: 60ch;
-  margin-bottom: 26px;
-}
-.proposta-root .section-head .eyebrow {
-  margin-bottom: 8px;
-  display: block;
-}
-
-/* two-column incluso / não incluso */
-.proposta-root .twocol {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.proposta-root .box {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 22px;
-}
-.proposta-root .box.in {
-  border-top: 4px solid var(--ciano);
-}
-.proposta-root .box.out {
-  border-top: 4px solid #c6d3dd;
-}
-.proposta-root .box h3 {
-  font-size: 16px;
-  margin-bottom: 6px;
-}
-.proposta-root .box ul {
-  margin: 0;
-  padding-left: 18px;
-  color: var(--mut);
-  font-size: 14px;
-}
-.proposta-root .box li {
-  margin: 6px 0;
-}
-.proposta-root .tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-weight: 700;
-  font-size: 13px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  margin-bottom: 10px;
-}
-.proposta-root .tag.in {
-  background: #e6f7fd;
-  color: #0a6e8c;
-}
-.proposta-root .tag.out {
-  background: #eef3f7;
-  color: #556b7d;
-}
-.proposta-root .note {
-  font-size: 13px;
-  color: var(--mut);
-  margin-top: 14px;
-}
-
-/* responsibilities */
-.proposta-root .resp {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 14px;
-}
-.proposta-root .ritem {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 18px;
-}
-.proposta-root .ritem .who {
-  font-weight: 800;
-  color: var(--navy);
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-.proposta-root .ritem .who .b {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--ciano);
-  margin-right: 8px;
-  vertical-align: middle;
-}
-.proposta-root .ritem p {
-  font-size: 14px;
-  color: var(--mut);
-  margin: 0;
-}
-
-/* compliance band */
-.proposta-root .band {
-  background: var(--navy);
-  color: #dcebf3;
-}
-.proposta-root .band .wrap {
-  padding: 52px 24px;
-}
-.proposta-root .band h2 {
-  color: #fff;
-}
-.proposta-root .clist {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px 34px;
-  margin-top: 20px;
-}
-.proposta-root .cli {
-  display: flex;
-  gap: 12px;
-  font-size: 14px;
-  line-height: 1.5;
-}
-.proposta-root .cli .mk {
-  flex: 0 0 auto;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: rgba(12, 173, 225, 0.18);
-  color: var(--ciano);
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 13px;
-}
-.proposta-root .cli b {
-  color: #fff;
-}
-.proposta-root .notbe {
-  background: rgba(178, 58, 58, 0.14);
-  border: 1px solid rgba(178, 58, 58, 0.4);
-  color: #f3c9c9;
-  border-radius: 12px;
-  padding: 14px 16px;
+/* Espaçamento entre os blocos de nível superior — no simulador de academias
+   quem faz isso é o .below; aqui as seções institucionais são empilhadas. */
+.sim-root.proposta .main-grid,
+.sim-root.proposta > .shell > section:not(.hero) {
   margin-top: 22px;
-  font-size: 14px;
-  font-weight: 600;
 }
 
-.proposta-root .riskbox {
-  background: #fbf6f6;
-  border: 1px solid #ead6d6;
-  border-radius: 12px;
-  padding: 16px 18px;
-  font-size: 14px;
+/* ── Card de exemplo no hero ───────────────────────────────────────────── */
+.sim-root.proposta .hero-example {
+  margin-top: 22px;
+  max-width: 620px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 26px rgba(26, 65, 101, 0.1);
 }
-.proposta-root .riskbox b {
-  color: #8f3030;
-}
-
-/* contact / footer */
-.proposta-root .cta-final {
-  background: linear-gradient(180deg, #fff, #eaf6fb);
-}
-.proposta-root .contact {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 26px;
-}
-.proposta-root .contact .info b {
+.sim-root.proposta .hero-example-head strong {
   display: block;
-  font-size: 18px;
-  color: var(--navy);
+  font-size: 14px;
+  color: var(--ink);
 }
-.proposta-root footer {
-  background: var(--navy);
-  color: #9fbbcd;
-  font-size: 13px;
-  padding: 26px 0;
+.sim-root.proposta .hero-example-head small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
 }
-.proposta-root footer .wrap {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  flex-wrap: wrap;
+.sim-root.proposta .hero-example-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0 10px;
+}
+.sim-root.proposta .hero-example-grid small {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sim-root.proposta .hero-example-grid strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 20px;
+  letter-spacing: -0.6px;
+  color: var(--brand-2);
+  font-variant-numeric: tabular-nums;
+}
+.sim-root.proposta .hero-example > p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted);
 }
 
-/* ===================== Simulador ===================== */
-.proposta-root .sg {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
-}
-@media (min-width: 960px) {
-  .proposta-root .sg.duo {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-.proposta-root .sc {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 8px 28px rgba(0, 32, 77, 0.06);
-}
-.proposta-root .sc h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 16px;
-  color: var(--navy);
-  margin-bottom: 14px;
-}
-.proposta-root .sc h3 .n {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--ciano);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-size: 13px;
-  font-weight: 800;
-  flex: 0 0 auto;
-}
-.proposta-root .seg {
-  display: inline-flex;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 3px;
-  gap: 2px;
-}
-.proposta-root .seg button {
-  border: 0;
-  background: transparent;
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--mut);
-  cursor: pointer;
-  font-family: inherit;
-}
-.proposta-root .seg button.on {
-  background: var(--navy);
-  color: #fff;
-}
-.proposta-root .frow {
+/* ── Formulários que alimentam as tabelas ──────────────────────────────── */
+.sim-root.proposta .frow {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  align-items: end;
+  align-items: flex-end;
   margin-bottom: 12px;
 }
-.proposta-root .frow label {
+.sim-root.proposta .frow label {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--mut);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-.proposta-root .frow input,
-.proposta-root .frow select {
+.sim-root.proposta .frow input,
+.sim-root.proposta .frow select {
   padding: 10px 12px;
   border: 1.5px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 14px;
+  font-weight: 700;
   color: var(--ink);
   background: #fff;
   font-family: inherit;
   min-width: 120px;
-  transition: border-color 0.15s;
+  transition: border-color 0.2s ease;
 }
-.proposta-root .frow input:focus,
-.proposta-root .frow select:focus {
+.sim-root.proposta .frow input:focus,
+.sim-root.proposta .frow select:focus {
   outline: none;
-  border-color: var(--ciano);
+  border-color: var(--accent-strong);
 }
-.proposta-root .frow input[type='number'] {
+.sim-root.proposta .frow input[type='number'] {
   width: 110px;
 }
-.proposta-root .sbtn {
-  background: var(--ciano);
-  color: #fff;
+.sim-root.proposta .frow input:disabled {
+  background: var(--surface-2);
+  color: #9aa9b7;
+}
+/* O .seg do sistema é uma pílula compacta; dentro de um label ele precisa
+   descolar do rótulo como um input faria. */
+.sim-root.proposta .frow .seg {
+  align-self: flex-start;
+}
+.sim-root.proposta .frow .seg button {
+  padding: 8px 13px;
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Botão de adicionar linha/programa. Fica na mesma .frow dos campos, então
+   alinha pela base como um input faria. */
+.sim-root.proposta .sbtn {
+  align-self: flex-end;
   border: 0;
-  border-radius: 10px;
-  padding: 12px 18px;
-  font-weight: 800;
-  font-size: 14px;
-  cursor: pointer;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: #fff;
   font-family: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 12px 18px;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(10, 109, 180, 0.22);
   transition:
-    transform 0.1s,
-    box-shadow 0.15s;
-  box-shadow: 0 4px 14px rgba(0, 179, 240, 0.35);
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
-.proposta-root .sbtn:hover {
-  transform: translateY(-1px);
+.sim-root.proposta .sbtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 26px rgba(10, 109, 180, 0.28);
 }
-.proposta-root .sbtn.ghost {
+
+/* Nota de apoio abaixo de um campo. NÃO usa .hint: no design system essa
+   classe é uma pílula, não texto corrido. */
+.sim-root.proposta .field-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.sim-root.proposta .field-note b {
+  color: var(--ink);
+}
+
+/* ── Tabelas densas ────────────────────────────────────────────────────── */
+.sim-root.proposta .tscroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
   background: #fff;
-  color: var(--navy);
-  border: 1.5px solid var(--line);
-  box-shadow: none;
 }
-.proposta-root table.st {
+.sim-root.proposta .tscroll table.st {
+  min-width: 900px;
+}
+.sim-root.proposta table.st {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13.5px;
-  margin-top: 6px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
 }
-.proposta-root table.st th {
-  background: var(--bg);
-  color: var(--mut);
+.sim-root.proposta table.st th {
+  background: var(--surface-2);
+  color: var(--muted);
   text-align: left;
-  padding: 9px 10px;
-  font-size: 11px;
+  padding: 10px 11px;
+  font-size: 10px;
+  font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  border-bottom: 2px solid var(--line);
-}
-.proposta-root table.st td {
-  padding: 10px;
   border-bottom: 1px solid var(--line);
+  white-space: nowrap;
 }
-.proposta-root table.st tr:hover td {
-  background: #fafdfe;
+.sim-root.proposta table.st td {
+  padding: 11px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
 }
-.proposta-root .pill {
+.sim-root.proposta table.st td b {
+  color: var(--ink);
+  font-weight: 800;
+}
+.sim-root.proposta table.st tr:last-child td {
+  border-bottom: 0;
+}
+.sim-root.proposta table.st tbody tr:hover td {
+  background: var(--accent-soft);
+}
+.sim-root.proposta .pill {
   display: inline-block;
   border-radius: 999px;
   padding: 3px 10px;
-  font-size: 11.5px;
-  font-weight: 800;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
 }
-.proposta-root .pill.ok {
+.sim-root.proposta .pill.ok {
   background: #e3f6ef;
-  color: var(--ok);
+  color: #12876a;
 }
-.proposta-root .pill.warn {
+.sim-root.proposta .pill.warn {
   background: #fbf1db;
   color: #9a6b00;
 }
-.proposta-root .pill.mut {
-  background: var(--bg);
-  color: var(--mut);
+.sim-root.proposta .pill.mut {
+  background: var(--surface-2);
+  color: var(--muted);
 }
-.proposta-root .xdel {
+.sim-root.proposta .xdel {
   background: none;
   border: 0;
   color: #c24a4a;
-  font-size: 17px;
-  cursor: pointer;
-  font-weight: 800;
+  font-size: 18px;
   line-height: 1;
-}
-.proposta-root .trow {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 9px 0;
-  border-bottom: 1px dashed var(--line);
-  font-size: 14px;
-  color: var(--mut);
-}
-.proposta-root .trow b {
-  font-size: 16px;
-  color: var(--navy);
-}
-.proposta-root .hint {
-  font-size: 12.5px;
-  color: var(--mut);
-  margin-top: 8px;
-  line-height: 1.5;
-}
-.proposta-root .stickybar {
-  position: sticky;
-  bottom: 14px;
-  z-index: 15;
-  margin-top: 22px;
-  background: var(--navy);
-  color: #fff;
-  border-radius: 16px;
-  padding: 16px 22px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 14px 40px rgba(0, 22, 50, 0.4);
-}
-.proposta-root .stickybar .tt {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #9fc0d3;
-  font-weight: 700;
-}
-.proposta-root .stickybar .vv {
-  font-size: 24px;
   font-weight: 800;
-  color: var(--ciano);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
 }
-.proposta-root .stickybar .mini {
-  font-size: 12.5px;
-  color: #c9ddea;
-}
-.proposta-root .tscroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  border-radius: 10px;
-}
-.proposta-root .tscroll table.st {
-  min-width: 760px;
+.sim-root.proposta .xdel:hover {
+  background: #fdeaea;
 }
 
-@media (max-width: 820px) {
-  .proposta-root .hero .grid,
-  .proposta-root .twocol,
-  .proposta-root .clist {
-    grid-template-columns: 1fr;
-  }
-  .proposta-root .top a.cta {
-    display: none;
+/* Totais de bloco abaixo de cada tabela — reusa o .dre-line do sistema, só
+   afasta do que vem antes. */
+.sim-root.proposta .dre-line {
+  margin-top: 0;
+}
+.sim-root.proposta .tscroll + .dre-line {
+  margin-top: 16px;
+}
+
+/* ── Escopo: incluso / não incluso ─────────────────────────────────────── */
+.sim-root.proposta .twocol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.sim-root.proposta .box {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 20px 22px;
+}
+.sim-root.proposta .box.in {
+  border-top: 4px solid var(--accent-strong);
+}
+.sim-root.proposta .box.out {
+  border-top: 4px solid #c6d3dd;
+}
+.sim-root.proposta .box ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.sim-root.proposta .box li {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+.sim-root.proposta .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 900;
+  font-size: 12px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+.sim-root.proposta .tag.in {
+  background: var(--accent-soft);
+  color: var(--brand-2);
+}
+.sim-root.proposta .tag.out {
+  background: var(--surface-2);
+  color: var(--muted);
+}
+.sim-root.proposta .note {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin-top: 14px;
+}
+.sim-root.proposta .note b {
+  color: var(--ink);
+}
+
+/* ── Responsabilidades ─────────────────────────────────────────────────── */
+.sim-root.proposta .resp {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+}
+.sim-root.proposta .ritem {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+}
+.sim-root.proposta .ritem .who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+  color: var(--ink);
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.sim-root.proposta .ritem .who .b {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-strong);
+  flex: 0 0 auto;
+}
+.sim-root.proposta .ritem p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ── Faixa de compliance ───────────────────────────────────────────────── */
+.sim-root.proposta .band {
+  background: linear-gradient(150deg, #102a43 0%, #123e62 70%, #0a6db4 130%);
+  color: #dcebf3;
+  border-radius: var(--radius);
+  padding: 30px 32px;
+  box-shadow: 0 24px 50px rgba(16, 42, 67, 0.22);
+}
+.sim-root.proposta .band .step-tag {
+  color: #86ddf6;
+}
+.sim-root.proposta .band .step-dot {
+  background: rgba(255, 255, 255, 0.14);
+  color: #86ddf6;
+}
+.sim-root.proposta .band h2 {
+  color: #fff;
+}
+.sim-root.proposta .band-lead {
+  max-width: 62ch;
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #bcd6e4;
+}
+.sim-root.proposta .clist {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 34px;
+  margin-top: 22px;
+}
+.sim-root.proposta .cli {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.sim-root.proposta .cli .mk {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  background: rgba(134, 221, 246, 0.18);
+  color: #86ddf6;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 12px;
+}
+.sim-root.proposta .cli b {
+  color: #fff;
+}
+.sim-root.proposta .notbe {
+  background: rgba(178, 58, 58, 0.16);
+  border: 1px solid rgba(178, 58, 58, 0.4);
+  color: #f3c9c9;
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-top: 22px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* ── Riscos ────────────────────────────────────────────────────────────── */
+.sim-root.proposta .riskbox {
+  background: #fbf6f6;
+  border: 1px solid #ead6d6;
+  border-radius: 18px;
+  padding: 18px 20px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.sim-root.proposta .riskbox b {
+  color: #8f3030;
+}
+.sim-root.proposta .riskbox p {
+  margin: 6px 0 0;
+}
+
+/* ── Contato ───────────────────────────────────────────────────────────── */
+.sim-root.proposta .contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 22px 24px;
+}
+.sim-root.proposta .contact .info b {
+  display: block;
+  font-size: 18px;
+  color: var(--ink);
+}
+.sim-root.proposta .contact .info span {
+  font-size: 13px;
+  color: var(--muted);
+}
+/* O .cta do sistema é bloco de largura total (mora no painel escuro); no card
+   de contato ele volta a ser um botão do tamanho do texto. */
+.sim-root.proposta .contact .cta {
+  width: auto;
+  margin-top: 0;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: 16px;
+  box-shadow: 0 12px 26px rgba(10, 109, 180, 0.24);
+}
+
+/* Resultado negativo: o card verde de lucro mentiria sobre um prejuízo. */
+.sim-root.proposta .profit-card.negative {
+  background: linear-gradient(135deg, #d4674f, #b8462f);
+  box-shadow: 0 15px 30px rgba(120, 45, 28, 0.23);
+}
+
+/* ── Responsivo ────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .sim-root.proposta .hero-example {
+    max-width: none;
   }
 }
-@media (max-width: 760px) {
-  .proposta-root .sc {
-    padding: 16px;
-    border-radius: 14px;
+
+@media (max-width: 620px) {
+  .sim-root.proposta .twocol,
+  .sim-root.proposta .clist,
+  .sim-root.proposta .hero-example-grid {
+    grid-template-columns: 1fr;
   }
-  .proposta-root .frow label {
+  .sim-root.proposta .band {
+    padding: 24px 20px;
+  }
+  .sim-root.proposta .frow label {
     width: 100%;
   }
-  .proposta-root .frow input,
-  .proposta-root .frow select {
+  .sim-root.proposta .frow input,
+  .sim-root.proposta .frow select {
     width: 100%;
     min-width: 0;
   }
-  .proposta-root .sbtn {
+  .sim-root.proposta .contact .cta,
+  .sim-root.proposta .sbtn {
     width: 100%;
   }
-  .proposta-root .seg {
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-  }
-  .proposta-root .seg button {
-    flex: 1 1 auto;
-    padding: 9px 8px;
-    font-size: 12.5px;
-  }
-  .proposta-root .tscroll {
+
+  /* Cada linha da tabela vira um card: com 11 colunas, rolagem horizontal no
+     celular é ilegível. O rótulo de cada célula vem do data-l do TSX. */
+  .sim-root.proposta .tscroll {
     overflow: visible;
+    border: 0;
+    background: transparent;
   }
-  .proposta-root .tscroll table.st {
+  .sim-root.proposta .tscroll table.st {
     min-width: 0;
   }
-  .proposta-root table.st thead {
+  .sim-root.proposta table.st thead {
     display: none;
   }
-  .proposta-root table.st,
-  .proposta-root table.st tbody,
-  .proposta-root table.st tr,
-  .proposta-root table.st td {
+  .sim-root.proposta table.st,
+  .sim-root.proposta table.st tbody,
+  .sim-root.proposta table.st tr,
+  .sim-root.proposta table.st td {
     display: block;
     width: 100%;
   }
-  .proposta-root table.st tr {
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    margin: 10px 0;
-    padding: 10px 40px 10px 12px;
-    background: #fff;
+  .sim-root.proposta table.st tr {
     position: relative;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    margin: 10px 0;
+    padding: 12px 42px 12px 14px;
+    background: #fff;
   }
-  .proposta-root table.st tr:hover td {
+  .sim-root.proposta table.st tbody tr:hover td {
     background: transparent;
   }
-  .proposta-root table.st td {
+  .sim-root.proposta table.st td {
     border: 0;
     padding: 5px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    font-size: 13.5px;
+    font-size: 13px;
   }
-  .proposta-root table.st td::before {
+  .sim-root.proposta table.st td::before {
     content: attr(data-l);
-    color: var(--mut);
-    font-weight: 700;
-    font-size: 10.5px;
+    color: var(--muted);
+    font-weight: 900;
+    font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     flex: 0 0 auto;
   }
-  .proposta-root table.st td.tdel {
+  .sim-root.proposta table.st td.tdel {
     position: absolute;
-    top: 6px;
+    top: 8px;
     right: 8px;
     width: auto;
     padding: 0;
   }
-  .proposta-root table.st td.tdel::before {
+  .sim-root.proposta table.st td.tdel::before {
     content: none;
-  }
-  .proposta-root .stickybar {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-    gap: 10px;
-    bottom: 8px;
-    padding: 14px 16px;
-  }
-  .proposta-root .stickybar .vv {
-    font-size: 20px;
-  }
-  .proposta-root .stickybar .sbtn {
-    width: 100%;
   }
 }

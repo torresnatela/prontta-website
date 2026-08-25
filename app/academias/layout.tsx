@@ -1,7 +1,7 @@
-import './academias.css';
+import '../simulador-ui.css';
 
 /**
- * Só carrega o CSS escopado das páginas /academias.
+ * Só carrega o design system dos simuladores (compartilhado com /proposta).
  *
  * Sem `metadata` aqui de propósito: as pages são Server Components e exportam a
  * própria (diferente de /proposta, cujo layout precisa cuidar disso porque a

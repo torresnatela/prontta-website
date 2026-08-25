@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from 'react';
 import { getMargin, PROGRAMS, type Cycle, type ProgramItemSummary } from '@/lib/pricing';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { newEntryId, useProgramsSummary, useProposal } from '../state/ProposalProvider';
+import { StepHeader } from './StepHeader';
 
 const CYCLES: Cycle[] = [3, 6, 12];
 
@@ -33,10 +34,14 @@ export function ProgramsStep() {
   }
 
   return (
-    <div className="sc">
-      <h3>
-        <span className="n">3</span>Programas de Saúde Assistida
-      </h3>
+    <section id="passo-programas">
+      <StepHeader
+        step={3}
+        tag="Some os programas"
+        title="Programas de Saúde Assistida"
+        lead="Jornadas fechadas em ciclos de 3, 6 ou 12 meses, com a composição de especialistas já definida."
+        chapterId="programas"
+      />
 
       <div className="frow">
         <label>
@@ -71,7 +76,7 @@ export function ProgramsStep() {
         </button>
       </div>
 
-      <p className="hint">
+      <p className="field-note">
         <b>Custo unit. (Prontta)</b> é o repasse do ciclo à Prontta (já inclui plataforma e
         IA). <b>Preço</b> é o que o paciente paga no ciclo. <b>Sua margem</b> é a diferença.
       </p>
@@ -130,20 +135,20 @@ export function ProgramsStep() {
         </table>
       </div>
 
-      <div className="trow">
+      <div className="dre-line">
         <span>Custo dos programas (repasse à Prontta)</span>
-        <b>{formatCurrency(summary.subtotalRepasse)}</b>
+        <strong>{formatCurrency(summary.subtotalRepasse)}</strong>
       </div>
-      <div className="trow">
+      <div className="dre-line">
         <span>Sua margem nos programas</span>
-        <b>
+        <strong>
           {formatCurrency(blockMargin.amount)} · {formatPercent(blockMargin.percent)}
-        </b>
+        </strong>
       </div>
-      <div className="trow">
+      <div className="dre-line">
         <span>Subtotal programas</span>
-        <b>{formatCurrency(summary.subtotalSell)}</b>
+        <strong>{formatCurrency(summary.subtotalSell)}</strong>
       </div>
-    </div>
+    </section>
   );
 }

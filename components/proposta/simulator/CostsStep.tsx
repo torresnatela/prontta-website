@@ -1,8 +1,15 @@
 'use client';
 
-import type { Implantation } from '@/lib/pricing';
+import {
+  IMPLANTATION_RANGE,
+  SOFTWARE_EXEMPTION_THRESHOLD,
+  SOFTWARE_MONTHLY_FEE,
+  type Implantation,
+} from '@/lib/pricing';
+import { formatCurrency } from '@/lib/utils';
 import type { ProposalDREState } from '../state/reducer';
 import { useProposal } from '../state/ProposalProvider';
+import { StepHeader } from './StepHeader';
 
 type ImplMode = 'AC' | 'V' | 'I';
 
@@ -13,6 +20,20 @@ const EXPENSE_FIELDS: Array<{ key: keyof ProposalDREState['expenses']; label: st
   { key: 'marketing', label: 'Marketing (R$)' },
   { key: 'outras', label: 'Outras (R$)' },
 ];
+
+/**
+ * "R$ 10 mil a R$ 15 mil" — derivado, para a faixa nunca divergir do modelo.
+ * Compacto porque é rótulo de campo: por extenso ocuparia duas linhas.
+ */
+const compactBRL = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+  notation: 'compact',
+  maximumFractionDigits: 0,
+});
+const implantationRangeLabel = `${compactBRL.format(
+  IMPLANTATION_RANGE.min,
+)} a ${compactBRL.format(IMPLANTATION_RANGE.max)}`;
 
 export function CostsStep() {
   const { state, dispatch } = useProposal();
@@ -32,10 +53,14 @@ export function CostsStep() {
   }
 
   return (
-    <div className="sc">
-      <h3>
-        <span className="n">4</span>Custos mensais e implantação
-      </h3>
+    <section id="passo-custos">
+      <StepHeader
+        step={4}
+        tag="Informe seus custos"
+        title="Custos mensais e implantação"
+        lead="São os seus números, não os da Prontta — os valores abaixo são só um ponto de partida."
+        chapterId="dre"
+      />
 
       <div className="frow">
         <label>
@@ -89,7 +114,7 @@ export function CostsStep() {
           </select>
         </label>
         <label>
-          Valor (R$ 10 a 15 mil)
+          Valor ({implantationRangeLabel})
           <input
             type="number"
             min={0}
@@ -101,10 +126,12 @@ export function CostsStep() {
         </label>
       </div>
 
-      <p className="hint">
-        Software mensal de R$ 1.499 entra sozinho quando o volume fica abaixo de 150 consultas/mês;
-        isento a partir de 150. Programas já incluem a plataforma. A implantação é investimento único.
+      <p className="field-note">
+        Software mensal de {formatCurrency(SOFTWARE_MONTHLY_FEE)} entra sozinho quando o volume fica
+        abaixo de {SOFTWARE_EXEMPTION_THRESHOLD} consultas/mês; isento a partir de{' '}
+        {SOFTWARE_EXEMPTION_THRESHOLD}. Programas já incluem a plataforma. A implantação é
+        investimento único.
       </p>
-    </div>
+    </section>
   );
 }

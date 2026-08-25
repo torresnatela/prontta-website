@@ -12,6 +12,7 @@ import {
 } from '@/lib/pricing';
 import { formatCurrency, formatPercent } from '@/lib/utils';
 import { newEntryId, useConsultationsSummary, useProposal } from '../state/ProposalProvider';
+import { StepHeader } from './StepHeader';
 
 const PLAN_ORDER: PlanId[] = ['popular', 'intermediario', 'premium'];
 
@@ -59,10 +60,14 @@ export function ConsultationsStep() {
   const blockMargin = getMargin(summary.patientPrice, summary.subtotalCost);
 
   return (
-    <div className="sc">
-      <h3>
-        <span className="n">2</span>Consultas: pacotes (agenda dedicada) e avulsas (compartilhada)
-      </h3>
+    <section id="passo-consultas">
+      <StepHeader
+        step={2}
+        tag="Monte as consultas"
+        title="Pacotes em agenda dedicada e avulsas na compartilhada"
+        lead="Cada linha tem plano e agenda próprios — é o plano que define quantas consultas cabem numa hora médica."
+        chapterId="consultas"
+      />
 
       <div className="frow">
         <label>
@@ -121,8 +126,8 @@ export function ConsultationsStep() {
         </button>
       </div>
 
-      {hint && <p className="hint">{hint}</p>}
-      <p className="hint">
+      {hint && <p className="field-note">{hint}</p>}
+      <p className="field-note">
         <b>Custo unit. (Prontta)</b> é o que você paga à Prontta por consulta.{' '}
         <b>Preço venda</b> é o que o paciente paga. <b>Sua margem</b> é a diferença entre os
         dois.
@@ -197,28 +202,28 @@ export function ConsultationsStep() {
         </table>
       </div>
 
-      <div className="trow">
+      <div className="dre-line">
         <span>Custo das consultas (repasse à Prontta)</span>
-        <b>{formatCurrency(summary.subtotalCost)}</b>
+        <strong>{formatCurrency(summary.subtotalCost)}</strong>
       </div>
-      <div className="trow">
+      <div className="dre-line">
         <span>Sua margem nas consultas</span>
-        <b>
+        <strong>
           {formatCurrency(blockMargin.amount)} · {formatPercent(blockMargin.percent)}
-        </b>
+        </strong>
       </div>
-      <div className="trow">
+      <div className="dre-line">
         <span>Preço das consultas ao paciente</span>
-        <b>{formatCurrency(summary.patientPrice)}</b>
+        <strong>{formatCurrency(summary.patientPrice)}</strong>
       </div>
-      <div className="trow">
+      <div className="dre-line">
         <span>Software mensal</span>
-        <b>
+        <strong>
           {software === 0 && summary.totalQuantity > 0
             ? 'ISENTO (150 ou mais consultas/mês)'
             : formatCurrency(software)}
-        </b>
+        </strong>
       </div>
-    </div>
+    </section>
   );
 }

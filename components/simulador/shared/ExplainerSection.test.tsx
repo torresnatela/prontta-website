@@ -12,11 +12,15 @@ const head = {
   lead: 'Do programa à DRE.',
 };
 
-function renderHub(chapters = SIMULADOR_CHAPTERS, cue?: string) {
+function renderHub(
+  chapters = SIMULADOR_CHAPTERS,
+  cue?: string,
+  bulletsSlot?: { chapterId: string; content: React.ReactNode },
+) {
   return render(
     <ExplainerProvider chapters={chapters}>
       {cue ? <ChapterCue chapterId={cue} /> : null}
-      <ExplainerSection {...head} />
+      <ExplainerSection {...head} bulletsSlot={bulletsSlot} />
     </ExplainerProvider>,
   );
 }
@@ -59,17 +63,30 @@ describe('ExplainerSection', () => {
     expect(container.querySelector('img')?.getAttribute('src')).toContain('dre.svg');
   });
 
-  it('mostra a galeria de programas no lugar dos bullets', async () => {
+  it('troca os bullets pelo bloco do `bulletsSlot` — só no capítulo indicado', async () => {
+    const user = userEvent.setup();
+    const slot = { chapterId: 'programas', content: <p>bloco da página</p> };
+    renderHub(SIMULADOR_CHAPTERS, undefined, slot);
+    const [visaoGeral, programas] = SIMULADOR_CHAPTERS;
+
+    // No capítulo de abertura o slot não vale: os bullets seguem no lugar.
+    expect(screen.getByText(visaoGeral.bullets[0])).toBeInTheDocument();
+    expect(screen.queryByText('bloco da página')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('tab', { name: new RegExp(programas.title) }));
+
+    expect(screen.getByText('bloco da página')).toBeInTheDocument();
+    expect(screen.queryByText(programas.bullets[0])).not.toBeInTheDocument();
+  });
+
+  it('mantém os bullets quando a página não passa slot nenhum', async () => {
     const user = userEvent.setup();
     renderHub();
     const programas = SIMULADOR_CHAPTERS[1];
 
     await user.click(screen.getByRole('tab', { name: new RegExp(programas.title) }));
 
-    // As capas existem porque o popover do catálogo some no celular.
-    expect(screen.getByText('Performance')).toBeInTheDocument();
-    expect(screen.getByText('Sono e Energia')).toBeInTheDocument();
-    expect(screen.queryByText(programas.bullets[0])).not.toBeInTheDocument();
+    expect(screen.getByText(programas.bullets[0])).toBeInTheDocument();
   });
 });
 

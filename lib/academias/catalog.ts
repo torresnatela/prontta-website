@@ -136,3 +136,13 @@ export function getAcademiaProgram(id: AcademiaProgramId): AcademiaProgramCard {
   }
   return found;
 }
+
+/**
+ * Foto de fundo do hero das duas páginas /academias.
+ *
+ * Fica aqui, e não dentro de `HeroMedia`, porque o componente virou
+ * compartilhado com /proposta e recebe o caminho por prop — sem isto o mesmo
+ * literal apareceria em `SimuladorApp` e em `ProgramasApp`.
+ * Inventário de mídia: `public/academias/README.md`.
+ */
+export const ACADEMIA_HERO_IMAGE = '/academias/hero-academias.png';

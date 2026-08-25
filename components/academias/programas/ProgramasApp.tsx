@@ -1,7 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { ACADEMIA_CYCLES, CYCLE_LABELS, getAcademiaProgram } from '@/lib/academias/catalog';
+import {
+  ACADEMIA_CYCLES,
+  ACADEMIA_HERO_IMAGE,
+  CYCLE_LABELS,
+  getAcademiaProgram,
+} from '@/lib/academias/catalog';
 import {
   buildAssociadoWhatsAppMessage,
   buildOfferPath,
@@ -18,15 +23,16 @@ import {
 import { PROGRAMAS_CHAPTERS } from '@/lib/academias/videos';
 import { getSpecialty, type Cycle } from '@/lib/pricing';
 import { whatsappHref } from '@/lib/site-config';
-import { AcademiaFooter, AcademiaTopBar } from '../shared/AcademiaChrome';
-import { ChapterCue } from '../shared/ChapterCue';
-import { ExplainerProvider, type ExplainerMedia } from '../shared/ExplainerProvider';
-import { ExplainerSection } from '../shared/ExplainerSection';
-import { brlAuto, plural } from '../shared/format';
-import { HeroMedia } from '../shared/HeroMedia';
-import { specialtyIcon } from '../shared/icons';
+import { SimFooter, SimTopBar } from '@/components/simulador/shared/SimChrome';
+import { ProgramGallery } from '../shared/ProgramGallery';
+import { ChapterCue } from '@/components/simulador/shared/ChapterCue';
+import { ExplainerProvider, type ExplainerMedia } from '@/components/simulador/shared/ExplainerProvider';
+import { ExplainerSection } from '@/components/simulador/shared/ExplainerSection';
+import { brlAuto, plural } from '@/components/simulador/shared/format';
+import { HeroMedia } from '@/components/simulador/shared/HeroMedia';
+import { specialtyIcon } from '@/components/simulador/shared/icons';
 import { ProgramPicker } from '../shared/ProgramPicker';
-import { RollingCurrency } from '../shared/RollingCurrency';
+import { RollingCurrency } from '@/components/simulador/shared/RollingCurrency';
 import { IncludedChips, SpecialistGrid } from '../shared/SpecialistGrid';
 
 type OfferMode = 'bundle' | 'custom';
@@ -114,12 +120,12 @@ function ProgramasShell({ offer, media = 'video' }: ProgramasAppProps) {
   );
 
   return (
-    <div className="academias-root programas" data-theme={program.theme}>
+    <div className="sim-root programas" data-theme={program.theme}>
       <div className="shell">
-        <AcademiaTopBar subtitle="Programas para seus associados" pill="Escolha seu programa" />
+        <SimTopBar subtitle="Programas para seus associados" pill="Escolha seu programa" />
 
         <section className="hero">
-          <HeroMedia />
+          <HeroMedia src={ACADEMIA_HERO_IMAGE} />
           <div className="hero-content">
             <div className="eyebrow">Jornadas de saúde assistida</div>
             <h1>{program.program.name}</h1>
@@ -160,6 +166,7 @@ function ProgramasShell({ offer, media = 'video' }: ProgramasAppProps) {
             { ...effectiveOffer, ciclo: viewCycle },
             media === 'video' ? '/academias/programas/sem-video' : '/academias/programas',
           )}
+          bulletsSlot={{ chapterId: 'programas', content: <ProgramGallery /> }}
         />
 
         <section className="catalog-section" id="catalogo">
@@ -441,7 +448,7 @@ function ProgramasShell({ offer, media = 'video' }: ProgramasAppProps) {
           </div>
         </section>
 
-        <AcademiaFooter>Prontta Saúde · Programas de saúde assistida para academias</AcademiaFooter>
+        <SimFooter>Prontta Saúde · Programas de saúde assistida para academias</SimFooter>
       </div>
 
       <div className="sticky-cta">

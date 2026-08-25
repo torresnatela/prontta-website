@@ -1,13 +1,21 @@
 /*
- * Estilos das páginas /academias/* — portados dos modelos comerciais oficiais.
- * Tudo escopado sob .academias-root para não vazar no restante do site.
+ * Sistema de design dos SIMULADORES — /academias/* e /proposta.
+ * Portado dos modelos comerciais oficiais.
+ *
+ * Tudo escopado sob .sim-root para não vazar no restante do site, que é Tailwind.
+ * Cada página monta o root com um modificador de contexto: `.sim-root.sim`
+ * (simulador de academias), `.sim-root.programas`, `.sim-root.proposta`.
+ *
+ * Já se chamou .academias-root, quando só /academias usava. O nome mudou ao
+ * /proposta passar a consumir as mesmas receitas: hero, .panel, .step-tag,
+ * camada explicativa e painel de resultado são um sistema só, e manter duas
+ * cópias divergindo é exatamente o que esta unificação evita.
  *
  * ⚠️ SÓ px, nunca rem: app/globals.css define html { font-size: 18px } e qualquer
  * rem portado dos modelos (que assumem 16px) sairia 12,5% maior.
- * Mesmo motivo pelo qual app/proposta/proposta.css não tem um único rem.
  */
 
-.academias-root {
+.sim-root {
   --bg: #f4f8fb;
   --surface: #ffffff;
   --surface-2: #eef7fb;
@@ -44,41 +52,41 @@
   overflow-x: hidden;
 }
 
-.academias-root *,
-.academias-root *::before,
-.academias-root *::after {
+.sim-root *,
+.sim-root *::before,
+.sim-root *::after {
   box-sizing: border-box;
 }
-.academias-root a {
+.sim-root a {
   color: inherit;
   text-decoration: none;
 }
-.academias-root button,
-.academias-root input {
+.sim-root button,
+.sim-root input {
   font: inherit;
 }
-.academias-root button {
+.sim-root button {
   touch-action: manipulation;
 }
-.academias-root input {
+.sim-root input {
   min-width: 0;
 }
-.academias-root button:focus-visible,
-.academias-root a:focus-visible,
-.academias-root input:focus-visible {
+.sim-root button:focus-visible,
+.sim-root a:focus-visible,
+.sim-root input:focus-visible {
   outline: 3px solid rgba(10, 159, 214, 0.32);
   outline-offset: 3px;
 }
-.academias-root h1,
-.academias-root h2,
-.academias-root h3,
-.academias-root h4 {
+.sim-root h1,
+.sim-root h2,
+.sim-root h3,
+.sim-root h4 {
   margin: 0;
 }
-.academias-root p {
+.sim-root p {
   margin: 0;
 }
-.academias-root .sr-only {
+.sim-root .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -92,25 +100,25 @@
 
 /* --- Temas por programa ------------------------------------------------- */
 
-.academias-root[data-theme='blue'] {
+.sim-root[data-theme='blue'] {
   --accent: #7cc8ff;
   --accent-strong: #2c97e8;
   --accent-soft: #ebf7ff;
   --accent-border: #bfe4ff;
 }
-.academias-root[data-theme='lilac'] {
+.sim-root[data-theme='lilac'] {
   --accent: #cfa9ff;
   --accent-strong: #a166ef;
   --accent-soft: #f4ebff;
   --accent-border: #cfb2fb;
 }
-.academias-root[data-theme='green'] {
+.sim-root[data-theme='green'] {
   --accent: #8ce0a9;
   --accent-strong: #28b76b;
   --accent-soft: #eaf9f0;
   --accent-border: #88dcac;
 }
-.academias-root[data-theme='gold'] {
+.sim-root[data-theme='gold'] {
   --accent: #e8c56c;
   --accent-strong: #cf9a28;
   --accent-soft: #fff4de;
@@ -119,25 +127,25 @@
 
 /* --- Casca compartilhada ------------------------------------------------- */
 
-.academias-root .shell {
+.sim-root .shell {
   max-width: 1380px;
   margin: 0 auto;
   padding: 26px;
 }
-.academias-root .topbar {
+.sim-root .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
   margin-bottom: 24px;
 }
-.academias-root .brand {
+.sim-root .brand {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 /* A logomarca já traz o nome — a legenda vira um rótulo ao lado dela. */
-.academias-root .brand-sub {
+.sim-root .brand-sub {
   padding-left: 12px;
   border-left: 1px solid var(--line);
   font-size: 12px;
@@ -146,7 +154,7 @@
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
-.academias-root .top-pill {
+.sim-root .top-pill {
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.9);
@@ -156,20 +164,20 @@
   font-weight: 800;
   font-size: 13px;
 }
-.academias-root .site-footer {
+.sim-root .site-footer {
   padding: 30px 10px 12px;
   color: var(--muted);
   font-size: 12px;
   text-align: center;
 }
-.academias-root .site-footer a {
+.sim-root .site-footer a {
   color: var(--brand-2);
   font-weight: 800;
 }
 
 /* --- Hero (compartilhado: foto via <HeroMedia> sobre o gradiente) --------- */
 
-.academias-root .hero {
+.sim-root .hero {
   position: relative;
   min-height: 430px;
   margin-bottom: 22px;
@@ -190,18 +198,18 @@
 
 /* A foto entra por <Image fill> (AVIF/WebP + srcset), não pelo --hero-image:
    o arquivo é um PNG de ~1,1 MB e o background-image o serviria cru. */
-.academias-root .hero-media {
+.sim-root .hero-media {
   position: absolute;
   inset: 0;
   z-index: 0;
 }
-.academias-root .hero-media img {
+.sim-root .hero-media img {
   object-fit: cover;
   /* A pessoa e o tablet ficam à direita; a esquerda da arte já é quase lisa. */
   object-position: center right;
 }
 /* Véu que devolve contraste aos 720px de texto sem apagar a foto. */
-.academias-root .hero-media::after {
+.sim-root .hero-media::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -214,12 +222,12 @@
   );
 }
 
-.academias-root .hero-content {
+.sim-root .hero-content {
   max-width: 720px;
   position: relative;
   z-index: 2;
 }
-.academias-root .eyebrow {
+.sim-root .eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -235,7 +243,7 @@
   color: var(--brand-2);
   margin-bottom: 16px;
 }
-.academias-root .hero h1 {
+.sim-root .hero h1 {
   font-size: clamp(34px, 4.2vw, 60px);
   line-height: 1.03;
   letter-spacing: -2.4px;
@@ -243,20 +251,20 @@
   max-width: 760px;
   color: var(--navy);
 }
-.academias-root .hero p {
+.sim-root .hero p {
   font-size: 17px;
   line-height: 1.55;
   color: #415d73;
   max-width: 670px;
 }
-.academias-root .hero-actions {
+.sim-root .hero-actions {
   display: flex;
   align-items: center;
   gap: 14px;
   flex-wrap: wrap;
   margin-top: 26px;
 }
-.academias-root .hero-cta {
+.sim-root .hero-cta {
   appearance: none;
   border: 0;
   border-radius: 16px;
@@ -268,17 +276,17 @@
   box-shadow: 0 13px 28px rgba(10, 109, 180, 0.24);
   transition: 0.2s ease;
 }
-.academias-root .hero-cta:hover {
+.sim-root .hero-cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 17px 32px rgba(10, 109, 180, 0.29);
 }
-.academias-root .hero-link {
+.sim-root .hero-link {
   color: var(--brand-2);
   font-size: 13px;
   font-weight: 900;
   padding: 12px 4px;
 }
-.academias-root .hero-stats {
+.sim-root .hero-stats {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -286,7 +294,7 @@
   position: relative;
   z-index: 1;
 }
-.academias-root .hero-stat {
+.sim-root .hero-stat {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -300,7 +308,7 @@
   font-weight: 800;
   box-shadow: 0 8px 22px rgba(18, 63, 102, 0.05);
 }
-.academias-root .hero-stat b {
+.sim-root .hero-stat b {
   display: grid;
   place-items: center;
   width: 22px;
@@ -312,12 +320,12 @@
 
 /* --- Roleta (contador animado) ------------------------------------------- */
 
-.academias-root .roleta {
+.sim-root .roleta {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   display: inline-block;
 }
-.academias-root .roleta.rolling {
+.sim-root .roleta.rolling {
   animation: academiasRoll 0.92s ease;
 }
 @keyframes academiasRoll {
@@ -339,21 +347,21 @@
 
 /* --- Blocos genéricos ----------------------------------------------------- */
 
-.academias-root .panel {
+.sim-root .panel {
   background: rgba(255, 255, 255, 0.93);
   border: 1px solid rgba(255, 255, 255, 0.95);
   box-shadow: var(--shadow);
   border-radius: var(--radius);
   padding: 26px;
 }
-.academias-root .section-head {
+.sim-root .section-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 18px;
   margin-bottom: 18px;
 }
-.academias-root .step-tag {
+.sim-root .step-tag {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -362,7 +370,7 @@
   font-size: 13px;
   margin-bottom: 6px;
 }
-.academias-root .step-dot {
+.sim-root .step-dot {
   width: 26px;
   height: 26px;
   border-radius: 9px;
@@ -370,22 +378,22 @@
   display: grid;
   place-items: center;
 }
-.academias-root h2 {
+.sim-root h2 {
   font-size: 25px;
   letter-spacing: -0.8px;
   line-height: 1.15;
 }
-.academias-root .section-head p {
+.sim-root .section-head p {
   margin-top: 6px;
   color: var(--muted);
   font-size: 14px;
 }
-.academias-root .divider {
+.sim-root .divider {
   height: 1px;
   background: var(--line);
   margin: 24px 0;
 }
-.academias-root .hint {
+.sim-root .hint {
   font-size: 11px;
   font-weight: 800;
   color: var(--muted);
@@ -396,19 +404,19 @@
 
 /* --- Cards de programa (usados nas duas páginas) -------------------------- */
 
-.academias-root .programs {
+.sim-root .programs {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
-.academias-root .program-slot {
+.sim-root .program-slot {
   position: relative;
   display: flex;
 }
-.academias-root .program-slot > .program {
+.sim-root .program-slot > .program {
   width: 100%;
 }
-.academias-root .program {
+.sim-root .program {
   appearance: none;
   border: 1px solid var(--line);
   background: #fff;
@@ -422,18 +430,18 @@
   overflow: hidden;
   color: inherit;
 }
-.academias-root .program::before {
+.sim-root .program::before {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
   opacity: 0.9;
 }
-.academias-root .program:hover {
+.sim-root .program:hover {
   transform: translateY(-3px);
   box-shadow: 0 13px 28px rgba(18, 63, 102, 0.1);
 }
-.academias-root .program .icon {
+.sim-root .program .icon {
   width: 46px;
   height: 46px;
   border-radius: 16px;
@@ -443,7 +451,7 @@
   position: relative;
   z-index: 1;
 }
-.academias-root .program .icon svg {
+.sim-root .program .icon svg {
   width: 22px;
   height: 22px;
   stroke: currentColor;
@@ -452,7 +460,7 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.academias-root .program strong {
+.sim-root .program strong {
   display: block;
   font-size: 16px;
   line-height: 1.12;
@@ -460,7 +468,7 @@
   position: relative;
   z-index: 1;
 }
-.academias-root .program small {
+.sim-root .program small {
   display: block;
   color: var(--muted);
   line-height: 1.35;
@@ -468,7 +476,7 @@
   position: relative;
   z-index: 1;
 }
-.academias-root .program .check {
+.sim-root .program .check {
   position: absolute;
   right: 12px;
   top: 12px;
@@ -481,97 +489,97 @@
   font-size: 12px;
   font-weight: 900;
 }
-.academias-root .program.active .check {
+.sim-root .program.active .check {
   display: grid;
 }
 
-.academias-root .program[data-card='blue'] {
+.sim-root .program[data-card='blue'] {
   background: linear-gradient(160deg, #ffffff 0%, #e7f5ff 100%);
   border-color: #cfe9ff;
 }
-.academias-root .program[data-card='blue']::before {
+.sim-root .program[data-card='blue']::before {
   background:
     radial-gradient(circle at top right, rgba(112, 193, 255, 0.28), transparent 44%),
     linear-gradient(180deg, rgba(112, 193, 255, 0.1), transparent 70%);
 }
-.academias-root .program[data-card='blue'] .icon {
+.sim-root .program[data-card='blue'] .icon {
   background: #d7edff;
   color: #238bd7;
 }
-.academias-root .program[data-card='blue'] .check {
+.sim-root .program[data-card='blue'] .check {
   background: #2c97e8;
 }
-.academias-root .program[data-card='blue'].active {
+.sim-root .program[data-card='blue'].active {
   border-color: #7cc8ff;
   box-shadow: 0 0 0 3px rgba(44, 151, 232, 0.14);
 }
 
-.academias-root .program[data-card='lilac'] {
+.sim-root .program[data-card='lilac'] {
   background: linear-gradient(160deg, #ffffff 0%, #f3ebff 100%);
   border-color: #e1cffb;
 }
-.academias-root .program[data-card='lilac']::before {
+.sim-root .program[data-card='lilac']::before {
   background:
     radial-gradient(circle at top right, rgba(188, 132, 255, 0.24), transparent 44%),
     linear-gradient(180deg, rgba(188, 132, 255, 0.08), transparent 70%);
 }
-.academias-root .program[data-card='lilac'] .icon {
+.sim-root .program[data-card='lilac'] .icon {
   background: #eadcff;
   color: #9657ea;
 }
-.academias-root .program[data-card='lilac'] .check {
+.sim-root .program[data-card='lilac'] .check {
   background: #a166ef;
 }
-.academias-root .program[data-card='lilac'].active {
+.sim-root .program[data-card='lilac'].active {
   border-color: #cfb2fb;
   box-shadow: 0 0 0 3px rgba(161, 102, 239, 0.14);
 }
 
-.academias-root .program[data-card='green'] {
+.sim-root .program[data-card='green'] {
   background: linear-gradient(160deg, #ffffff 0%, #e9f8ef 100%);
   border-color: #cdebd9;
 }
-.academias-root .program[data-card='green']::before {
+.sim-root .program[data-card='green']::before {
   background:
     radial-gradient(circle at top right, rgba(79, 202, 129, 0.22), transparent 44%),
     linear-gradient(180deg, rgba(79, 202, 129, 0.08), transparent 70%);
 }
-.academias-root .program[data-card='green'] .icon {
+.sim-root .program[data-card='green'] .icon {
   background: #d8f2e2;
   color: #24a45d;
 }
-.academias-root .program[data-card='green'] .check {
+.sim-root .program[data-card='green'] .check {
   background: #28b76b;
 }
-.academias-root .program[data-card='green'].active {
+.sim-root .program[data-card='green'].active {
   border-color: #88dcac;
   box-shadow: 0 0 0 3px rgba(40, 183, 107, 0.14);
 }
 
-.academias-root .program[data-card='gold'] {
+.sim-root .program[data-card='gold'] {
   background: linear-gradient(160deg, #ffffff 0%, #fff7e8 100%);
   border-color: #f0dfb3;
 }
-.academias-root .program[data-card='gold']::before {
+.sim-root .program[data-card='gold']::before {
   background:
     radial-gradient(circle at top right, rgba(222, 170, 58, 0.22), transparent 44%),
     linear-gradient(180deg, rgba(222, 170, 58, 0.08), transparent 70%);
 }
-.academias-root .program[data-card='gold'] .icon {
+.sim-root .program[data-card='gold'] .icon {
   background: #ffefc8;
   color: #b98619;
 }
-.academias-root .program[data-card='gold'] .check {
+.sim-root .program[data-card='gold'] .check {
   background: #cf9a28;
 }
-.academias-root .program[data-card='gold'].active {
+.sim-root .program[data-card='gold'].active {
   border-color: #e2c26e;
   box-shadow: 0 0 0 3px rgba(207, 154, 40, 0.14);
 }
 
 /* --- Popover do catálogo (só na página do associado) ---------------------- */
 
-.academias-root .program-popover {
+.sim-root .program-popover {
   position: absolute;
   z-index: 30;
   top: calc(100% + 12px);
@@ -594,20 +602,20 @@
     visibility 0.22s ease;
 }
 /* Hover no mouse, foco no teclado — sem JS de posicionamento. */
-.academias-root .program-slot.has-popover:hover .program-popover,
-.academias-root .program-slot.has-popover:focus-within .program-popover {
+.sim-root .program-slot.has-popover:hover .program-popover,
+.sim-root .program-slot.has-popover:focus-within .program-popover {
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1);
 }
-.academias-root .program-popover::before {
+.sim-root .program-popover::before {
   content: '';
   position: absolute;
   inset: auto auto 100% 34px;
   border: 10px solid transparent;
   border-bottom-color: rgba(255, 255, 255, 0.97);
 }
-.academias-root .program-popover-accent {
+.sim-root .program-popover-accent {
   position: absolute;
   right: -56px;
   top: -52px;
@@ -617,12 +625,12 @@
   background: var(--accent);
   opacity: 0.18;
 }
-.academias-root .program-popover-inner {
+.sim-root .program-popover-inner {
   padding: 18px 18px 12px;
   position: relative;
   z-index: 1;
 }
-.academias-root .program-popover-kicker {
+.sim-root .program-popover-kicker {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -635,30 +643,30 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
-.academias-root .program-popover h4 {
+.sim-root .program-popover h4 {
   margin-top: 9px;
   font-size: 19px;
   line-height: 1.1;
   letter-spacing: -0.6px;
 }
-.academias-root .program-popover-doctor {
+.sim-root .program-popover-doctor {
   margin-top: 5px;
   color: var(--accent-strong);
   font-size: 12px;
   font-weight: 900;
 }
-.academias-root .program-popover-summary {
+.sim-root .program-popover-summary {
   margin-top: 6px;
   color: #5e7184;
   font-size: 12px;
   line-height: 1.42;
 }
-.academias-root .program-popover-cover {
+.sim-root .program-popover-cover {
   padding: 0 18px 16px;
   position: relative;
   z-index: 1;
 }
-.academias-root .program-popover-cover strong {
+.sim-root .program-popover-cover strong {
   display: block;
   margin-bottom: 8px;
   font-size: 11px;
@@ -666,11 +674,11 @@
   text-transform: uppercase;
   letter-spacing: 0.07em;
 }
-.academias-root .program-popover-list {
+.sim-root .program-popover-list {
   display: grid;
   gap: 7px;
 }
-.academias-root .program-popover-item {
+.sim-root .program-popover-item {
   display: flex;
   align-items: flex-start;
   gap: 7px;
@@ -682,7 +690,7 @@
   font-size: 11px;
   line-height: 1.32;
 }
-.academias-root .program-popover-item b {
+.sim-root .program-popover-item b {
   display: grid;
   place-items: center;
   flex: 0 0 18px;
@@ -694,17 +702,17 @@
   font-size: 11px;
 }
 /* Última coluna: ancora à direita para não sangrar fora da tela. */
-.academias-root .programs > .program-slot:last-child .program-popover {
+.sim-root .programs > .program-slot:last-child .program-popover {
   left: auto;
   right: 0;
 }
-.academias-root .programs > .program-slot:last-child .program-popover::before {
+.sim-root .programs > .program-slot:last-child .program-popover::before {
   inset: auto 34px 100% auto;
 }
 
 /* --- Grid de especialistas (usado nas duas páginas) ----------------------- */
 
-.academias-root .specialist-grid {
+.sim-root .specialist-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
@@ -712,7 +720,7 @@
   position: relative;
   z-index: 1;
 }
-.academias-root .specialist-card {
+.sim-root .specialist-card {
   display: flex;
   align-items: center;
   gap: 11px;
@@ -722,7 +730,7 @@
   border: 1px solid rgba(255, 255, 255, 0.98);
   min-height: 72px;
 }
-.academias-root .spec-icon {
+.sim-root .spec-icon {
   width: 36px;
   height: 36px;
   border-radius: 12px;
@@ -732,7 +740,7 @@
   color: var(--accent-strong);
   flex: 0 0 auto;
 }
-.academias-root .spec-icon svg {
+.sim-root .spec-icon svg {
   width: 19px;
   height: 19px;
   fill: none;
@@ -741,20 +749,20 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.academias-root .specialist-card strong {
+.sim-root .specialist-card strong {
   display: block;
   color: var(--navy);
   font-size: 12px;
   line-height: 1.2;
 }
-.academias-root .specialist-card small {
+.sim-root .specialist-card small {
   display: block;
   color: var(--accent-strong);
   font-size: 11px;
   font-weight: 900;
   margin-top: 4px;
 }
-.academias-root .included-row {
+.sim-root .included-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -762,7 +770,7 @@
   position: relative;
   z-index: 1;
 }
-.academias-root .included-chip {
+.sim-root .included-chip {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -774,7 +782,7 @@
   color: #426078;
   font-weight: 800;
 }
-.academias-root .included-chip b {
+.sim-root .included-chip b {
   display: grid;
   place-items: center;
   width: 18px;
@@ -789,19 +797,19 @@
    PÁGINA 1 — /academias/simulador
    ========================================================================= */
 
-.academias-root .main-grid {
+.sim-root .main-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 420px;
   gap: 22px;
   align-items: start;
 }
 
-.academias-root .cycles {
+.sim-root .cycles {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
-.academias-root .cycle {
+.sim-root .cycle {
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 20px;
@@ -812,27 +820,27 @@
   position: relative;
   color: inherit;
 }
-.academias-root .cycle.active {
+.sim-root .cycle.active {
   border-color: var(--accent-strong);
   background: var(--accent-soft);
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
-.academias-root .cycle .months {
+.sim-root .cycle .months {
   font-size: 12px;
   color: var(--brand-2);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.09em;
 }
-.academias-root .cycle strong {
+.sim-root .cycle strong {
   display: block;
   font-size: 20px;
   margin: 6px 0 5px;
 }
-.academias-root .cycle small {
+.sim-root .cycle small {
   color: var(--muted);
 }
-.academias-root .badge-best {
+.sim-root .badge-best {
   position: absolute;
   right: 12px;
   top: 12px;
@@ -846,7 +854,7 @@
   letter-spacing: 0.06em;
 }
 
-.academias-root .offer-preview {
+.sim-root .offer-preview {
   border: 1px solid var(--accent-border);
   background: linear-gradient(145deg, #fff, var(--accent-soft));
   border-radius: 24px;
@@ -854,7 +862,7 @@
   position: relative;
   overflow: hidden;
 }
-.academias-root .offer-preview::before {
+.sim-root .offer-preview::before {
   content: '';
   position: absolute;
   width: 220px;
@@ -866,7 +874,7 @@
   opacity: 0.16;
   pointer-events: none;
 }
-.academias-root .offer-preview-head {
+.sim-root .offer-preview-head {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -874,7 +882,7 @@
   position: relative;
   z-index: 1;
 }
-.academias-root .offer-preview-kicker {
+.sim-root .offer-preview-kicker {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -885,19 +893,19 @@
   letter-spacing: 0.09em;
   margin-bottom: 8px;
 }
-.academias-root .offer-preview h3 {
+.sim-root .offer-preview h3 {
   font-size: 23px;
   letter-spacing: -0.7px;
   margin-bottom: 7px;
   color: var(--navy);
 }
-.academias-root .offer-preview p {
+.sim-root .offer-preview p {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.5;
   max-width: 680px;
 }
-.academias-root .offer-price {
+.sim-root .offer-price {
   min-width: 170px;
   text-align: right;
   padding: 13px 15px;
@@ -906,7 +914,7 @@
   border: 1px solid rgba(255, 255, 255, 0.95);
   box-shadow: 0 10px 24px rgba(18, 63, 102, 0.07);
 }
-.academias-root .offer-price small {
+.sim-root .offer-price small {
   display: block;
   color: var(--muted);
   font-size: 10px;
@@ -914,33 +922,33 @@
   font-weight: 900;
   letter-spacing: 0.07em;
 }
-.academias-root .offer-price strong {
+.sim-root .offer-price strong {
   display: block;
   color: var(--accent-strong);
   font-size: 24px;
   letter-spacing: -0.8px;
   margin-top: 3px;
 }
-.academias-root .offer-price span {
+.sim-root .offer-price span {
   display: block;
   color: var(--muted);
   font-size: 11px;
   margin-top: 2px;
 }
 
-.academias-root .controls-grid {
+.sim-root .controls-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   align-items: start;
 }
-.academias-root .control-card {
+.sim-root .control-card {
   border: 1px solid var(--line);
   background: #fbfdff;
   border-radius: 22px;
   padding: 20px;
 }
-.academias-root .control-label {
+.sim-root .control-label {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -948,13 +956,13 @@
   font-weight: 900;
   margin-bottom: 15px;
 }
-.academias-root .wheel-wrap {
+.sim-root .wheel-wrap {
   display: grid;
   grid-template-columns: 50px 1fr 50px;
   gap: 12px;
   align-items: center;
 }
-.academias-root .round-btn {
+.sim-root .round-btn {
   width: 50px;
   height: 50px;
   border: 1px solid var(--line);
@@ -965,10 +973,10 @@
   color: var(--brand-2);
   cursor: pointer;
 }
-.academias-root .round-btn:active {
+.sim-root .round-btn:active {
   transform: scale(0.96);
 }
-.academias-root .wheel {
+.sim-root .wheel {
   height: 110px;
   border-radius: 20px;
   background: linear-gradient(#edf3f8, #fff 36%, #fff 64%, #edf3f8);
@@ -980,8 +988,8 @@
   align-items: center;
   justify-content: center;
 }
-.academias-root .wheel::before,
-.academias-root .wheel::after {
+.sim-root .wheel::before,
+.sim-root .wheel::after {
   content: '';
   position: absolute;
   left: 14px;
@@ -989,26 +997,26 @@
   height: 1px;
   background: #cfe3ee;
 }
-.academias-root .wheel::before {
+.sim-root .wheel::before {
   top: 34px;
 }
-.academias-root .wheel::after {
+.sim-root .wheel::after {
   bottom: 34px;
 }
-.academias-root .wheel .ghost {
+.sim-root .wheel .ghost {
   position: absolute;
   font-size: 15px;
   color: #9aa9b8;
   font-weight: 800;
   pointer-events: none;
 }
-.academias-root .wheel .ghost.top {
+.sim-root .wheel .ghost.top {
   top: 8px;
 }
-.academias-root .wheel .ghost.bottom {
+.sim-root .wheel .ghost.bottom {
   bottom: 8px;
 }
-.academias-root .wheel input {
+.sim-root .wheel input {
   width: 100%;
   border: 0;
   background: transparent;
@@ -1018,13 +1026,13 @@
   color: var(--accent-strong);
   outline: none;
 }
-.academias-root .quick-values {
+.sim-root .quick-values {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 12px;
 }
-.academias-root .quick-values button {
+.sim-root .quick-values button {
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 999px;
@@ -1034,37 +1042,37 @@
   cursor: pointer;
   color: var(--muted);
 }
-.academias-root .quick-values button:hover,
-.academias-root .quick-values button.active {
+.sim-root .quick-values button:hover,
+.sim-root .quick-values button.active {
   border-color: var(--brand);
   color: var(--brand-2);
 }
-.academias-root .sales-personal {
+.sim-root .sales-personal {
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid var(--line);
 }
-.academias-root .sales-personal-head {
+.sim-root .sales-personal-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
   margin-bottom: 9px;
 }
-.academias-root .sales-personal-head span {
+.sim-root .sales-personal-head span {
   font-size: 12px;
   font-weight: 900;
 }
-.academias-root .sales-personal-head small {
+.sim-root .sales-personal-head small {
   font-size: 10px;
   color: var(--muted);
 }
-.academias-root .personal-sales-row {
+.sim-root .personal-sales-row {
   display: flex;
   align-items: center;
   gap: 9px;
 }
-.academias-root .personal-sales-row input {
+.sim-root .personal-sales-row input {
   width: 96px;
   border: 1px solid var(--line);
   border-radius: 13px;
@@ -1073,7 +1081,7 @@
   color: var(--navy);
   outline: 0;
 }
-.academias-root .personal-sales-row button {
+.sim-root .personal-sales-row button {
   border: 1px solid var(--accent-border);
   background: var(--accent-soft);
   color: var(--accent-strong);
@@ -1084,11 +1092,11 @@
   cursor: pointer;
 }
 
-.academias-root .pricing-stack {
+.sim-root .pricing-stack {
   display: grid;
   gap: 12px;
 }
-.academias-root .cost-highlight {
+.sim-root .cost-highlight {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1098,40 +1106,40 @@
   background: var(--accent-soft);
   border: 1px solid var(--accent-border);
 }
-.academias-root .cost-highlight span {
+.sim-root .cost-highlight span {
   font-size: 12px;
   color: var(--muted);
   font-weight: 800;
 }
-.academias-root .cost-highlight strong {
+.sim-root .cost-highlight strong {
   font-size: 19px;
   color: var(--accent-strong);
   white-space: nowrap;
 }
-.academias-root .percentage-grid {
+.sim-root .percentage-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-.academias-root .percent-field {
+.sim-root .percent-field {
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 17px;
   padding: 12px;
 }
-.academias-root .percent-field label {
+.sim-root .percent-field label {
   display: block;
   color: var(--muted);
   font-size: 11px;
   font-weight: 900;
   margin-bottom: 8px;
 }
-.academias-root .percent-input {
+.sim-root .percent-input {
   display: flex;
   align-items: center;
   gap: 5px;
 }
-.academias-root .percent-input input {
+.sim-root .percent-input input {
   width: 100%;
   border: 0;
   outline: 0;
@@ -1140,17 +1148,17 @@
   color: var(--navy);
   background: transparent;
 }
-.academias-root .percent-input span {
+.sim-root .percent-input span {
   font-weight: 900;
   color: var(--accent-strong);
 }
-.academias-root .quick-percent {
+.sim-root .quick-percent {
   display: flex;
   gap: 7px;
   flex-wrap: wrap;
   margin-top: 8px;
 }
-.academias-root .quick-percent button {
+.sim-root .quick-percent button {
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 999px;
@@ -1160,19 +1168,19 @@
   color: var(--muted);
   cursor: pointer;
 }
-.academias-root .quick-percent button:hover,
-.academias-root .quick-percent button.active {
+.sim-root .quick-percent button:hover,
+.sim-root .quick-percent button.active {
   border-color: var(--accent-strong);
   color: var(--accent-strong);
   background: var(--accent-soft);
 }
-.academias-root .final-price-box {
+.sim-root .final-price-box {
   border: 1px solid var(--accent-border);
   background: linear-gradient(145deg, #fff, var(--accent-soft));
   border-radius: 20px;
   padding: 14px;
 }
-.academias-root .final-price-box small {
+.sim-root .final-price-box small {
   display: block;
   color: var(--muted);
   font-size: 10px;
@@ -1180,7 +1188,7 @@
   font-weight: 900;
   letter-spacing: 0.07em;
 }
-.academias-root .price-box {
+.sim-root .price-box {
   display: flex;
   align-items: center;
   border: 1px solid #cfe3ee;
@@ -1189,12 +1197,12 @@
   padding: 8px 13px;
   margin-top: 6px;
 }
-.academias-root .price-box span {
+.sim-root .price-box span {
   font-size: 19px;
   font-weight: 900;
   color: var(--brand-2);
 }
-.academias-root .price-box input {
+.sim-root .price-box input {
   border: 0;
   outline: 0;
   width: 100%;
@@ -1204,7 +1212,7 @@
   padding: 7px 8px;
   background: transparent;
 }
-.academias-root .price-reset {
+.sim-root .price-reset {
   margin-top: 8px;
   border: 0;
   background: transparent;
@@ -1214,18 +1222,18 @@
   cursor: pointer;
   padding: 2px 0;
 }
-.academias-root .info-strip {
+.sim-root .info-strip {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   margin-top: 15px;
 }
-.academias-root .info-strip div {
+.sim-root .info-strip div {
   border-radius: 16px;
   background: #f0f6f9;
   padding: 11px;
 }
-.academias-root .info-strip small {
+.sim-root .info-strip small {
   display: block;
   color: var(--muted);
   font-size: 10px;
@@ -1233,7 +1241,7 @@
   font-weight: 900;
   letter-spacing: 0.06em;
 }
-.academias-root .info-strip strong {
+.sim-root .info-strip strong {
   display: block;
   margin-top: 4px;
   font-size: 13px;
@@ -1241,7 +1249,7 @@
 
 /* Painel de resultado (coluna direita) */
 
-.academias-root .result-panel {
+.sim-root .result-panel {
   position: sticky;
   top: 22px;
   background: linear-gradient(150deg, #102a43 0%, #123e62 67%, #086da8 120%);
@@ -1251,7 +1259,7 @@
   box-shadow: 0 24px 50px rgba(16, 42, 67, 0.25);
   overflow: hidden;
 }
-.academias-root .result-panel::before {
+.sim-root .result-panel::before {
   content: '';
   position: absolute;
   width: 260px;
@@ -1261,47 +1269,47 @@
   right: -100px;
   top: -110px;
 }
-.academias-root .result-top {
+.sim-root .result-top {
   position: relative;
   z-index: 1;
 }
-.academias-root .result-kicker {
+.sim-root .result-kicker {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.13em;
   color: #86ddf6;
   font-weight: 900;
 }
-.academias-root .result-title {
+.sim-root .result-title {
   font-size: 24px;
   font-weight: 900;
   margin-top: 6px;
   letter-spacing: -0.7px;
 }
-.academias-root .result-sub {
+.sim-root .result-sub {
   color: #cfe0ea;
   font-size: 13px;
   margin-top: 5px;
 }
-.academias-root .main-revenue {
+.sim-root .main-revenue {
   margin: 24px 0 18px;
   padding: 20px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.09);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
-.academias-root .revenue-head {
+.sim-root .revenue-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
-.academias-root .main-revenue small {
+.sim-root .main-revenue small {
   display: block;
   color: #cbe3ef;
   font-weight: 700;
 }
-.academias-root .main-revenue strong {
+.sim-root .main-revenue strong {
   display: block;
   font-size: 42px;
   line-height: 1;
@@ -1309,13 +1317,13 @@
   letter-spacing: -2px;
   color: var(--accent);
 }
-.academias-root .main-revenue > span {
+.sim-root .main-revenue > span {
   display: block;
   font-size: 12px;
   color: #93b9cb;
   margin-top: 8px;
 }
-.academias-root .result-live {
+.sim-root .result-live {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1329,7 +1337,7 @@
   letter-spacing: 0.05em;
   white-space: nowrap;
 }
-.academias-root .result-live::before {
+.sim-root .result-live::before {
   content: '';
   width: 7px;
   height: 7px;
@@ -1337,11 +1345,11 @@
   background: #4be1ae;
   box-shadow: 0 0 0 5px rgba(75, 225, 174, 0.11);
 }
-.academias-root .result-list {
+.sim-root .result-list {
   display: grid;
   gap: 11px;
 }
-.academias-root .result-item {
+.sim-root .result-item {
   display: flex;
   justify-content: space-between;
   gap: 18px;
@@ -1349,60 +1357,60 @@
   padding: 12px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-.academias-root .result-item:last-child {
+.sim-root .result-item:last-child {
   border-bottom: 0;
 }
-.academias-root .result-item span {
+.sim-root .result-item span {
   font-size: 13px;
   color: #cae0ea;
 }
-.academias-root .result-item strong {
+.sim-root .result-item strong {
   font-size: 16px;
   text-align: right;
   color: var(--accent);
 }
-.academias-root .profit-card {
+.sim-root .profit-card {
   margin-top: 16px;
   padding: 19px;
   border-radius: 20px;
   background: linear-gradient(135deg, #23b88a, #179c76);
   box-shadow: 0 15px 30px rgba(12, 103, 79, 0.23);
 }
-.academias-root .profit-card small {
+.sim-root .profit-card small {
   font-size: 12px;
   font-weight: 800;
   opacity: 0.88;
 }
-.academias-root .profit-card strong {
+.sim-root .profit-card strong {
   display: block;
   font-size: 35px;
   letter-spacing: -1.4px;
   margin: 5px 0;
   color: #fff;
 }
-.academias-root .profit-row {
+.sim-root .profit-row {
   display: flex;
   justify-content: space-between;
   font-size: 12px;
   font-weight: 800;
   opacity: 0.95;
 }
-.academias-root .profit-row .roleta {
+.sim-root .profit-row .roleta {
   color: #fff;
 }
-.academias-root .distribution-card {
+.sim-root .distribution-card {
   margin-top: 15px;
   padding: 15px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.075);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
-.academias-root .distribution-card h4 {
+.sim-root .distribution-card h4 {
   margin-bottom: 11px;
   font-size: 13px;
   color: #fff;
 }
-.academias-root .distribution-row {
+.sim-root .distribution-row {
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -1410,25 +1418,25 @@
   font-size: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-.academias-root .distribution-row:last-child {
+.sim-root .distribution-row:last-child {
   border-bottom: 0;
 }
-.academias-root .distribution-row span {
+.sim-root .distribution-row span {
   color: #cbe0ea;
 }
-.academias-root .distribution-row strong {
+.sim-root .distribution-row strong {
   color: #fff;
 }
-.academias-root .distribution-row.personal strong {
+.sim-root .distribution-row.personal strong {
   color: #d8c1ff;
 }
-.academias-root .distribution-row.academy strong {
+.sim-root .distribution-row.academy strong {
   color: #ffdc79;
 }
-.academias-root .bar-wrap {
+.sim-root .bar-wrap {
   margin-top: 16px;
 }
-.academias-root .bar-labels {
+.sim-root .bar-labels {
   display: flex;
   justify-content: space-between;
   color: #cae0ea;
@@ -1436,23 +1444,23 @@
   font-weight: 700;
   margin-bottom: 7px;
 }
-.academias-root .mixbar {
+.sim-root .mixbar {
   display: flex;
   height: 12px;
   border-radius: 999px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.12);
 }
-.academias-root .mixbar .cost {
+.sim-root .mixbar .cost {
   background: #77a6bf;
 }
-.academias-root .mixbar .personal {
+.sim-root .mixbar .personal {
   background: #b48af0;
 }
-.academias-root .mixbar .profit {
+.sim-root .mixbar .profit {
   background: var(--yellow);
 }
-.academias-root .cta {
+.sim-root .cta {
   display: block;
   width: 100%;
   border: 0;
@@ -1466,20 +1474,20 @@
   box-shadow: 0 12px 22px rgba(0, 0, 0, 0.12);
   text-align: center;
 }
-.academias-root .cta:hover {
+.sim-root .cta:hover {
   transform: translateY(-2px);
 }
-.academias-root .cta.secondary {
+.sim-root .cta.secondary {
   margin-top: 10px;
   background: transparent;
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.28);
   box-shadow: none;
 }
-.academias-root .cta.secondary:hover {
+.sim-root .cta.secondary:hover {
   background: rgba(255, 255, 255, 0.08);
 }
-.academias-root .copy-feedback {
+.sim-root .copy-feedback {
   min-height: 16px;
   margin-top: 8px;
   text-align: center;
@@ -1487,7 +1495,7 @@
   font-size: 10px;
   font-weight: 800;
 }
-.academias-root .copy-fallback {
+.sim-root .copy-fallback {
   width: 100%;
   margin-top: 8px;
   border-radius: 12px;
@@ -1497,7 +1505,7 @@
   padding: 9px 11px;
   font-size: 11px;
 }
-.academias-root .disclaimer {
+.sim-root .disclaimer {
   margin-top: 12px;
   color: #a8c4d1;
   font-size: 10px;
@@ -1507,14 +1515,14 @@
 
 /* DRE recolhível */
 
-.academias-root .dre {
+.sim-root .dre {
   margin-top: 22px;
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 22px;
   padding: 4px 20px;
 }
-.academias-root .dre > summary {
+.sim-root .dre > summary {
   cursor: pointer;
   list-style: none;
   padding: 16px 0;
@@ -1524,33 +1532,33 @@
   align-items: center;
   gap: 9px;
 }
-.academias-root .dre > summary::-webkit-details-marker {
+.sim-root .dre > summary::-webkit-details-marker {
   display: none;
 }
-.academias-root .dre > summary::before {
+.sim-root .dre > summary::before {
   content: '▸';
   transition: transform 0.2s ease;
   display: inline-block;
 }
-.academias-root .dre[open] > summary::before {
+.sim-root .dre[open] > summary::before {
   transform: rotate(90deg);
 }
-.academias-root .dre-body {
+.sim-root .dre-body {
   padding-bottom: 18px;
 }
-.academias-root .dre-fields {
+.sim-root .dre-fields {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin-bottom: 16px;
 }
-.academias-root .dre-field {
+.sim-root .dre-field {
   border: 1px solid var(--line);
   border-radius: 15px;
   padding: 10px 12px;
   background: #fbfdff;
 }
-.academias-root .dre-field label {
+.sim-root .dre-field label {
   display: block;
   color: var(--muted);
   font-size: 10px;
@@ -1559,7 +1567,7 @@
   letter-spacing: 0.05em;
   margin-bottom: 5px;
 }
-.academias-root .dre-field input {
+.sim-root .dre-field input {
   width: 100%;
   border: 0;
   outline: 0;
@@ -1568,7 +1576,7 @@
   font-weight: 900;
   color: var(--navy);
 }
-.academias-root .dre-line {
+.sim-root .dre-line {
   display: flex;
   justify-content: space-between;
   gap: 14px;
@@ -1576,61 +1584,61 @@
   font-size: 13px;
   border-bottom: 1px solid var(--line);
 }
-.academias-root .dre-line:last-child {
+.sim-root .dre-line:last-child {
   border-bottom: 0;
 }
-.academias-root .dre-line span {
+.sim-root .dre-line span {
   color: var(--muted);
 }
-.academias-root .dre-line strong {
+.sim-root .dre-line strong {
   font-variant-numeric: tabular-nums;
 }
-.academias-root .dre-line.sub span,
-.academias-root .dre-line.sub strong {
+.sim-root .dre-line.sub span,
+.sim-root .dre-line.sub strong {
   font-size: 12px;
   color: #8798a8;
   font-weight: 700;
   padding-left: 14px;
 }
-.academias-root .dre-line.total {
+.sim-root .dre-line.total {
   margin-top: 6px;
   padding-top: 13px;
   border-top: 2px solid var(--line);
   border-bottom: 0;
   font-size: 15px;
 }
-.academias-root .dre-line.total strong {
+.sim-root .dre-line.total strong {
   color: var(--green);
   font-size: 19px;
 }
-.academias-root .dre-line.total.negative strong {
+.sim-root .dre-line.total.negative strong {
   color: #d64545;
 }
-.academias-root .dre-note {
+.sim-root .dre-note {
   margin-top: 12px;
   font-size: 11px;
   color: var(--muted);
   line-height: 1.5;
 }
-.academias-root .implantation {
+.sim-root .implantation {
   margin-top: 16px;
   padding: 14px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: #fbfdff;
 }
-.academias-root .implantation-head {
+.sim-root .implantation-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 14px;
   flex-wrap: wrap;
 }
-.academias-root .implantation-head strong {
+.sim-root .implantation-head strong {
   display: block;
   font-size: 13px;
 }
-.academias-root .implantation-head small {
+.sim-root .implantation-head small {
   display: block;
   margin-top: 3px;
   font-size: 11px;
@@ -1638,7 +1646,7 @@
   line-height: 1.45;
   max-width: 420px;
 }
-.academias-root .seg {
+.sim-root .seg {
   display: inline-flex;
   flex: 0 0 auto;
   border: 1px solid var(--line);
@@ -1647,7 +1655,7 @@
   padding: 3px;
   gap: 2px;
 }
-.academias-root .seg button {
+.sim-root .seg button {
   border: 0;
   background: transparent;
   border-radius: 999px;
@@ -1657,80 +1665,80 @@
   color: var(--muted);
   cursor: pointer;
 }
-.academias-root .seg button.on {
+.sim-root .seg button.on {
   background: var(--accent-soft);
   color: var(--accent-strong);
 }
-.academias-root .implantation .dre-line {
+.sim-root .implantation .dre-line {
   border-bottom: 0;
 }
-.academias-root .implantation-value,
-.academias-root .implantation-payback {
+.sim-root .implantation-value,
+.sim-root .implantation-payback {
   margin-top: 10px;
 }
-.academias-root .panel-lead {
+.sim-root .panel-lead {
   margin-top: 6px;
   color: var(--muted);
   font-size: 14px;
 }
-.academias-root .base-members {
+.sim-root .base-members {
   margin-top: 14px;
 }
 
 /* Barra fixa mobile */
 
-.academias-root .mobile-result-bar {
+.sim-root .mobile-result-bar {
   display: none;
 }
 
 /* Blocos abaixo da dobra */
 
-.academias-root .below {
+.sim-root .below {
   margin-top: 22px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 22px;
 }
-.academias-root .scenario-grid {
+.sim-root .scenario-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-top: 16px;
 }
-.academias-root .scenario {
+.sim-root .scenario {
   border: 1px solid var(--line);
   border-radius: 18px;
   padding: 16px;
   background: #fff;
 }
-.academias-root .scenario small {
+.sim-root .scenario small {
   display: block;
   color: var(--muted);
   font-weight: 800;
 }
-.academias-root .scenario strong {
+.sim-root .scenario strong {
   display: block;
   font-size: 21px;
   margin: 6px 0 3px;
 }
-.academias-root .scenario span {
+.sim-root .scenario span {
   font-size: 12px;
   color: var(--brand-2);
   font-weight: 900;
 }
-.academias-root .journey {
+.sim-root .journey {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   margin-top: 16px;
 }
-.academias-root .journey div {
+.sim-root .journey div {
   padding: 15px;
   border-radius: 18px;
   background: #f3f8fb;
   border: 1px solid var(--line);
 }
-.academias-root .journey b {
+.sim-root .journey b {
   display: grid;
   place-items: center;
   width: 28px;
@@ -1740,11 +1748,11 @@
   color: var(--brand-2);
   margin-bottom: 10px;
 }
-.academias-root .journey strong {
+.sim-root .journey strong {
   display: block;
   font-size: 13px;
 }
-.academias-root .journey small {
+.sim-root .journey small {
   color: var(--muted);
   font-size: 11px;
 }
@@ -1753,49 +1761,49 @@
    PÁGINA 2 — /academias/programas
    ========================================================================= */
 
-.academias-root.programas {
+.sim-root.programas {
   padding-bottom: 96px;
 }
-.academias-root .catalog-section {
+.sim-root .catalog-section {
   margin-top: 20px;
 }
-.academias-root .section-title {
+.sim-root .section-title {
   display: flex;
   justify-content: space-between;
   align-items: end;
   gap: 14px;
   margin-bottom: 12px;
 }
-.academias-root .section-title h2 {
+.sim-root .section-title h2 {
   font-size: 24px;
   letter-spacing: -0.7px;
 }
-.academias-root .section-title p {
+.sim-root .section-title p {
   margin-top: 6px;
   color: var(--muted);
   font-size: 14px;
   max-width: 720px;
 }
 
-.academias-root .hero-price {
+.sim-root .hero-price {
   display: flex;
   align-items: end;
   gap: 12px;
   margin-top: 22px;
   flex-wrap: wrap;
 }
-.academias-root .hero-price strong {
+.sim-root .hero-price strong {
   font-size: 34px;
   letter-spacing: -1.3px;
   color: var(--accent-strong);
 }
-.academias-root .hero-price span {
+.sim-root .hero-price span {
   font-size: 13px;
   color: var(--muted);
   padding-bottom: 5px;
 }
 
-.academias-root .main-card {
+.sim-root .main-card {
   margin-top: 18px;
   background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.95);
@@ -1803,27 +1811,27 @@
   box-shadow: var(--shadow);
   overflow: hidden;
 }
-.academias-root .main-head {
+.sim-root .main-head {
   padding: 22px 24px;
   background: linear-gradient(150deg, #fff, var(--accent-soft));
   border-bottom: 1px solid var(--line);
 }
-.academias-root .main-head-top {
+.sim-root .main-head-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
 }
-.academias-root .main-head h2 {
+.sim-root .main-head h2 {
   color: var(--navy);
 }
-.academias-root .main-head > .main-head-top p {
+.sim-root .main-head > .main-head-top p {
   margin-top: 6px;
   color: var(--muted);
   font-size: 14px;
   max-width: 640px;
 }
-.academias-root .live-box {
+.sim-root .live-box {
   min-width: 260px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.85);
@@ -1832,7 +1840,7 @@
   text-align: right;
   box-shadow: 0 8px 22px rgba(18, 63, 102, 0.05);
 }
-.academias-root .live-box small {
+.sim-root .live-box small {
   display: block;
   color: var(--muted);
   font-size: 10px;
@@ -1840,30 +1848,30 @@
   font-weight: 900;
   letter-spacing: 0.07em;
 }
-.academias-root .live-box strong {
+.sim-root .live-box strong {
   display: block;
   font-size: 30px;
   letter-spacing: -1.1px;
   color: var(--accent-strong);
   margin-top: 4px;
 }
-.academias-root .live-box > span {
+.sim-root .live-box > span {
   display: block;
   font-size: 12px;
   color: var(--muted);
   margin-top: 3px;
 }
-.academias-root .compare-note {
+.sim-root .compare-note {
   margin-top: 9px;
   padding-top: 9px;
   border-top: 1px solid var(--line);
   font-size: 11px;
   color: var(--muted);
 }
-.academias-root .compare-note b {
+.sim-root .compare-note b {
   color: var(--navy);
 }
-.academias-root .owner-flag {
+.sim-root .owner-flag {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1877,13 +1885,13 @@
   font-weight: 900;
 }
 
-.academias-root .cycle-tabs {
+.sim-root .cycle-tabs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   margin-top: 20px;
 }
-.academias-root .cycle-tab {
+.sim-root .cycle-tab {
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 17px;
@@ -1893,12 +1901,12 @@
   color: inherit;
   transition: 0.2s;
 }
-.academias-root .cycle-tab.active {
+.sim-root .cycle-tab.active {
   border-color: var(--accent-strong);
   background: var(--accent-soft);
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
-.academias-root .cycle-tab small {
+.sim-root .cycle-tab small {
   display: block;
   font-size: 10px;
   color: var(--brand-2);
@@ -1906,53 +1914,53 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
-.academias-root .cycle-tab strong {
+.sim-root .cycle-tab strong {
   display: block;
   font-size: 16px;
   margin-top: 4px;
 }
-.academias-root .cycle-tab span {
+.sim-root .cycle-tab span {
   display: block;
   font-size: 12px;
   color: var(--muted);
   margin-top: 2px;
 }
 
-.academias-root .main-body {
+.sim-root .main-body {
   padding: 22px 24px 26px;
 }
-.academias-root .builder-grid {
+.sim-root .builder-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
   gap: 18px;
   align-items: start;
 }
-.academias-root .body-title {
+.sim-root .body-title {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
 }
-.academias-root .body-title h3 {
+.sim-root .body-title h3 {
   font-size: 19px;
   letter-spacing: -0.5px;
 }
-.academias-root .body-title span {
+.sim-root .body-title span {
   font-size: 12px;
   font-weight: 900;
   color: var(--accent-strong);
 }
-.academias-root .helper {
+.sim-root .helper {
   margin: 6px 0 14px;
   color: var(--muted);
   font-size: 13px;
 }
-.academias-root .options {
+.sim-root .options {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
-.academias-root .option {
+.sim-root .option {
   border: 1px solid var(--line);
   border-radius: 18px;
   padding: 14px;
@@ -1966,32 +1974,32 @@
   gap: 11px;
   align-items: flex-start;
 }
-.academias-root .option:hover {
+.sim-root .option:hover {
   border-color: var(--accent-border);
 }
-.academias-root .option.active {
+.sim-root .option.active {
   border-color: var(--accent-strong);
   background: var(--accent-soft);
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
-.academias-root .option strong {
+.sim-root .option strong {
   display: block;
   font-size: 13px;
   color: var(--navy);
 }
-.academias-root .option small {
+.sim-root .option small {
   display: block;
   color: var(--muted);
   font-size: 11px;
   margin-top: 3px;
 }
-.academias-root .option b {
+.sim-root .option b {
   display: block;
   margin-top: 6px;
   font-size: 14px;
   color: var(--accent-strong);
 }
-.academias-root .option .tick {
+.sim-root .option .tick {
   position: absolute;
   right: 11px;
   top: 11px;
@@ -2006,13 +2014,13 @@
   color: transparent;
   background: #fff;
 }
-.academias-root .option.active .tick {
+.sim-root .option.active .tick {
   background: var(--accent-strong);
   border-color: var(--accent-strong);
   color: #fff;
 }
 
-.academias-root .builder-side {
+.sim-root .builder-side {
   border: 1px solid var(--line);
   background: #fbfdff;
   border-radius: 22px;
@@ -2020,35 +2028,35 @@
   position: sticky;
   top: 18px;
 }
-.academias-root .side-kicker {
+.sim-root .side-kicker {
   font-size: 10px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.09em;
   color: var(--accent-strong);
 }
-.academias-root .side-value {
+.sim-root .side-value {
   margin-top: 12px;
 }
-.academias-root .side-value small {
+.sim-root .side-value small {
   display: block;
   color: var(--muted);
   font-size: 11px;
   font-weight: 800;
 }
-.academias-root .side-value strong {
+.sim-root .side-value strong {
   display: block;
   font-size: 30px;
   letter-spacing: -1.1px;
   color: var(--navy);
   margin-top: 4px;
 }
-.academias-root .side-total {
+.sim-root .side-total {
   font-size: 12px;
   color: var(--muted);
   margin-top: 4px;
 }
-.academias-root .mini-tag {
+.sim-root .mini-tag {
   display: inline-block;
   margin-top: 12px;
   padding: 5px 9px;
@@ -2059,12 +2067,12 @@
   font-size: 10px;
   font-weight: 900;
 }
-.academias-root .selected-list {
+.sim-root .selected-list {
   margin-top: 12px;
   display: grid;
   gap: 6px;
 }
-.academias-root .selected-list div {
+.sim-root .selected-list div {
   display: flex;
   justify-content: space-between;
   gap: 10px;
@@ -2072,22 +2080,22 @@
   padding: 6px 0;
   border-bottom: 1px dashed var(--line);
 }
-.academias-root .selected-list div:last-child {
+.sim-root .selected-list div:last-child {
   border-bottom: 0;
 }
-.academias-root .selected-list span {
+.sim-root .selected-list span {
   color: var(--muted);
 }
-.academias-root .selected-list strong {
+.sim-root .selected-list strong {
   font-variant-numeric: tabular-nums;
 }
-.academias-root .summary-note {
+.sim-root .summary-note {
   margin-top: 12px;
   font-size: 11px;
   color: var(--muted);
   line-height: 1.5;
 }
-.academias-root .select-offer {
+.sim-root .select-offer {
   margin-top: 14px;
   width: 100%;
   border: 0;
@@ -2099,46 +2107,46 @@
   cursor: pointer;
   box-shadow: 0 12px 24px rgba(10, 109, 180, 0.16);
 }
-.academias-root .select-offer.ghost {
+.sim-root .select-offer.ghost {
   background: transparent;
   color: var(--accent-strong);
   border: 1px solid var(--accent-border);
   box-shadow: none;
 }
 
-.academias-root .bundle-card {
+.sim-root .bundle-card {
   margin-top: 22px;
   border: 1px solid var(--accent-border);
   background: linear-gradient(145deg, #fff, var(--accent-soft));
   border-radius: 24px;
   padding: 20px;
 }
-.academias-root .bundle-top {
+.sim-root .bundle-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
 }
-.academias-root .bundle-kicker {
+.sim-root .bundle-kicker {
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.09em;
   color: var(--accent-strong);
 }
-.academias-root .bundle-title {
+.sim-root .bundle-title {
   font-size: 21px;
   letter-spacing: -0.6px;
   margin-top: 6px;
   color: var(--navy);
 }
-.academias-root .bundle-desc {
+.sim-root .bundle-desc {
   margin-top: 6px;
   color: var(--muted);
   font-size: 13px;
   max-width: 560px;
 }
-.academias-root .bundle-price {
+.sim-root .bundle-price {
   min-width: 190px;
   text-align: right;
   padding: 13px 15px;
@@ -2146,7 +2154,7 @@
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.98);
 }
-.academias-root .bundle-price small {
+.sim-root .bundle-price small {
   display: block;
   color: var(--muted);
   font-size: 10px;
@@ -2154,20 +2162,20 @@
   font-weight: 900;
   letter-spacing: 0.07em;
 }
-.academias-root .bundle-price strong {
+.sim-root .bundle-price strong {
   display: block;
   font-size: 26px;
   letter-spacing: -0.9px;
   color: var(--accent-strong);
   margin-top: 3px;
 }
-.academias-root .bundle-price span {
+.sim-root .bundle-price span {
   display: block;
   font-size: 11px;
   color: var(--muted);
   margin-top: 2px;
 }
-.academias-root .bundle-actions {
+.sim-root .bundle-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2175,7 +2183,7 @@
   margin-top: 18px;
   flex-wrap: wrap;
 }
-.academias-root .bundle-save {
+.sim-root .bundle-save {
   font-size: 12px;
   font-weight: 900;
   color: #09845f;
@@ -2183,7 +2191,7 @@
   border-radius: 999px;
   padding: 8px 12px;
 }
-.academias-root .bundle-btn {
+.sim-root .bundle-btn {
   border: 0;
   border-radius: 16px;
   padding: 14px 18px;
@@ -2194,34 +2202,34 @@
   box-shadow: 0 12px 24px rgba(16, 140, 102, 0.18);
 }
 
-.academias-root .extras-card {
+.sim-root .extras-card {
   margin-top: 18px;
   border-top: 1px solid var(--accent-border);
   padding-top: 16px;
 }
-.academias-root .extras-head {
+.sim-root .extras-head {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 12px;
 }
-.academias-root .extras-head h4 {
+.sim-root .extras-head h4 {
   font-size: 15px;
   color: var(--navy);
 }
-.academias-root .extras-head p {
+.sim-root .extras-head p {
   margin-top: 4px;
   color: var(--muted);
   font-size: 12px;
   max-width: 520px;
 }
-.academias-root .extras-grid {
+.sim-root .extras-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
-.academias-root .extra {
+.sim-root .extra {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2231,23 +2239,23 @@
   border-radius: 16px;
   padding: 11px 13px;
 }
-.academias-root .extra strong {
+.sim-root .extra strong {
   display: block;
   font-size: 13px;
   color: var(--navy);
 }
-.academias-root .extra small {
+.sim-root .extra small {
   display: block;
   font-size: 11px;
   color: var(--muted);
 }
-.academias-root .stepper {
+.sim-root .stepper {
   display: flex;
   align-items: center;
   gap: 8px;
   flex: 0 0 auto;
 }
-.academias-root .stepper button {
+.sim-root .stepper button {
   width: 30px;
   height: 30px;
   border-radius: 10px;
@@ -2257,30 +2265,30 @@
   font-weight: 900;
   cursor: pointer;
 }
-.academias-root .stepper button:disabled {
+.sim-root .stepper button:disabled {
   opacity: 0.4;
   cursor: default;
 }
-.academias-root .stepper output {
+.sim-root .stepper output {
   min-width: 20px;
   text-align: center;
   font-weight: 900;
   font-variant-numeric: tabular-nums;
 }
 
-.academias-root .how {
+.sim-root .how {
   margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
-.academias-root .how div {
+.sim-root .how div {
   padding: 15px;
   border-radius: 18px;
   background: #f3f8fb;
   border: 1px solid var(--line);
 }
-.academias-root .how b {
+.sim-root .how b {
   display: grid;
   place-items: center;
   width: 28px;
@@ -2290,18 +2298,18 @@
   color: var(--brand-2);
   margin-bottom: 10px;
 }
-.academias-root .how strong {
+.sim-root .how strong {
   display: block;
   font-size: 13px;
 }
-.academias-root .how small {
+.sim-root .how small {
   display: block;
   margin-top: 3px;
   color: var(--muted);
   font-size: 11px;
   line-height: 1.4;
 }
-.academias-root .notice {
+.sim-root .notice {
   margin-top: 16px;
   padding: 13px 15px;
   border-radius: 16px;
@@ -2312,7 +2320,7 @@
   line-height: 1.5;
 }
 
-.academias-root .sticky-cta {
+.sim-root .sticky-cta {
   position: fixed;
   left: 0;
   right: 0;
@@ -2324,7 +2332,7 @@
   padding: 12px 16px;
   box-shadow: 0 -10px 30px rgba(16, 42, 67, 0.08);
 }
-.academias-root .sticky-inner {
+.sim-root .sticky-inner {
   max-width: 1140px;
   margin: 0 auto;
   display: flex;
@@ -2332,18 +2340,18 @@
   justify-content: space-between;
   gap: 16px;
 }
-.academias-root .sticky-price strong {
+.sim-root .sticky-price strong {
   display: block;
   font-size: 22px;
   letter-spacing: -0.8px;
   color: var(--navy);
 }
-.academias-root .sticky-price small {
+.sim-root .sticky-price small {
   display: block;
   font-size: 11px;
   color: var(--muted);
 }
-.academias-root .sticky-cta .join {
+.sim-root .sticky-cta .join {
   flex: 0 0 auto;
   border: 0;
   border-radius: 16px;
@@ -2359,7 +2367,7 @@
    Camada explicativa (capítulos + vídeo) — usada pelas DUAS páginas
    ========================================================================= */
 
-.academias-root .explainer {
+.sim-root .explainer {
   background: rgba(255, 255, 255, 0.93);
   border: 1px solid rgba(255, 255, 255, 0.95);
   box-shadow: var(--shadow);
@@ -2370,17 +2378,17 @@
      encoste no topo da viewport. */
   scroll-margin-top: 18px;
 }
-.academias-root .explainer-head {
+.sim-root .explainer-head {
   margin-bottom: 20px;
 }
-.academias-root .explainer-head-top {
+.sim-root .explainer-head-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
 }
 /* Alternador entre as variantes com e sem vídeo (páginas de teste). */
-.academias-root .variant-switch {
+.sim-root .variant-switch {
   flex: 0 0 auto;
   padding: 9px 14px;
   border: 1px dashed var(--accent-border);
@@ -2391,29 +2399,29 @@
   font-weight: 900;
   transition: 0.2s ease;
 }
-.academias-root .variant-switch:hover {
+.sim-root .variant-switch:hover {
   border-style: solid;
   background: var(--accent-soft);
 }
-.academias-root .explainer-head .panel-lead {
+.sim-root .explainer-head .panel-lead {
   margin-top: 6px;
   max-width: 720px;
   color: var(--muted);
   font-size: 14px;
 }
 
-.academias-root .explainer-grid {
+.sim-root .explainer-grid {
   display: grid;
   grid-template-columns: 300px minmax(0, 1fr);
   gap: 20px;
   align-items: start;
 }
 
-.academias-root .chapter-list {
+.sim-root .chapter-list {
   display: grid;
   gap: 8px;
 }
-.academias-root .chapter-item {
+.sim-root .chapter-item {
   display: flex;
   align-items: flex-start;
   gap: 11px;
@@ -2426,31 +2434,31 @@
   cursor: pointer;
   transition: 0.2s ease;
 }
-.academias-root .chapter-item:hover {
+.sim-root .chapter-item:hover {
   border-color: var(--accent-border);
 }
-.academias-root .chapter-item.active {
+.sim-root .chapter-item.active {
   border-color: var(--accent-strong);
   background: var(--accent-soft);
   box-shadow: 0 10px 24px rgba(18, 63, 102, 0.08);
 }
-.academias-root .chapter-item .step-dot {
+.sim-root .chapter-item .step-dot {
   flex: 0 0 26px;
   font-size: 13px;
   font-weight: 900;
   color: var(--brand-2);
 }
-.academias-root .chapter-item.active .step-dot {
+.sim-root .chapter-item.active .step-dot {
   background: var(--accent-strong);
   color: #fff;
 }
-.academias-root .chapter-item strong {
+.sim-root .chapter-item strong {
   display: block;
   font-size: 14px;
   line-height: 1.25;
   color: var(--navy);
 }
-.academias-root .chapter-item small {
+.sim-root .chapter-item small {
   display: block;
   margin-top: 3px;
   font-size: 11px;
@@ -2458,33 +2466,33 @@
   color: var(--muted);
 }
 
-.academias-root .chapter-body {
+.sim-root .chapter-body {
   min-width: 0;
 }
-.academias-root .chapter-body:focus {
+.sim-root .chapter-body:focus {
   outline: none;
 }
-.academias-root .chapter-body h3 {
+.sim-root .chapter-body h3 {
   margin-top: 18px;
   font-size: 21px;
   letter-spacing: -0.6px;
   color: var(--navy);
 }
-.academias-root .chapter-body > p {
+.sim-root .chapter-body > p {
   margin-top: 8px;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.5;
 }
 
-.academias-root .chapter-bullets {
+.sim-root .chapter-bullets {
   list-style: none;
   margin: 16px 0 0;
   padding: 0;
   display: grid;
   gap: 8px;
 }
-.academias-root .chapter-bullets li {
+.sim-root .chapter-bullets li {
   display: flex;
   align-items: flex-start;
   gap: 9px;
@@ -2496,7 +2504,7 @@
   font-size: 13px;
   line-height: 1.4;
 }
-.academias-root .chapter-bullets b {
+.sim-root .chapter-bullets b {
   display: grid;
   place-items: center;
   flex: 0 0 18px;
@@ -2510,35 +2518,35 @@
 
 /* Galeria do capítulo "programas": garante as capas no celular, onde o popover
    do catálogo é escondido (ver @media hover:none mais abaixo). */
-.academias-root .chapter-gallery {
+.sim-root .chapter-gallery {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   margin-top: 16px;
 }
-.academias-root .chapter-gallery figure {
+.sim-root .chapter-gallery figure {
   margin: 0;
   border: 1px solid var(--line);
   border-radius: 15px;
   overflow: hidden;
   background: #fff;
 }
-.academias-root .chapter-gallery img {
+.sim-root .chapter-gallery img {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: cover;
 }
-.academias-root .chapter-gallery figcaption {
+.sim-root .chapter-gallery figcaption {
   padding: 9px 10px 11px;
 }
-.academias-root .chapter-gallery strong {
+.sim-root .chapter-gallery strong {
   display: block;
   font-size: 12px;
   color: var(--navy);
 }
-.academias-root .chapter-gallery small {
+.sim-root .chapter-gallery small {
   display: block;
   margin-top: 3px;
   font-size: 11px;
@@ -2546,7 +2554,7 @@
   color: var(--muted);
 }
 
-.academias-root .chapter-cta {
+.sim-root .chapter-cta {
   display: inline-flex;
   align-items: center;
   margin-top: 16px;
@@ -2561,7 +2569,7 @@
 
 /* --- Player (facade + embed) --------------------------------------------- */
 
-.academias-root .video-frame {
+.sim-root .video-frame {
   position: relative;
   display: block;
   width: 100%;
@@ -2572,23 +2580,23 @@
   background: var(--navy);
   padding: 0;
 }
-.academias-root .video-embed {
+.sim-root .video-embed {
   width: 100%;
   height: 100%;
   border: 0;
   display: block;
 }
-.academias-root .video-facade {
+.sim-root .video-facade {
   cursor: pointer;
 }
 /* Variante sem vídeo: a mesma moldura, sem play e sem interação. */
-.academias-root .chapter-illustration {
+.sim-root .chapter-illustration {
   cursor: default;
 }
-.academias-root .video-poster {
+.sim-root .video-poster {
   object-fit: cover;
 }
-.academias-root .video-play {
+.sim-root .video-play {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -2603,16 +2611,16 @@
   box-shadow: 0 16px 34px rgba(13, 33, 55, 0.35);
   transition: 0.2s ease;
 }
-.academias-root .video-play svg {
+.sim-root .video-play svg {
   width: 30px;
   height: 30px;
   margin-left: 3px;
 }
-.academias-root .video-facade:hover .video-play {
+.sim-root .video-facade:hover .video-play {
   transform: translate(-50%, -50%) scale(1.07);
 }
 /* À direita de propósito: a capa usa o canto inferior esquerdo para o título. */
-.academias-root .video-meta {
+.sim-root .video-meta {
   position: absolute;
   right: 16px;
   bottom: 16px;
@@ -2625,11 +2633,11 @@
   backdrop-filter: blur(6px);
   color: #fff;
 }
-.academias-root .video-meta strong {
+.sim-root .video-meta strong {
   font-size: 12px;
   font-weight: 900;
 }
-.academias-root .video-meta small {
+.sim-root .video-meta small {
   font-size: 11px;
   font-weight: 700;
   opacity: 0.85;
@@ -2637,7 +2645,7 @@
 
 /* --- Atalho "▶ ver vídeo" nos passos ------------------------------------- */
 
-.academias-root .chapter-cue {
+.sim-root .chapter-cue {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -2652,41 +2660,41 @@
   cursor: pointer;
   transition: 0.2s ease;
 }
-.academias-root .chapter-cue:hover {
+.sim-root .chapter-cue:hover {
   background: #fff;
   border-color: var(--accent-strong);
 }
-.academias-root .chapter-cue span {
+.sim-root .chapter-cue span {
   font-size: 10px;
 }
 /* Dentro da DRE o atalho é bloco próprio, acima dos campos. */
-.academias-root .dre-body .chapter-cue {
+.sim-root .dre-body .chapter-cue {
   margin-bottom: 16px;
 }
 
 /* Linha "Escolha a duração do ciclo" + atalho, na página do associado. */
-.academias-root .cycle-tabs-head {
+.sim-root .cycle-tabs-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   margin-top: 20px;
 }
-.academias-root .cycle-tabs-head span {
+.sim-root .cycle-tabs-head span {
   font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
 }
-.academias-root .cycle-tabs-head + .cycle-tabs {
+.sim-root .cycle-tabs-head + .cycle-tabs {
   margin-top: 10px;
 }
 
 /* Capa do programa dentro do popover do catálogo.
    Faixa 5:2 em vez do 16:9 do arquivo: a capa inteira somaria ~215px à altura
    do popover, que já é alto e abre para baixo. */
-.academias-root .program-popover-image {
+.sim-root .program-popover-image {
   display: block;
   width: 100%;
   height: auto;
@@ -2701,79 +2709,79 @@
    ========================================================================= */
 
 @media (max-width: 1150px) {
-  .academias-root .programs {
+  .sim-root .programs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .academias-root .main-grid {
+  .sim-root .main-grid {
     grid-template-columns: minmax(0, 1fr) 370px;
   }
-  .academias-root .hero {
+  .sim-root .hero {
     min-height: 400px;
     padding: 44px 38px;
   }
-  .academias-root .specialist-grid {
+  .sim-root .specialist-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 900px) {
-  .academias-root.sim {
+  .sim-root.sim {
     padding-bottom: 88px;
   }
-  .academias-root .shell {
+  .sim-root .shell {
     padding: 16px;
   }
-  .academias-root .main-grid,
-  .academias-root .builder-grid,
-  .academias-root .below,
-  .academias-root .controls-grid,
-  .academias-root .explainer-grid {
+  .sim-root .main-grid,
+  .sim-root .builder-grid,
+  .sim-root .below,
+  .sim-root .controls-grid,
+  .sim-root .explainer-grid {
     grid-template-columns: 1fr;
   }
-  .academias-root .explainer {
+  .sim-root .explainer {
     padding: 17px;
     border-radius: 20px;
   }
   /* Capítulos viram chips roláveis: empilhados, empurrariam o player para fora
      da primeira tela. */
-  .academias-root .chapter-list {
+  .sim-root .chapter-list {
     display: flex;
     overflow-x: auto;
     padding-bottom: 4px;
     scrollbar-width: thin;
   }
-  .academias-root .chapter-item {
+  .sim-root .chapter-item {
     flex: 0 0 auto;
     width: auto;
     max-width: 230px;
   }
-  .academias-root .chapter-gallery {
+  .sim-root .chapter-gallery {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .academias-root .cycle-tabs-head,
-  .academias-root .explainer-head-top {
+  .sim-root .cycle-tabs-head,
+  .sim-root .explainer-head-top {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  .academias-root .result-panel,
-  .academias-root .builder-side {
+  .sim-root .result-panel,
+  .sim-root .builder-side {
     position: relative;
     top: auto;
   }
-  .academias-root .result-panel {
+  .sim-root .result-panel {
     order: 2;
   }
-  .academias-root .hero {
+  .sim-root .hero {
     min-height: 380px;
     padding: 36px 28px;
   }
   /* Sem os 720px de coluna, o texto ocupa a largura toda: a foto recua a
      textura de fundo em vez de disputar espaço com ele. */
-  .academias-root .hero-media {
+  .sim-root .hero-media {
     opacity: 0.3;
   }
-  .academias-root .hero-media::after {
+  .sim-root .hero-media::after {
     background: linear-gradient(
       100deg,
       rgba(247, 252, 255, 0.92) 0%,
@@ -2781,14 +2789,14 @@
       rgba(247, 252, 255, 0.6) 100%
     );
   }
-  .academias-root .specialist-grid,
-  .academias-root .extras-grid {
+  .sim-root .specialist-grid,
+  .sim-root .extras-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .academias-root .dre-fields {
+  .sim-root .dre-fields {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .academias-root .mobile-result-bar {
+  .sim-root .mobile-result-bar {
     position: fixed;
     left: max(12px, env(safe-area-inset-left));
     right: max(12px, env(safe-area-inset-right));
@@ -2806,10 +2814,10 @@
     box-shadow: 0 16px 38px rgba(16, 42, 67, 0.28);
     backdrop-filter: blur(14px);
   }
-  .academias-root .mobile-result-bar div {
+  .sim-root .mobile-result-bar div {
     min-width: 0;
   }
-  .academias-root .mobile-result-bar small {
+  .sim-root .mobile-result-bar small {
     display: block;
     color: #bcd8e5;
     font-size: 10px;
@@ -2817,7 +2825,7 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
-  .academias-root .mobile-result-bar strong {
+  .sim-root .mobile-result-bar strong {
     display: block;
     margin-top: 2px;
     font-size: 21px;
@@ -2825,7 +2833,7 @@
     color: #fff;
     white-space: nowrap;
   }
-  .academias-root .mobile-result-bar button {
+  .sim-root .mobile-result-bar button {
     flex: 0 0 auto;
     min-height: 44px;
     border: 0;
@@ -2840,215 +2848,215 @@
 }
 
 @media (max-width: 620px) {
-  .academias-root .shell {
+  .sim-root .shell {
     padding: 12px;
   }
-  .academias-root .topbar {
+  .sim-root .topbar {
     margin-bottom: 14px;
   }
-  .academias-root .top-pill {
+  .sim-root .top-pill {
     display: none;
   }
-  .academias-root .brand-sub {
+  .sim-root .brand-sub {
     padding-left: 10px;
     font-size: 10px;
     letter-spacing: 0.07em;
   }
-  .academias-root .hero {
+  .sim-root .hero {
     border-radius: 24px;
     min-height: 0;
     padding: 24px 18px;
     align-items: flex-start;
     margin-bottom: 14px;
   }
-  .academias-root .hero h1 {
+  .sim-root .hero h1 {
     font-size: clamp(30px, 9vw, 40px);
     letter-spacing: -1.5px;
   }
-  .academias-root .hero p {
+  .sim-root .hero p {
     font-size: 15px;
     max-width: 100%;
   }
-  .academias-root .hero-actions {
+  .sim-root .hero-actions {
     align-items: stretch;
     gap: 8px;
   }
-  .academias-root .hero-cta {
+  .sim-root .hero-cta {
     width: 100%;
     min-height: 48px;
   }
-  .academias-root .hero-link {
+  .sim-root .hero-link {
     text-align: center;
     width: 100%;
   }
-  .academias-root .hero-stats {
+  .sim-root .hero-stats {
     display: grid;
     grid-template-columns: 1fr;
     gap: 7px;
   }
-  .academias-root .panel {
+  .sim-root .panel {
     padding: 17px;
     border-radius: 20px;
   }
-  .academias-root h2 {
+  .sim-root h2 {
     font-size: 21px;
     letter-spacing: -0.5px;
   }
-  .academias-root .section-head {
+  .sim-root .section-head {
     display: block;
     margin-bottom: 14px;
   }
-  .academias-root .programs {
+  .sim-root .programs {
     gap: 9px;
   }
-  .academias-root .program {
+  .sim-root .program {
     min-height: 138px;
     padding: 13px;
     border-radius: 17px;
   }
-  .academias-root .cycles,
-  .academias-root .cycle-tabs,
-  .academias-root .percentage-grid,
-  .academias-root .info-strip,
-  .academias-root .scenario-grid,
-  .academias-root .how,
-  .academias-root .options,
-  .academias-root .extras-grid,
-  .academias-root .dre-fields {
+  .sim-root .cycles,
+  .sim-root .cycle-tabs,
+  .sim-root .percentage-grid,
+  .sim-root .info-strip,
+  .sim-root .scenario-grid,
+  .sim-root .how,
+  .sim-root .options,
+  .sim-root .extras-grid,
+  .sim-root .dre-fields {
     grid-template-columns: 1fr;
   }
-  .academias-root .journey {
+  .sim-root .journey {
     grid-template-columns: 1fr 1fr;
   }
-  .academias-root .specialist-grid {
+  .sim-root .specialist-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
   }
-  .academias-root .offer-preview,
-  .academias-root .bundle-card {
+  .sim-root .offer-preview,
+  .sim-root .bundle-card {
     padding: 16px;
     border-radius: 19px;
   }
-  .academias-root .offer-preview-head,
-  .academias-root .bundle-top,
-  .academias-root .main-head-top,
-  .academias-root .extras-head {
+  .sim-root .offer-preview-head,
+  .sim-root .bundle-top,
+  .sim-root .main-head-top,
+  .sim-root .extras-head {
     display: block;
   }
-  .academias-root .offer-price,
-  .academias-root .bundle-price,
-  .academias-root .live-box {
+  .sim-root .offer-price,
+  .sim-root .bundle-price,
+  .sim-root .live-box {
     text-align: left;
     min-width: 0;
     margin-top: 12px;
     padding: 11px 12px;
     border-radius: 15px;
   }
-  .academias-root .wheel-wrap {
+  .sim-root .wheel-wrap {
     grid-template-columns: 44px minmax(0, 1fr) 44px;
     gap: 8px;
   }
-  .academias-root .round-btn {
+  .sim-root .round-btn {
     width: 44px;
     height: 44px;
     border-radius: 14px;
   }
-  .academias-root .wheel {
+  .sim-root .wheel {
     height: 96px;
   }
-  .academias-root .wheel input {
+  .sim-root .wheel input {
     font-size: 34px;
   }
-  .academias-root .quick-values,
-  .academias-root .quick-percent {
+  .sim-root .quick-values,
+  .sim-root .quick-percent {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
   }
-  .academias-root .quick-values button,
-  .academias-root .quick-percent button {
+  .sim-root .quick-values button,
+  .sim-root .quick-percent button {
     padding: 8px 3px;
     font-size: 10px;
     white-space: nowrap;
   }
-  .academias-root .personal-sales-row input {
+  .sim-root .personal-sales-row input {
     width: 88px;
     min-height: 44px;
   }
-  .academias-root .personal-sales-row button {
+  .sim-root .personal-sales-row button {
     flex: 1;
     min-height: 44px;
     border-radius: 13px;
   }
-  .academias-root .result-panel {
+  .sim-root .result-panel {
     padding: 19px;
     border-radius: 22px;
   }
-  .academias-root .main-revenue strong {
+  .sim-root .main-revenue strong {
     font-size: clamp(30px, 9vw, 38px);
     letter-spacing: -1.4px;
   }
-  .academias-root .result-item {
+  .sim-root .result-item {
     align-items: flex-start;
     gap: 10px;
   }
-  .academias-root .result-item span {
+  .sim-root .result-item span {
     max-width: 58%;
     font-size: 12px;
     line-height: 1.3;
   }
-  .academias-root .result-item strong {
+  .sim-root .result-item strong {
     max-width: 42%;
     font-size: 14px;
     white-space: normal;
     overflow-wrap: anywhere;
   }
-  .academias-root .profit-card strong {
+  .sim-root .profit-card strong {
     font-size: 30px;
     overflow-wrap: anywhere;
   }
-  .academias-root .distribution-row strong {
+  .sim-root .distribution-row strong {
     text-align: right;
     overflow-wrap: anywhere;
   }
-  .academias-root .main-body,
-  .academias-root .main-head {
+  .sim-root .main-body,
+  .sim-root .main-head {
     padding: 16px;
   }
-  .academias-root .sticky-inner {
+  .sim-root .sticky-inner {
     gap: 10px;
   }
-  .academias-root .sticky-price strong {
+  .sim-root .sticky-price strong {
     font-size: 19px;
   }
-  .academias-root .sticky-cta .join {
+  .sim-root .sticky-cta .join {
     padding: 12px 15px;
     font-size: 13px;
   }
   /* Sem largura para título e atalho lado a lado: o "▶ ver vídeo" desce. */
-  .academias-root .section-head,
-  .academias-root .section-title {
+  .sim-root .section-head,
+  .sim-root .section-title {
     flex-direction: column;
     align-items: flex-start;
   }
-  .academias-root .chapter-body h3 {
+  .sim-root .chapter-body h3 {
     font-size: 19px;
   }
-  .academias-root .video-play {
+  .sim-root .video-play {
     width: 58px;
     height: 58px;
   }
-  .academias-root .video-play svg {
+  .sim-root .video-play svg {
     width: 24px;
     height: 24px;
   }
   /* Sai da capa: disputaria o rodapé com o título dela, e a duração já aparece
      no capítulo selecionado logo acima. */
-  .academias-root .video-meta {
+  .sim-root .video-meta {
     display: none;
   }
   /* Acompanha .hero-cta e .hero-link, que já viram bloco aqui. */
-  .academias-root .hero-actions .chapter-cue {
+  .sim-root .hero-actions .chapter-cue {
     width: 100%;
     justify-content: center;
     min-height: 44px;
@@ -3056,42 +3064,42 @@
 }
 
 @media (max-width: 360px) {
-  .academias-root .programs,
-  .academias-root .specialist-grid,
-  .academias-root .journey,
-  .academias-root .chapter-gallery {
+  .sim-root .programs,
+  .sim-root .specialist-grid,
+  .sim-root .journey,
+  .sim-root .chapter-gallery {
     grid-template-columns: 1fr;
   }
 }
 
 @media (hover: none) {
-  .academias-root .program:hover,
-  .academias-root .hero-cta:hover,
-  .academias-root .cta:hover {
+  .sim-root .program:hover,
+  .sim-root .hero-cta:hover,
+  .sim-root .cta:hover {
     transform: none;
   }
   /* Sem hover real, o popover só atrapalharia o toque — como no modelo. */
-  .academias-root .program-popover {
+  .sim-root .program-popover {
     display: none;
   }
 }
 
 @media (max-width: 900px) {
-  .academias-root .program-popover {
+  .sim-root .program-popover {
     display: none;
   }
 }
 
 /* Backstop do JS: mesmo se a checagem falhar, nada anima. */
 @media (prefers-reduced-motion: reduce) {
-  .academias-root *,
-  .academias-root *::before,
-  .academias-root *::after {
+  .sim-root *,
+  .sim-root *::before,
+  .sim-root *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .academias-root .roleta.rolling {
+  .sim-root .roleta.rolling {
     animation: none !important;
   }
 }

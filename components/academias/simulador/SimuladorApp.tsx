@@ -1,12 +1,13 @@
 'use client';
 
-import { getAcademiaProgram } from '@/lib/academias/catalog';
+import { ACADEMIA_HERO_IMAGE, getAcademiaProgram } from '@/lib/academias/catalog';
 import { SIMULADOR_CHAPTERS } from '@/lib/academias/videos';
-import { AcademiaFooter, AcademiaTopBar } from '../shared/AcademiaChrome';
-import { ChapterCue } from '../shared/ChapterCue';
-import { ExplainerProvider, type ExplainerMedia } from '../shared/ExplainerProvider';
-import { ExplainerSection } from '../shared/ExplainerSection';
-import { HeroMedia } from '../shared/HeroMedia';
+import { SimFooter, SimTopBar } from '@/components/simulador/shared/SimChrome';
+import { ProgramGallery } from '../shared/ProgramGallery';
+import { ChapterCue } from '@/components/simulador/shared/ChapterCue';
+import { ExplainerProvider, type ExplainerMedia } from '@/components/simulador/shared/ExplainerProvider';
+import { ExplainerSection } from '@/components/simulador/shared/ExplainerSection';
+import { HeroMedia } from '@/components/simulador/shared/HeroMedia';
 import { BelowSections } from './BelowSections';
 import { DREPanel } from './DREPanel';
 import { MobileResultBar, ResultPanel } from './ResultPanel';
@@ -16,7 +17,7 @@ import { SimuladorProvider, useSimulador } from './state/SimuladorProvider';
 function Hero() {
   return (
     <section className="hero" aria-label="Simulador de receita para academias">
-      <HeroMedia />
+      <HeroMedia src={ACADEMIA_HERO_IMAGE} />
       <div className="hero-content">
         <div className="eyebrow">Prontta Saúde para Academias</div>
         <h1>Simule uma nova fonte de receita para sua academia.</h1>
@@ -60,9 +61,9 @@ function SimuladorShell({ media }: { media: ExplainerMedia }) {
   const isVideo = media === 'video';
 
   return (
-    <div className="academias-root sim" data-theme={theme}>
+    <div className="sim-root sim" data-theme={theme}>
       <div className="shell">
-        <AcademiaTopBar
+        <SimTopBar
           subtitle="Simulador para academias"
           pill="Receita recorrente com saúde assistida"
         />
@@ -81,6 +82,7 @@ function SimuladorShell({ media }: { media: ExplainerMedia }) {
               : 'Do que é um programa de saúde até como ler a DRE do mês. Leia na ordem ou pule direto para a dúvida que você tem agora.'
           }
           variantHref={isVideo ? '/academias/simulador/sem-video' : '/academias/simulador'}
+          bulletsSlot={{ chapterId: 'programas', content: <ProgramGallery /> }}
         />
 
         <div className="main-grid" id="simulador">
@@ -100,7 +102,7 @@ function SimuladorShell({ media }: { media: ExplainerMedia }) {
         <MobileResultBar />
         <BelowSections />
 
-        <AcademiaFooter>Simulador comercial · Prontta Saúde para Academias</AcademiaFooter>
+        <SimFooter>Simulador comercial · Prontta Saúde para Academias</SimFooter>
       </div>
     </div>
   );

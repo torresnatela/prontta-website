@@ -2,8 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ACADEMIA_PROGRAMS } from '@/lib/academias/catalog';
-import type { ExplainerChapter } from '@/lib/academias/videos';
+import type { ReactNode } from 'react';
+import type { ExplainerChapter } from '@/lib/simulador/explainer';
 import { cn } from '@/lib/utils';
 import { EXPLAINER_SECTION_ID, useExplainer } from './ExplainerProvider';
 import { VideoFacade } from './VideoFacade';
@@ -15,6 +15,14 @@ interface ExplainerSectionProps {
   lead: string;
   /** Link para a mesma página na outra variante (com ↔ sem vídeo). */
   variantHref?: string;
+  /**
+   * Bloco próprio da página que substitui os bullets em UM capítulo.
+   * /academias usa para a galeria de capas dos programas.
+   *
+   * É prop, e não um `active.id === 'programas'` aqui dentro, porque /proposta
+   * também tem um capítulo com esse id — e mostraria o catálogo de academia.
+   */
+  bulletsSlot?: { chapterId: string; content: ReactNode };
 }
 
 /** Capa do capítulo sem player — a variante /sem-video. */
@@ -32,31 +40,18 @@ function ChapterIllustration({ chapter }: { chapter: ExplainerChapter }) {
   );
 }
 
-/** Galeria que substitui os bullets no capítulo dos programas.
- *  Existe porque o popover do catálogo some em ≤900px e no toque — sem ela,
- *  ninguém no celular veria as capas. */
-function ProgramGallery() {
-  return (
-    <div className="chapter-gallery">
-      {ACADEMIA_PROGRAMS.map((program) => (
-        <figure key={program.id} data-card={program.theme}>
-          <Image src={program.image} alt="" width={320} height={180} sizes="180px" />
-          <figcaption>
-            <strong>{program.shortName}</strong>
-            <small>{program.tagline}</small>
-          </figcaption>
-        </figure>
-      ))}
-    </div>
-  );
-}
-
 /**
  * O hub "Entenda antes de simular": lista de capítulos à esquerda, player e
  * texto à direita. Estado vem do `ExplainerProvider` para que os atalhos
  * espalhados pelos passos (`ChapterCue`) possam trocar o capítulo daqui.
  */
-export function ExplainerSection({ kicker, title, lead, variantHref }: ExplainerSectionProps) {
+export function ExplainerSection({
+  kicker,
+  title,
+  lead,
+  variantHref,
+  bulletsSlot,
+}: ExplainerSectionProps) {
   const { chapters, media, activeId, setActiveId } = useExplainer();
   const active = chapters.find((chapter) => chapter.id === activeId) ?? chapters[0];
   const isVideo = media === 'video';
@@ -135,8 +130,8 @@ export function ExplainerSection({ kicker, title, lead, variantHref }: Explainer
           <h3>{active.title}</h3>
           <p>{active.summary}</p>
 
-          {active.id === 'programas' ? (
-            <ProgramGallery />
+          {bulletsSlot && bulletsSlot.chapterId === active.id ? (
+            bulletsSlot.content
           ) : (
             <ul className="chapter-bullets">
               {active.bullets.map((bullet) => (

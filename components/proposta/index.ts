@@ -1,7 +1,6 @@
 export { ProposalProvider } from './state/ProposalProvider';
-export { TopBar } from './sections/TopBar';
-export { HeroSection } from './sections/HeroSection';
-export { SimulatorSection } from './sections/SimulatorSection';
+export { ProposalHero } from './sections/ProposalHero';
+export { ProposalMobileBar, ProposalResultPanel } from './sections/ProposalResultPanel';
 export { IncludedSection } from './sections/IncludedSection';
 export { ResponsibilitiesSection } from './sections/ResponsibilitiesSection';
 export { ComplianceSection } from './sections/ComplianceSection';

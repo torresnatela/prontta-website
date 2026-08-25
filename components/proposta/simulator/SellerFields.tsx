@@ -1,15 +1,20 @@
 'use client';
 
 import { useProposal } from '../state/ProposalProvider';
+import { StepHeader } from './StepHeader';
 
 export function SellerFields() {
   const { state, dispatch } = useProposal();
 
   return (
-    <div className="sc">
-      <h3>
-        <span className="n">6</span>Seus dados (aparecem na proposta em PDF)
-      </h3>
+    <section id="passo-vendedor">
+      <StepHeader
+        step={6}
+        tag="Assine a proposta"
+        title="Seus dados de consultor"
+        lead="Entram na página de contato do PDF. Em branco, a proposta sai com os dados institucionais da Prontta."
+        chapterId="pdf"
+      />
       <div className="frow">
         <label style={{ flex: '1 1 220px' }}>
           Nome do consultor
@@ -39,6 +44,6 @@ export function SellerFields() {
           />
         </label>
       </div>
-    </div>
+    </section>
   );
 }

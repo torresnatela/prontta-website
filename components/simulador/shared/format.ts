@@ -1,5 +1,5 @@
 /**
- * Formatadores das páginas /academias.
+ * Formatadores dos simuladores — /academias/* e /proposta.
  *
  * Os `Intl.NumberFormat` são criados UMA vez no módulo: `formatCurrency` de
  * lib/utils.ts instancia um formatter por chamada, o que a 60fps × ~12 valores

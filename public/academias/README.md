@@ -5,7 +5,7 @@ Inventário do que está publicado aqui, para que serve e o que ainda é placeho
 ## Pendências antes de considerar a camada explicativa "pronta"
 
 1. **Trocar os vídeos.** Todos os capítulos apontam para `PLACEHOLDER_YOUTUBE_ID`
-   em [`lib/academias/videos.ts`](../../lib/academias/videos.ts) — hoje "Big Buck
+   em [`lib/simulador/explainer.ts`](../../lib/simulador/explainer.ts) — hoje "Big Buck
    Bunny", da Blender Foundation. Grave os quatro vídeos, publique no canal e
    substitua o `youtubeId` de cada capítulo. Nenhum componente precisa mudar.
 2. **Trocar as capas em SVG** pelas fotos reais (ver tabela abaixo).
@@ -18,7 +18,7 @@ Inventário do que está publicado aqui, para que serve e o que ainda é placeho
 
 | Arquivo | Proporção | Onde aparece |
 | --- | --- | --- |
-| `hero-academias.png` | 1916×821 (~2.33:1) | Fundo do hero das duas páginas, via `components/academias/shared/HeroMedia.tsx`. **Foto real** — não é placeholder. |
+| `hero-academias.png` | 1916×821 (~2.33:1) | Fundo do hero das duas páginas, via `components/simulador/shared/HeroMedia.tsx` (caminho em `ACADEMIA_HERO_IMAGE`, `lib/academias/catalog.ts`). **Foto real** — não é placeholder. |
 | `capitulos/visao-geral.svg` | 16:9 | Capa do capítulo 1 do hub, nas duas páginas. Placeholder. |
 | `capitulos/programas.svg` | 16:9 | Capa do capítulo "programas". Placeholder. |
 | `capitulos/ciclo.svg` | 16:9 | Capa do capítulo "ciclo". Placeholder. |
@@ -44,6 +44,19 @@ conforme o público: dono da academia x associado).
    automático); um `.jpg`/`.png`/`.webp` no lugar passa a ser otimizado de verdade
    — o que é o comportamento desejado, mas exige trocar a extensão no código.
 
-Os placeholders atuais foram gerados por script e usam a paleta de tema de cada
-programa definida em [`app/academias/academias.css`](../../app/academias/academias.css)
+As capas de `capitulos/` saem de
+[`scripts/generate-placeholder-covers.mjs`](../../scripts/generate-placeholder-covers.mjs):
+
+```sh
+node scripts/generate-placeholder-covers.mjs academias
+```
+
+A saída é determinística e estes arquivos estão versionados — rodar o script sem
+ter mudado o template deixa o `git status` limpo.
+
+As capas de `programas/` foram geradas à parte e usam a paleta de tema de cada
+programa definida em [`app/simulador-ui.css`](../../app/simulador-ui.css)
 (`[data-theme='blue'|'lilac'|'green'|'gold']`).
+
+A página /proposta tem o inventário gêmeo em
+[`public/proposta-midia/README.md`](../proposta-midia/README.md).

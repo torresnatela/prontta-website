@@ -1,6 +1,6 @@
 import type { PackageLine } from '@/lib/academias/pricing';
-import { plural } from './format';
-import { specialtyIcon } from './icons';
+import { plural } from '@/components/simulador/shared/format';
+import { specialtyIcon } from '@/components/simulador/shared/icons';
 
 interface SpecialistGridProps {
   lines: PackageLine[];

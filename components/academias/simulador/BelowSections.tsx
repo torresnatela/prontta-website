@@ -1,6 +1,6 @@
 'use client';
 
-import { brlAuto } from '../shared/format';
+import { brlAuto } from '@/components/simulador/shared/format';
 import { useScenarios, useSimulador } from './state/SimuladorProvider';
 
 const JOURNEY = [

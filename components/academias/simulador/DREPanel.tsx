@@ -2,8 +2,8 @@
 
 import { IMPLANTATION_RANGE, type DREExpenses, type Implantation } from '@/lib/pricing';
 import { PROPOSAL_CONTENT } from '@/lib/proposal-content';
-import { ChapterCue } from '../shared/ChapterCue';
-import { brl, brlAuto, percent } from '../shared/format';
+import { ChapterCue } from '@/components/simulador/shared/ChapterCue';
+import { brl, brlAuto, percent } from '@/components/simulador/shared/format';
 import {
   useAcademiaDRE,
   useImplantation,

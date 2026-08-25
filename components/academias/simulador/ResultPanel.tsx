@@ -1,8 +1,8 @@
 'use client';
 
 import { CYCLE_LABELS, getAcademiaProgram } from '@/lib/academias/catalog';
-import { brlAuto } from '../shared/format';
-import { RollingCurrency, RollingPercent } from '../shared/RollingCurrency';
+import { brlAuto } from '@/components/simulador/shared/format';
+import { RollingCurrency, RollingPercent } from '@/components/simulador/shared/RollingCurrency';
 import { ShareLinkButton } from './ShareLinkButton';
 import { useSimulador, useSimulation } from './state/SimuladorProvider';
 
