@@ -9,6 +9,7 @@ import {
   type ConsultationsSummary,
   type DREResult,
   type ProgramsSummary,
+  type ClientType,
   type ProposalTotals,
 } from '@/lib/pricing';
 import { initialProposalState, proposalReducer, type ProposalAction, type ProposalState } from './reducer';
@@ -20,8 +21,23 @@ interface ProposalContextValue {
 
 const ProposalContext = createContext<ProposalContextValue | null>(null);
 
-export function ProposalProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(proposalReducer, initialProposalState);
+interface ProposalProviderProps {
+  children: ReactNode;
+  /**
+   * Canal de venda que abre selecionado. É o que muda o vocabulário da
+   * proposta (headline do hero, rótulo salvo no painel) — a matemática é a
+   * mesma para todos. Cada rota comercial passa o seu: /proposta abre em
+   * clínica, /academias/proposta abre em academia.
+   */
+  clientType?: ClientType;
+}
+
+export function ProposalProvider({ children, clientType }: ProposalProviderProps) {
+  const [state, dispatch] = useReducer(
+    proposalReducer,
+    clientType,
+    (type): ProposalState => (type ? { ...initialProposalState, clientType: type } : initialProposalState),
+  );
   const value = useMemo(() => ({ state, dispatch }), [state]);
   return <ProposalContext.Provider value={value}>{children}</ProposalContext.Provider>;
 }
