@@ -23,9 +23,11 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
+  // ⚠️ `/proposta` e `/proposta/:path*` estão FORA do matcher de propósito: as
+  // propostas são públicas por enquanto (o simulador e o PDF rodam sem login).
+  // O que exige sessão é só a área logada — /painel e /admin. Ao fechar as
+  // propostas de novo, basta devolver as duas linhas aqui.
   matcher: [
-    '/proposta',
-    '/proposta/:path*',
     '/painel',
     '/painel/:path*',
     '/admin',

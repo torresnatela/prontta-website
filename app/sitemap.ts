@@ -19,6 +19,7 @@ const STATIC_ROUTES: {
   { path: '/', changeFrequency: 'weekly', priority: 1 },
   { path: '/blog', changeFrequency: 'daily', priority: 0.9 },
   { path: '/proposta', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/proposta/academias', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/academias/simulador', changeFrequency: 'monthly', priority: 0.8 },
   // A variante com ?programa/?ciclo/?preco é link de distribuição (noindex);
   // aqui entra só a URL limpa, que é a canônica.

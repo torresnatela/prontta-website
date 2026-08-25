@@ -12,9 +12,9 @@ export const metadata: Metadata = {
  * Mesma proposta de /proposta, aberta no canal academia: a headline do hero e o
  * rótulo salvo no painel falam de academia; a matemática é idêntica.
  *
- * Mora sob /proposta (e não sob /academias) de propósito: é ferramenta de
- * parceiro, e o `proxy.ts` já exige login em `/proposta/:path*`. /academias/* é
- * a vitrine pública, aberta ao dono da academia.
+ * Mora sob /proposta (e não sob /academias) de propósito: é a ferramenta do
+ * parceiro montando uma proposta, irmã de /proposta. /academias/* é a vitrine
+ * do dono da academia — outro público, outro vocabulário.
  */
 export default function PropostaAcademiasPage() {
   return <ProposalExperience clientType="academia" topBarSubtitle="Proposta comercial · academias" />;
