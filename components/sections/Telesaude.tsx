@@ -292,7 +292,7 @@ export function Telesaude() {
           </div>
 
           <div className="mt-10 text-center">
-            <Link href="/proposta">
+            <Link href="/proposta/clinicas">
               <Button variant="primary" size="lg" className="bg-emerald-500 hover:bg-emerald-600 group">
                 Implementar na minha clínica
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />

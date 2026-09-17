@@ -111,7 +111,7 @@ export function Hero() {
               transition={{ delay: 0.7 }}
               className="mt-10 flex flex-col sm:flex-row gap-4"
             >
-              <Link href="/proposta">
+              <Link href="/proposta/clinicas">
                 <Button variant="primary" size="lg" className="group">
                   Solicitar Proposta
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />

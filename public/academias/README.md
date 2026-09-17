@@ -4,10 +4,14 @@ Inventário do que está publicado aqui, para que serve e o que ainda é placeho
 
 ## Pendências antes de considerar a camada explicativa "pronta"
 
-1. **Trocar os vídeos.** Todos os capítulos apontam para `PLACEHOLDER_YOUTUBE_ID`
+1. **Trocar os vídeos.** Todos os capítulos apontam para `PLACEHOLDER_VIDEO`
    em [`lib/simulador/explainer.ts`](../../lib/simulador/explainer.ts) — hoje "Big Buck
-   Bunny", da Blender Foundation. Grave os quatro vídeos, publique no canal e
-   substitua o `youtubeId` de cada capítulo. Nenhum componente precisa mudar.
+   Bunny", da Blender Foundation. Grave os quatro vídeos e troque o `video` de
+   cada capítulo: `{ kind: 'youtube', youtubeId }` se publicar no canal, ou
+   `{ kind: 'file', src }` para MP4 auto-hospedado no Vercel Blob, como
+   /proposta/clinicas já faz (receita em
+   [`public/proposta-midia/README.md`](../proposta-midia/README.md)). Nenhum
+   componente precisa mudar.
 2. **Trocar as capas em SVG** pelas fotos reais (ver tabela abaixo).
 3. **Só então**, publicar JSON-LD `VideoObject`. O helper deve entrar em
    [`lib/structured-data.ts`](../../lib/structured-data.ts), como os demais.

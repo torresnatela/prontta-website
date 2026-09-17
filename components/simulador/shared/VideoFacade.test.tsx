@@ -4,11 +4,18 @@ import { describe, expect, it } from 'vitest';
 import { VideoFacade } from './VideoFacade';
 
 const props = {
-  youtubeId: 'aqz-KE-bpKQ',
+  video: { kind: 'youtube', youtubeId: 'aqz-KE-bpKQ' },
   title: 'O que é o ciclo',
   poster: '/academias/capitulos/ciclo.svg',
   durationLabel: '2 min',
-};
+} as const;
+
+const arquivo = {
+  video: { kind: 'file', src: 'https://blob.example/proposta/simulacao.mp4' },
+  title: 'Como fazer uma simulação',
+  poster: '/proposta-midia/capitulos/visao-geral.jpg',
+  durationLabel: '3 min',
+} as const;
 
 describe('VideoFacade', () => {
   it('não carrega nada do YouTube antes do clique', () => {
@@ -44,5 +51,42 @@ describe('VideoFacade', () => {
     expect(iframe?.getAttribute('title')).toBe('O que é o ciclo');
     // O domínio com cookie nunca deve aparecer.
     expect(iframe?.getAttribute('src')).not.toContain('//www.youtube.com');
+  });
+
+  describe('vídeo em arquivo (auto-hospedado)', () => {
+    it('antes do clique é a mesma capa — nada é baixado', () => {
+      const { container } = render(<VideoFacade {...arquivo} />);
+
+      expect(container.querySelector('video')).toBeNull();
+      expect(container.querySelector('iframe')).toBeNull();
+      expect(
+        screen.getByRole('button', {
+          name: 'Assistir: Como fazer uma simulação',
+        }),
+      ).toBeInTheDocument();
+      expect(screen.getByText('3 min')).toBeInTheDocument();
+    });
+
+    it('depois do clique toca num <video> nativo, sem YouTube', async () => {
+      const user = userEvent.setup();
+      const { container } = render(<VideoFacade {...arquivo} />);
+
+      await user.click(
+        screen.getByRole('button', {
+          name: 'Assistir: Como fazer uma simulação',
+        }),
+      );
+
+      const video = container.querySelector('video');
+      expect(video).not.toBeNull();
+      expect(video?.getAttribute('src')).toBe('https://blob.example/proposta/simulacao.mp4');
+      // Controles nativos: o facade só substitui o primeiro play.
+      expect(video).toHaveAttribute('controls');
+      expect(video).toHaveAttribute('autoplay');
+      // iOS abre fullscreen à força sem playsinline.
+      expect(video).toHaveAttribute('playsinline');
+      expect(video?.getAttribute('poster')).toBe('/proposta-midia/capitulos/visao-geral.jpg');
+      expect(container.querySelector('iframe')).toBeNull();
+    });
   });
 });

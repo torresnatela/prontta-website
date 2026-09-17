@@ -10,6 +10,14 @@ const nextConfig = {
     // capas hospedadas remotamente (coverImage com URL https), caso sejam usadas.
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
   },
+  async redirects() {
+    return [
+      // A proposta "sem sufixo" virou /proposta/clinicas quando cada canal ganhou
+      // a sua URL. Permanente: é a URL que circulou em material impresso e
+      // links antigos, e o Google deve consolidar o sinal na nova.
+      { source: '/proposta', destination: '/proposta/clinicas', permanent: true },
+    ]
+  },
 }
 
 // Plugins passados como STRINGS por exigência do Turbopack (precisam ser

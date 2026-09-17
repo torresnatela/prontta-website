@@ -19,7 +19,7 @@ const footerLinks = {
     { name: 'Telesaúde Híbrida', href: '/#telesaude' },
   ],
   recursos: [
-    { name: 'Simulador de Proposta', href: '/proposta' },
+    { name: 'Simulador de Proposta', href: '/proposta/clinicas' },
     { name: 'Blog', href: '/blog' },
     { name: 'FAQ', href: '/faq' },
   ],

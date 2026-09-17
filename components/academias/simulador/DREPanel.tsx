@@ -116,7 +116,7 @@ export function DREPanel() {
       <div className="dre-body">
         {/* O atalho fica aqui dentro: quem abriu a DRE é exatamente quem tem a
             dúvida que o vídeo responde. */}
-        <ChapterCue chapterId="dre" label="Ver como ler esta DRE · 4 min" />
+        <ChapterCue chapterId="dre" label="Ver como ler esta DRE" />
 
         <div className="dre-fields">
           <div className="dre-field">

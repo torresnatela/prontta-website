@@ -118,7 +118,7 @@ export function ExplainerSection({
           {isVideo ? (
             <VideoFacade
               key={active.id}
-              youtubeId={active.youtubeId}
+              video={active.video}
               title={active.title}
               poster={active.poster}
               durationLabel={active.durationLabel}

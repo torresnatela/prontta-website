@@ -26,7 +26,7 @@ export default async function PainelLayout({ children }: { children: React.React
               <Link href="/painel" className="text-primary-navy hover:text-primary-cyan">
                 Propostas
               </Link>
-              <Link href="/proposta" className="text-primary-navy hover:text-primary-cyan">
+              <Link href="/proposta/clinicas" className="text-primary-navy hover:text-primary-cyan">
                 Nova proposta
               </Link>
               {isAdmin && (

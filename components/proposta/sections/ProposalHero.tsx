@@ -2,8 +2,8 @@
 
 import { ChapterCue } from '@/components/simulador/shared/ChapterCue';
 import { HeroMedia } from '@/components/simulador/shared/HeroMedia';
-import { PROPOSTA_HERO_IMAGE } from '@/lib/proposta/videos';
-import { useProposalNarrative } from '../state/ProposalProvider';
+import { heroImageFor } from '@/lib/proposta/videos';
+import { useProposal, useProposalNarrative } from '../state/ProposalProvider';
 
 /**
  * Hero da proposta.
@@ -15,11 +15,12 @@ import { useProposalNarrative } from '../state/ProposalProvider';
  */
 export function ProposalHero() {
   const c = useProposalNarrative();
+  const { clientType } = useProposal().state;
   const example = c.heroExample;
 
   return (
     <section className="hero" aria-label="Proposta comercial Prontta Saúde">
-      <HeroMedia src={PROPOSTA_HERO_IMAGE} />
+      <HeroMedia src={heroImageFor(clientType)} />
       <div className="hero-content">
         <div className="eyebrow">{c.category}</div>
         <h1>{c.headline}</h1>
@@ -31,7 +32,7 @@ export function ProposalHero() {
           </a>
           <ChapterCue
             chapterId="visao-geral"
-            label="Ver como funciona · 2 min"
+            label="Ver como funciona"
             labelImagem="Entender antes de montar"
           />
           <a className="hero-link" href="#contato">

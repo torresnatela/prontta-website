@@ -25,7 +25,7 @@ describe.each(LISTS)('%s', (_name, chapters) => {
     for (const chapter of chapters) {
       expect(chapter.title.length).toBeGreaterThan(0);
       expect(chapter.summary.length).toBeGreaterThan(0);
-      expect(chapter.youtubeId.length).toBeGreaterThan(0);
+      expect(chapter.video.kind).toBe('youtube');
       expect(chapter.durationLabel.length).toBeGreaterThan(0);
       expect(chapter.bullets.length).toBeGreaterThan(0);
     }
@@ -86,7 +86,10 @@ describe('ids do YouTube', () => {
     const ID = /^[\w-]{11}$/;
     expect(PLACEHOLDER_YOUTUBE_ID).toMatch(ID);
     for (const chapter of [...SIMULADOR_CHAPTERS, ...PROGRAMAS_CHAPTERS]) {
-      expect(chapter.youtubeId).toMatch(ID);
+      // Os capítulos de /academias vêm todos do YouTube — os auto-hospedados
+      // (`kind: 'file'`) hoje são só os de /proposta.
+      expect(chapter.video.kind).toBe('youtube');
+      if (chapter.video.kind === 'youtube') expect(chapter.video.youtubeId).toMatch(ID);
     }
   });
 });

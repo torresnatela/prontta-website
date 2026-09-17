@@ -67,7 +67,7 @@ export function Header() {
 
           {/* CTA Button */}
           <div className="hidden lg:block">
-            <Link href="/proposta">
+            <Link href="/proposta/clinicas">
               <Button variant="primary" size="md">
                 Simular Proposta
               </Button>
@@ -121,7 +121,7 @@ export function Header() {
                   transition={{ delay: 0.5 }}
                   className="pt-4"
                 >
-                  <Link href="/proposta" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link href="/proposta/clinicas" onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="primary" size="lg" className="w-full">
                       Simular Proposta
                     </Button>

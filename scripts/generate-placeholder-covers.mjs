@@ -168,13 +168,15 @@ const PAGES = {
     // NÃO renomeie para `public/proposta/`: o matcher de `proxy.ts` cobre
     // `/proposta/:path*` e engoliria os arquivos estáticos num redirect
     // para o login. Ver `public/proposta-midia/README.md`.
-    // /academias já tem foto real no hero; aqui ainda não.
+    //
+    // Hoje só /proposta/empresa consome estes placeholders: /proposta/clinicas
+    // e /proposta/academias já usam frames reais (.jpg) e a foto de /academias.
+    // `beneficio` e `retorno` (só da empresa) foram gerados à parte.
     hero: { path: 'public/proposta-midia/hero-proposta.svg', label: 'Proposta comercial Prontta Saúde' },
     chapters: [
       { id: 'visao-geral', label: 'Visão geral', glyph: 'bars' },
       { id: 'consultas', label: 'Consultas', glyph: 'calendarCheck' },
       { id: 'programas', label: 'Programas', glyph: 'heartPulse' },
-      { id: 'dre', label: 'Resultado', glyph: 'ledger' },
       { id: 'pdf', label: 'Proposta', glyph: 'document' },
     ],
   },

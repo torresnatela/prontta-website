@@ -9,6 +9,20 @@
  * Quem renderiza é `components/simulador/shared/ExplainerSection.tsx`.
  */
 
+/**
+ * De onde vem o vídeo de um capítulo.
+ *
+ * `youtube` — embed via youtube-nocookie, atrás do facade (nada é carregado
+ *             antes do clique). É o formato dos placeholders e de qualquer
+ *             vídeo publicado no canal.
+ * `file`    — MP4 auto-hospedado (Vercel Blob), tocado num `<video>` nativo.
+ *             Formato dos vídeos de /proposta, gravações de tela que não
+ *             passam pelo YouTube.
+ *
+ * O facade é o mesmo nos dois casos; só o que aparece depois do play muda.
+ */
+export type ExplainerVideo = { kind: 'youtube'; youtubeId: string } | { kind: 'file'; src: string };
+
 export interface ExplainerChapter {
   /** Também é o alvo do `<ChapterCue chapterId="…">` espalhado pelos passos. */
   id: string;
@@ -18,8 +32,8 @@ export interface ExplainerChapter {
   summary: string;
   /** Três pontos-chave. Podem dar lugar a um bloco próprio via `bulletsSlot`. */
   bullets: readonly string[];
-  /** ID do vídeo no YouTube (o player usa youtube-nocookie). */
-  youtubeId: string;
+  /** Fonte do vídeo — YouTube (placeholder/canal) ou arquivo auto-hospedado. */
+  video: ExplainerVideo;
   /** Rótulo humano da duração, ex.: "2 min". Aparece na lista e no play. */
   durationLabel: string;
   /** Capa 16:9 local. `next/image` serve .svg sem otimizar (as-is). */
@@ -37,3 +51,9 @@ export interface ExplainerChapter {
  * para ele: seria dado estruturado descrevendo um vídeo que não é o anunciado.
  */
 export const PLACEHOLDER_YOUTUBE_ID = 'aqz-KE-bpKQ';
+
+/** O mesmo placeholder, já na forma que `ExplainerChapter.video` pede. */
+export const PLACEHOLDER_VIDEO: ExplainerVideo = {
+  kind: 'youtube',
+  youtubeId: PLACEHOLDER_YOUTUBE_ID,
+};

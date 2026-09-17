@@ -34,7 +34,7 @@ export default async function PainelPage() {
             {proposals.length} {proposals.length === 1 ? 'proposta' : 'propostas'}
           </p>
         </div>
-        <Link href="/proposta">
+        <Link href="/proposta/clinicas">
           <Button variant="primary" size="md">
             <FilePlus2 className="mr-2 h-5 w-5" />
             Nova proposta
@@ -47,7 +47,7 @@ export default async function PainelPage() {
           <p className="text-lg text-neutral-gray">
             Você ainda não salvou nenhuma proposta.
           </p>
-          <Link href="/proposta" className="mt-4 inline-block">
+          <Link href="/proposta/clinicas" className="mt-4 inline-block">
             <Button variant="secondary" size="md">
               Montar a primeira
               <ArrowRight className="ml-2 h-5 w-5" />

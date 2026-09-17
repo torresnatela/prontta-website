@@ -9,11 +9,17 @@
  * /proposta — moram em `lib/simulador/explainer.ts`.
  *
  * ⚠️ Os vídeos ainda são PLACEHOLDER. Para publicar os definitivos, troque o
- * `youtubeId` de cada capítulo — nenhum componente precisa mudar.
+ * `video` de cada capítulo — `{ kind: 'youtube', youtubeId }` para o canal ou
+ * `{ kind: 'file', src }` para MP4 no Vercel Blob (como /proposta/clinicas faz;
+ * ver `public/proposta-midia/README.md`). Nenhum componente precisa mudar.
  * Ver `public/academias/README.md` para a lista de pendências de mídia.
  */
 
-import { PLACEHOLDER_YOUTUBE_ID, type ExplainerChapter } from '@/lib/simulador/explainer';
+import {
+  PLACEHOLDER_VIDEO,
+  PLACEHOLDER_YOUTUBE_ID,
+  type ExplainerChapter,
+} from '@/lib/simulador/explainer';
 
 export { PLACEHOLDER_YOUTUBE_ID };
 export type { ExplainerChapter };
@@ -32,7 +38,7 @@ export const SIMULADOR_CHAPTERS: readonly ExplainerChapter[] = [
       'O painel separa o que é custo Prontta, comissão do personal e lucro da academia',
       'Nada aqui é enviado para ninguém: é uma simulação sua, no seu navegador',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '2 min',
     poster: poster('visao-geral'),
     cta: { label: 'Começar a simular', href: '#simulador' },
@@ -47,7 +53,7 @@ export const SIMULADOR_CHAPTERS: readonly ExplainerChapter[] = [
       'A composição de especialistas já vem definida por programa e por ciclo',
       'Você escolhe qual oferecer — a operação clínica é toda da Prontta',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '3 min',
     poster: poster('programas'),
     cta: { label: 'Escolher o programa', href: '#simulador' },
@@ -62,7 +68,7 @@ export const SIMULADOR_CHAPTERS: readonly ExplainerChapter[] = [
       'Quanto mais longo o ciclo, menor o custo Prontta por mês',
       'O ciclo de 6 meses costuma equilibrar adesão do aluno e margem da academia',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '2 min',
     poster: poster('ciclo'),
     cta: { label: 'Definir o ciclo', href: '#simulador' },
@@ -77,7 +83,7 @@ export const SIMULADOR_CHAPTERS: readonly ExplainerChapter[] = [
       'A comissão do personal é despesa de venda sua, nunca repasse à Prontta',
       'A taxa de implantação não entra no resultado mensal — aparece só como payback',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '4 min',
     poster: poster('dre'),
     cta: { label: 'Ver meu resultado', href: '#resultado' },
@@ -102,7 +108,7 @@ export const PROGRAMAS_CHAPTERS: readonly ExplainerChapter[] = [
       'Consultas por telessaúde com médico, nutrição e psicologia',
       'Acompanhamento contínuo — não é consulta avulsa, é jornada',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '2 min',
     poster: poster('visao-geral'),
     cta: { label: 'Ver os programas', href: '#catalogo' },
@@ -117,7 +123,7 @@ export const PROGRAMAS_CHAPTERS: readonly ExplainerChapter[] = [
       'A composição de especialistas muda conforme o programa',
       'Dá para aceitar o pacote recomendado ou montar o seu',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '3 min',
     poster: poster('programas'),
     cta: { label: 'Ver os programas', href: '#catalogo' },
@@ -132,7 +138,7 @@ export const PROGRAMAS_CHAPTERS: readonly ExplainerChapter[] = [
       'O valor por mês cai conforme o ciclo aumenta',
       'Resultado em saúde precisa de tempo — por isso o ciclo mínimo é de 3 meses',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '2 min',
     poster: poster('ciclo'),
     cta: { label: 'Comparar os ciclos', href: '#pacote' },

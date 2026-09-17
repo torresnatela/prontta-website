@@ -11,10 +11,12 @@
  * componente precisou mudar por causa dessa ausência.
  *
  * ⚠️ Os vídeos ainda são PLACEHOLDER. Para publicar os definitivos, troque o
- * `youtubeId` de cada capítulo — nenhum componente precisa mudar.
+ * `video` de cada capítulo — `{ kind: 'youtube', youtubeId }` para o canal ou
+ * `{ kind: 'file', src }` para MP4 no Vercel Blob (como /proposta/clinicas faz;
+ * ver `public/proposta-midia/README.md`). Nenhum componente precisa mudar.
  */
 
-import { PLACEHOLDER_YOUTUBE_ID, type ExplainerChapter } from '@/lib/simulador/explainer';
+import { PLACEHOLDER_VIDEO, type ExplainerChapter } from '@/lib/simulador/explainer';
 
 export const EMPRESA_HERO_IMAGE = '/proposta-midia/hero-proposta.svg';
 
@@ -31,7 +33,7 @@ export const EMPRESA_CHAPTERS: readonly ExplainerChapter[] = [
       'Cada ajuste recalcula o custo por colaborador no painel ao lado',
       'Nada é enviado para ninguém: a simulação roda no seu navegador',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '2 min',
     poster: poster('visao-geral'),
     cta: { label: 'Começar a montar', href: '#simulador' },
@@ -46,7 +48,7 @@ export const EMPRESA_CHAPTERS: readonly ExplainerChapter[] = [
       'Agenda dedicada é comprada em plantões fechados de 4 horas médicas',
       'Acima de 150 consultas/mês o software mensal fica isento',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '3 min',
     poster: poster('consultas'),
     cta: { label: 'Ir para as consultas', href: '#passo-consultas' },
@@ -61,7 +63,7 @@ export const EMPRESA_CHAPTERS: readonly ExplainerChapter[] = [
       'O contrato é o ciclo cheio; a coluna mensal é o rateio dele no orçamento',
       'Programas não pagam software mensal, só o fee de plataforma por ciclo',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '3 min',
     poster: poster('programas'),
     cta: { label: 'Ir para os programas', href: '#passo-programas' },
@@ -76,7 +78,7 @@ export const EMPRESA_CHAPTERS: readonly ExplainerChapter[] = [
       'Três modelos de custeio: integral pela empresa, compartilhado ou pelo colaborador',
       'Desconto em folha da parte do colaborador exige autorização dele (CLT, art. 462)',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '3 min',
     poster: poster('beneficio'),
     cta: { label: 'Ir para o custeio', href: '#passo-custeio' },
@@ -91,7 +93,7 @@ export const EMPRESA_CHAPTERS: readonly ExplainerChapter[] = [
       'Nenhuma premissa de retorno é da Prontta — todas são digitadas com o cliente',
       'A redução necessária para o benefício se pagar é aritmética, não promessa',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '4 min',
     poster: poster('retorno'),
     cta: { label: 'Ver o retorno', href: '#passo-retorno' },
@@ -106,7 +108,7 @@ export const EMPRESA_CHAPTERS: readonly ExplainerChapter[] = [
       'As tabelas mostram preço unitário e total, sem coluna de margem',
       'O PDF congela os preços do momento: uma proposta gerada não muda depois',
     ],
-    youtubeId: PLACEHOLDER_YOUTUBE_ID,
+    video: PLACEHOLDER_VIDEO,
     durationLabel: '2 min',
     poster: poster('pdf'),
     cta: { label: 'Ir para os seus dados', href: '#passo-vendedor' },

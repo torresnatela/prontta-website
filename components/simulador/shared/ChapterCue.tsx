@@ -5,7 +5,11 @@ import { useExplainer } from './ExplainerProvider';
 interface ChapterCueProps {
   /** `id` do capítulo em `SIMULADOR_CHAPTERS` / `PROGRAMAS_CHAPTERS`. */
   chapterId: string;
-  /** Rótulo no modo vídeo. Sem isto: "Ver vídeo · 2 min". */
+  /**
+   * Verbo do modo vídeo — a duração do capítulo é anexada sempre.
+   * Sem isto: "Ver vídeo · 2 min"; com `label="Ver como funciona"`:
+   * "Ver como funciona · 2 min".
+   */
   label?: string;
   /** Rótulo no modo imagem. Sem isto: "Entender este passo". */
   labelImagem?: string;
@@ -26,7 +30,7 @@ export function ChapterCue({ chapterId, label, labelImagem }: ChapterCueProps) {
 
   const isVideo = media === 'video';
   const text = isVideo
-    ? (label ?? `Ver vídeo · ${chapter.durationLabel}`)
+    ? `${label ?? 'Ver vídeo'} · ${chapter.durationLabel}`
     : (labelImagem ?? 'Entender este passo');
 
   return (

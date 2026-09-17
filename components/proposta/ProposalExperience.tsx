@@ -40,8 +40,8 @@ interface ProposalExperienceProps {
 
 const EXPLAINER_COPY = {
   revenda: {
-    title: 'Cinco vídeos curtos e você monta a proposta sozinho',
-    lead: 'Da formação do preço de uma consulta até o PDF assinado. Assista na ordem ou pule direto para a dúvida que você tem agora.',
+    title: 'Três vídeos curtos e você monta a proposta sozinho',
+    lead: 'Da simulação de consultas e programas até a DRE e o PDF final. Assista na ordem ou pule direto para a dúvida que você tem agora.',
   },
   beneficio: {
     title: 'Seis vídeos curtos e você monta a proposta sozinho',

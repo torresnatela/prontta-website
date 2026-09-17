@@ -147,6 +147,20 @@ describe('ChapterCue', () => {
     expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
   });
 
+  it('anexa a duração do capítulo ao rótulo customizado', () => {
+    // O rótulo é só o verbo; a duração vem do capítulo. Assim trocar o vídeo
+    // não deixa um "· 2 min" velho espalhado pelos heros.
+    render(
+      <ExplainerProvider chapters={SIMULADOR_CHAPTERS}>
+        <ChapterCue chapterId="visao-geral" label="Ver como funciona" />
+      </ExplainerProvider>,
+    );
+
+    expect(screen.getByRole('button')).toHaveTextContent(
+      `Ver como funciona · ${SIMULADOR_CHAPTERS[0].durationLabel}`,
+    );
+  });
+
   it('some quando o capítulo não existe para aquele público', () => {
     // O atalho da DRE mora no DREPanel; na página do associado ele não deve
     // renderizar nada, nem vazar o vocabulário de custo.

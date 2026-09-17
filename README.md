@@ -70,7 +70,7 @@ npm start
 - Formulário de contato rápido
 - Footer com informações de contato
 
-### Calculadora de Propostas (`/proposta`)
+### Proposta e Simulador (`/proposta/clinicas`, `/proposta/academias`, `/proposta/empresa`)
 - Formulário em 3 etapas
 - Seleção de tipo de serviço
 - Configuração de pacientes/mês

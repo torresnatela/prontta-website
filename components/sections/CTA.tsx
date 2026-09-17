@@ -92,7 +92,7 @@ export function CTA() {
             </div>
 
             {/* CTA Button */}
-            <Link href="/proposta">
+            <Link href="/proposta/clinicas">
               <Button variant="primary" size="lg" className="group">
                 Solicitar Proposta Detalhada
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />

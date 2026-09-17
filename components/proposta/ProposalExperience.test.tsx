@@ -8,9 +8,12 @@ import { describe, expect, it, vi } from 'vitest';
  * página — daí o stub.
  */
 vi.mock('next/image', () => ({
-  default: ({ alt }: { alt?: string }) => <img alt={alt ?? ''} />,
+  default: ({ alt, src }: { alt?: string; src?: unknown }) => (
+    <img alt={alt ?? ''} src={typeof src === 'string' ? src : undefined} />
+  ),
 }));
 
+import { ACADEMIA_HERO_IMAGE } from '@/lib/academias/catalog';
 import { ProposalExperience } from './ProposalExperience';
 
 /**
@@ -111,7 +114,7 @@ describe('/proposta/empresa — modo benefício', () => {
   });
 });
 
-describe('/proposta — modo revenda segue intacto', () => {
+describe('/proposta/clinicas — modo revenda segue intacto', () => {
   it('mantém margens, DRE e as colunas de custo', () => {
     const { container } = renderRevenda();
 
@@ -130,11 +133,44 @@ describe('/proposta — modo revenda segue intacto', () => {
 
   it('fala com o canal escolhido', () => {
     const { container } = renderRevenda();
-    expect(within(container).getByRole('heading', { level: 1 }).textContent).toMatch(/sua clínica/i);
+    expect(within(container).getByRole('heading', { level: 1 }).textContent).toMatch(
+      /sua clínica/i,
+    );
   });
 
   it('o benefício fala com a empresa', () => {
     const { container } = renderBeneficio();
-    expect(within(container).getByRole('heading', { level: 1 }).textContent).toMatch(/sua empresa/i);
+    expect(within(container).getByRole('heading', { level: 1 }).textContent).toMatch(
+      /sua empresa/i,
+    );
+  });
+});
+
+describe('camada explicativa da revenda', () => {
+  it('anuncia e lista os três vídeos gravados', () => {
+    const { container } = renderRevenda();
+
+    expect(
+      within(container).getByRole('heading', { level: 2, name: /três vídeos curtos/i }),
+    ).toBeInTheDocument();
+    expect(within(container).getAllByRole('tab')).toHaveLength(3);
+  });
+});
+
+describe('foto do hero por canal', () => {
+  const heroSrc = (container: HTMLElement) =>
+    container.querySelector('.hero-media img')?.getAttribute('src');
+
+  it('clínicas e academias usam a foto real de /academias', () => {
+    expect(heroSrc(renderRevenda().container)).toBe(ACADEMIA_HERO_IMAGE);
+    expect(
+      heroSrc(
+        render(<ProposalExperience clientType="academia" topBarSubtitle="academias" />).container,
+      ),
+    ).toBe(ACADEMIA_HERO_IMAGE);
+  });
+
+  it('a empresa segue com a arte placeholder', () => {
+    expect(heroSrc(renderBeneficio().container)).toBe('/proposta-midia/hero-proposta.svg');
   });
 });

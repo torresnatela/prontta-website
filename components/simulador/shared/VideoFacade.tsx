@@ -2,9 +2,10 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import type { ExplainerVideo } from '@/lib/simulador/explainer';
 
 interface VideoFacadeProps {
-  youtubeId: string;
+  video: ExplainerVideo;
   title: string;
   /** Capa local 16:9. */
   poster: string;
@@ -18,26 +19,43 @@ const EMBED_PARAMS = 'autoplay=1&rel=0&modestbranding=1&playsinline=1';
 /**
  * Player "facade": mostra só a capa até o clique.
  *
- * Nenhum iframe, script ou cookie do YouTube antes do play — o mesmo cuidado que
- * `components/CookieConsent.tsx` toma com o GA. Depois do clique o embed vem de
- * `youtube-nocookie.com`.
+ * Nenhum iframe, script, cookie do YouTube — nem byte de MP4 — antes do play; o
+ * mesmo cuidado que `components/CookieConsent.tsx` toma com o GA. Depois do
+ * clique, o embed vem de `youtube-nocookie.com` ou o arquivo toca num `<video>`
+ * nativo, conforme `video.kind`.
  *
  * Não usa o `YouTubeEmbed` de `@next/third-parties` de propósito: ele baixa o
  * lite-youtube de uma CDN externa e aponta para o domínio com cookie.
  */
-export function VideoFacade({ youtubeId, title, poster, durationLabel }: VideoFacadeProps) {
+export function VideoFacade({ video, title, poster, durationLabel }: VideoFacadeProps) {
   const [playing, setPlaying] = useState(false);
 
   if (playing) {
     return (
       <div className="video-frame">
-        <iframe
-          className="video-embed"
-          src={`https://www.youtube-nocookie.com/embed/${youtubeId}?${EMBED_PARAMS}`}
-          title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        />
+        {video.kind === 'youtube' ? (
+          <iframe
+            className="video-embed"
+            src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?${EMBED_PARAMS}`}
+            title={title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        ) : (
+          // Gravações de tela não são 16:9 exatos: o <video> deixa as faixas
+          // na cor do frame (--navy) em vez de cortar a interface gravada.
+          <video
+            className="video-embed"
+            src={video.src}
+            poster={poster}
+            controls
+            autoPlay
+            playsInline
+            preload="metadata"
+          >
+            {title}
+          </video>
+        )}
       </div>
     );
   }

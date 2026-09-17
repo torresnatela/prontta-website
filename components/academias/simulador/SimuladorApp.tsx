@@ -31,7 +31,7 @@ function Hero() {
           </a>
           <ChapterCue
             chapterId="visao-geral"
-            label="Ver como funciona · 2 min"
+            label="Ver como funciona"
             labelImagem="Entender antes de simular"
           />
           <a className="hero-link" href="#resultado">
