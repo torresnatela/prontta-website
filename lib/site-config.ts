@@ -16,9 +16,9 @@ export const siteConfig = {
   name: 'Prontta Saúde',
   /** URL canônica de produção, sem barra no final. */
   url: siteUrl,
-  shortDescription: 'Soluções em Terceirização Médica',
+  shortDescription: 'Infraestrutura B2B de telessaúde assistida',
   description:
-    'Terceirização de serviços médicos especializados para clínicas e hospitais. Telesaúde híbrida, agenda dedicada e on demand para ampliar a oferta de especialidades com qualidade e redução de custos.',
+    'A Prontta transforma clínicas, academias e empresas em pontos de cuidado especializado. Programas de Saúde Assistida em ciclos de 3, 6 e 12 meses, com receita recorrente para o parceiro. Não é plano de saúde.',
   /** Imagem OG padrão (precisa existir em /public). */
   ogImage: '/og-image.png',
   /** Logomarca para JSON-LD. Gerada por `npm run brand:assets`. */
@@ -27,20 +27,31 @@ export const siteConfig = {
   language: 'pt-BR',
 
   contact: {
-    phone: '+55-31-99333-3245',
-    phoneDisplay: '(31) 99333-3245',
-    phoneHref: 'tel:+5531993333245',
+    phone: '+55-31-98492-7635',
+    phoneDisplay: '(31) 98492-7635',
+    phoneHref: 'tel:+5531984927635',
     email: 'contato@pronttasaude.com.br',
-    hours: 'Seg - Sex: 8h às 18h',
+    hours: 'Seg a sex, 8h às 18h',
   },
 
   address: {
-    streetAddress: 'Av. Pres. Eurico Dutra, 608 - Belvedere',
+    streetAddress: 'Rua Rio Grande do Norte, 1435, sala 708, 7º pavimento, Savassi',
     addressLocality: 'Belo Horizonte',
     addressRegion: 'MG',
-    postalCode: '30320-190',
+    postalCode: '30130-138',
     addressCountry: 'BR',
-    full: 'Av. Pres. Eurico Dutra, 608 - Belvedere, Belo Horizonte - MG, 30320-190',
+    full: 'Rua Rio Grande do Norte, 1435, sala 708, 7º pavimento, Savassi, Belo Horizonte/MG, CEP 30130-138',
+  },
+
+  /** Identificação legal exibida no rodapé (Resolução CFM nº 2.336/2023). */
+  legal: {
+    legalName: 'Prontta Saúde Ltda.',
+    cnpj: '63.638.463/0001-01',
+    technicalDirector: 'Dr. Romualdo da Silva Gonçalves, médico, CRM-MG 39150',
+    /** Inscrição da PJ no CRM-MG — preencha quando o protocolo sair. */
+    crmProtocol: '[Nº DO PROTOCOLO]',
+    /** Encarregado de dados (LGPD). */
+    dpoEmail: 'contato@pronttasaude.com.br',
   },
 
   social: {

@@ -51,16 +51,16 @@ export function TableOfContents({ content }: { content: string }) {
   if (headings.length < 3) return null
 
   return (
-    <nav aria-label="Sumário" className="rounded-2xl border-2 border-accent-light bg-white p-5">
-      <p className="mb-3 font-display text-sm font-bold uppercase tracking-wide text-neutral-gray">
+    <nav aria-label="Sumário" className="rounded-xl border border-line bg-card p-5">
+      <p className="mb-3 text-[12.5px] font-semibold uppercase tracking-[0.1em] text-cyan-ink">
         Neste artigo
       </p>
-      <ul className="space-y-2 text-sm">
+      <ul className="space-y-2 text-[14px]">
         {headings.map((heading) => (
           <li key={heading.id} className={heading.level === 3 ? 'pl-4' : ''}>
             <Link
               href={`#${heading.id}`}
-              className="text-primary-navy/70 hover:text-primary-cyan transition-colors line-clamp-2"
+              className="line-clamp-2 text-ink-2 transition-colors hover:text-ink"
             >
               {heading.text}
             </Link>

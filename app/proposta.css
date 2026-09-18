@@ -12,8 +12,8 @@
  *
  * Escopado em `.sim-root.proposta` para não alcançar /academias.
  *
- * ⚠️ SÓ px, nunca rem — mesma regra do simulador-ui.css: app/globals.css define
- * html { font-size: 18px } e qualquer rem sairia 12,5% maior.
+ * ⚠️ SÓ px, nunca rem — mesma regra do simulador-ui.css: o tamanho-base do
+ * documento é do site institucional e pode mudar sem aviso.
  */
 
 /* A proposta pede mais largura que o simulador de academias: a tabela de

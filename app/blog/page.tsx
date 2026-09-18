@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { Header, Footer } from '@/components/layout'
+import { FinalCTA } from '@/components/sections'
+import { Eyebrow } from '@/components/ui'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { JsonLd } from '@/components/JsonLd'
 import { generateMetadata as buildMetadata } from '@/lib/seo'
@@ -10,7 +12,7 @@ import { siteConfig } from '@/lib/site-config'
 export const metadata: Metadata = buildMetadata({
   title: 'Blog',
   description:
-    'Conteúdos sobre terceirização médica, telesaúde híbrida, gestão de clínicas e ampliação de especialidades. Insights práticos da Prontta Saúde.',
+    'Conteúdos sobre telessaúde assistida, gestão de clínicas, academias e empresas e ampliação de especialidades. Insights práticos da Prontta Saúde.',
   path: '/blog',
 })
 
@@ -20,39 +22,33 @@ export default function BlogIndexPage() {
   return (
     <>
       <Header />
-      <main className="pt-28 md:pt-32">
-        {/* Hero */}
-        <section className="section-padding pb-8 md:pb-12">
-          <div className="container-custom mx-auto text-center">
-            <span className="inline-block px-5 py-2.5 bg-primary-cyan/10 text-primary-cyan font-medium rounded-full text-base mb-4">
-              Blog Prontta Saúde
-            </span>
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-navy text-balance">
-              Ideias para <span className="gradient-text">transformar</span> a saúde
+      <main>
+        <section className="container-custom pb-10 pt-14 lg:pt-20">
+          <div className="flex max-w-[740px] flex-col gap-4">
+            <Eyebrow>Conteúdo</Eyebrow>
+            <h1 className="heading text-[clamp(34px,4.4vw,52px)] font-extrabold">
+              Ideias para transformar a saúde
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-xl text-neutral-gray">
-              Terceirização médica, telesaúde híbrida e gestão de clínicas — conteúdo
-              prático para ampliar especialidades com qualidade e eficiência.
+            <p className="text-[17px] text-ink-2">
+              Telessaúde assistida, gestão de clínicas, academias e empresas — conteúdo prático para
+              ampliar especialidades com qualidade e eficiência.
             </p>
           </div>
         </section>
 
-        {/* Grid */}
-        <section className="section-padding pt-4">
-          <div className="container-custom mx-auto">
-            {posts.length === 0 ? (
-              <p className="text-center text-lg text-neutral-gray">
-                Em breve, novos conteúdos por aqui. 🩺
-              </p>
-            ) : (
-              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                {posts.map((post, index) => (
-                  <BlogCard key={post.slug} post={post} priority={index < 3} />
-                ))}
-              </div>
-            )}
-          </div>
+        <section className="container-custom pb-20">
+          {posts.length === 0 ? (
+            <p className="text-ink-2">Em breve, novos conteúdos por aqui.</p>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {posts.map((post, index) => (
+                <BlogCard key={post.slug} post={post} priority={index < 3} />
+              ))}
+            </div>
+          )}
         </section>
+
+        <FinalCTA />
       </main>
       <Footer />
 

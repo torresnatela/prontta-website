@@ -16,6 +16,9 @@ const nextConfig = {
       // a sua URL. Permanente: é a URL que circulou em material impresso e
       // links antigos, e o Google deve consolidar o sinal na nova.
       { source: '/proposta', destination: '/proposta/clinicas', permanent: true },
+      // O layout aprovado do site cita /proposta/empresas (plural); a rota
+      // real é no singular.
+      { source: '/proposta/empresas', destination: '/proposta/empresa', permanent: true },
     ]
   },
 }

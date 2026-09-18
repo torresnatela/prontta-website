@@ -15,7 +15,7 @@ export default async function PainelLayout({ children }: { children: React.React
   const isAdmin = user.role === 'admin';
 
   return (
-    <div className="min-h-screen bg-accent-light/20">
+    <div className="min-h-screen bg-accent-light/20 text-primary-navy">
       <header className="border-b border-accent-light bg-white">
         <div className="container-custom mx-auto flex flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-8">

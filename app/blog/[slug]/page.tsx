@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { Header, Footer } from '@/components/layout'
-import { CTA } from '@/components/sections'
+import { FinalCTA } from '@/components/sections'
 import { JsonLd } from '@/components/JsonLd'
 import { Breadcrumbs } from '@/components/blog/Breadcrumbs'
 import { ArticleHeader } from '@/components/blog/ArticleHeader'
@@ -23,11 +23,7 @@ export function generateStaticParams(): Params[] {
   return getAllSlugs().map((slug) => ({ slug }))
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<Params>
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params
   const post = getPostBySlug(slug)
   if (!post) return { title: 'Artigo não encontrado' }
@@ -50,11 +46,7 @@ export async function generateMetadata({
   })
 }
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: Promise<Params>
-}) {
+export default async function BlogPostPage({ params }: { params: Promise<Params> }) {
   const { slug } = await params
   const post = getPostBySlug(slug)
   if (!post) notFound()
@@ -91,52 +83,50 @@ export default async function BlogPostPage({
   return (
     <>
       <Header />
-      <main className="pt-28 md:pt-32">
-        <div className="section-padding pt-4">
-          <div className="container-custom mx-auto grid gap-12 lg:grid-cols-[minmax(0,1fr)_280px]">
-            {/* Artigo */}
-            <article className="min-w-0 max-w-3xl">
-              <Breadcrumbs items={breadcrumbs} />
-              <ArticleHeader post={post} author={author} />
+      <main>
+        <div className="container-custom grid gap-12 pb-20 pt-10 lg:grid-cols-[minmax(0,1fr)_280px] lg:pt-14">
+          {/* Artigo */}
+          <article className="min-w-0 max-w-3xl">
+            <Breadcrumbs items={breadcrumbs} />
+            <ArticleHeader post={post} author={author} />
 
-              <div className="mt-8 border-t border-accent-light pt-8">
-                <MDXContent components={mdxComponents} />
+            <div className="mt-8 border-t border-line pt-8">
+              <MDXContent components={mdxComponents} />
+            </div>
+
+            {/* Tags */}
+            {post.tags.length > 0 && (
+              <div className="mt-10 flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-md border border-line px-3 py-1 text-[13px] text-ink-3"
+                  >
+                    #{tag}
+                  </span>
+                ))}
               </div>
+            )}
 
-              {/* Tags */}
-              {post.tags.length > 0 && (
-                <div className="mt-10 flex flex-wrap gap-2">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-accent-light px-3 py-1 text-sm text-primary-navy/70"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              )}
+            <AuthorBox author={author} />
+          </article>
 
-              <AuthorBox author={author} />
-            </article>
-
-            {/* Sumário (desktop) */}
-            <aside className="hidden lg:block">
-              <div className="sticky top-28">
-                <TableOfContents content={post.content} />
-              </div>
-            </aside>
-          </div>
+          {/* Sumário (desktop) */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-28">
+              <TableOfContents content={post.content} />
+            </div>
+          </aside>
         </div>
 
         {/* Relacionados */}
         {related.length > 0 && (
-          <section className="section-padding pt-0">
-            <div className="container-custom mx-auto">
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-primary-navy mb-8">
+          <section className="border-t border-line bg-surface py-20">
+            <div className="container-custom">
+              <h2 className="heading mb-8 text-[clamp(24px,2.6vw,31px)] font-extrabold">
                 Continue lendo
               </h2>
-              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {related.map((p) => (
                   <BlogCard key={p.slug} post={p} />
                 ))}
@@ -145,7 +135,7 @@ export default async function BlogPostPage({
           </section>
         )}
 
-        <CTA />
+        <FinalCTA />
       </main>
       <Footer />
 

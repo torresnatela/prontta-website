@@ -11,8 +11,8 @@
  * camada explicativa e painel de resultado são um sistema só, e manter duas
  * cópias divergindo é exatamente o que esta unificação evita.
  *
- * ⚠️ SÓ px, nunca rem: app/globals.css define html { font-size: 18px } e qualquer
- * rem portado dos modelos (que assumem 16px) sairia 12,5% maior.
+ * ⚠️ SÓ px, nunca rem: o tamanho-base do documento é do site institucional e
+ * pode mudar sem aviso; px mantém os modelos fiéis ao original.
  */
 
 .sim-root {
@@ -36,9 +36,9 @@
   --accent-soft: #ebf7ff;
   --accent-border: #bfe4ff;
 
-  /* Outfit é a fonte do site, carregada em app/layout.tsx como --font-outfit.
-     Os modelos usam Inter, que não existe neste projeto e cairia em system-ui. */
-  font-family: var(--font-outfit), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+  /* Inter é a fonte do site, carregada em app/layout.tsx como --font-inter —
+     a mesma que os modelos comerciais originais usam. */
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, sans-serif;
   font-size: 16px;
   line-height: 1.55;

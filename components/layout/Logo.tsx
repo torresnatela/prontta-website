@@ -8,7 +8,8 @@ interface LogoProps {
   className?: string
   /** `false` mostra só o ícone do P. */
   showText?: boolean
-  size?: 'sm' | 'md' | 'lg'
+  /** sm 32px · md 40px · lg 46px (rodapé) · nav 44px no celular, 52px no desktop (cabeçalho). */
+  size?: 'sm' | 'md' | 'lg' | 'nav'
   /** `white` usa a versão de fundo escuro (rodapé, capas). */
   variant?: 'default' | 'white'
   /** Só no cabeçalho, que fica acima da dobra. */
@@ -28,7 +29,7 @@ export function Logo({
   variant = 'default',
   priority = false,
 }: LogoProps) {
-  const heights = { sm: 'h-8', md: 'h-10', lg: 'h-14' }
+  const heights = { sm: 'h-8', md: 'h-10', lg: 'h-[46px]', nav: 'h-11 lg:h-[52px]' }
   const source = showText ? (variant === 'white' ? lockupWhite : lockup) : mark
 
   return (

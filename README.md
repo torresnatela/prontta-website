@@ -1,6 +1,6 @@
 # Prontta Saúde - Landing Page
 
-Landing page moderna para a Prontta Saúde, empresa de terceirização de serviços médicos especializados.
+Site institucional da Prontta Saúde, infraestrutura B2B de telessaúde assistida para clínicas, academias e empresas.
 
 ## 🚀 Stack Tecnológica
 
@@ -24,9 +24,10 @@ prontta-website/
 │   ├── sitemap.ts          # Sitemap dinâmico
 │   └── robots.ts           # robots.txt
 ├── components/
-│   ├── ui/                 # Componentes base (Button, Input, Card)
+│   ├── ui/                 # Componentes base (Button, Input, Eyebrow, Note, Tag)
 │   ├── layout/             # Header, Footer, Logo
-│   ├── sections/           # Hero, Services, Benefits, HowItWorks, CTA
+│   ├── sections/           # Seções da home (Hero, Doors, Programs, FinalCTA…)
+│   ├── simulator-gate/     # Modal que antecede os simuladores
 │   └── calculator/         # Formulário e lógica da calculadora
 ├── lib/
 │   ├── pricing.ts          # Regras de precificação
@@ -37,12 +38,19 @@ prontta-website/
 
 ## 🎨 Paleta de Cores
 
+Tema navy escuro, tokens em `tailwind.config.ts`:
+
 ```css
---primary-cyan: #00B4E6;    /* Azul principal */
---primary-navy: #0D2137;    /* Azul escuro */
---accent-light: #E6F9FF;    /* Fundo claro */
---neutral-gray: #6B7280;    /* Textos secundários */
+bg:      #001632   /* fundo da página */
+surface: #00204D   /* seções alternadas */
+card:    #0A2E5C   /* cards */
+ink:     #EDF4FA   /* texto (ink-2 #B7CBE0, ink-3 #93AECB) */
+line:    #17406F   /* bordas */
+cyan:    #01B4F7   /* marca e botões (cyan-ink #6FD3F8) */
 ```
+
+Fontes: Inter (corpo) e Manrope (títulos). A área logada (`/login`, `/painel`,
+`/admin`) continua clara, com `primary-*`, `accent-light` e `neutral-gray`.
 
 ## 🛠️ Instalação
 

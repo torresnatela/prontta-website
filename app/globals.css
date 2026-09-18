@@ -2,62 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --primary-cyan: #00B4E6;
-  --primary-navy: #0D2137;
-  --accent-light: #E6F9FF;
-  --neutral-gray: #6B7280;
-  --white: #FFFFFF;
-}
+/*
+ * Base do site institucional (tema navy escuro).
+ *
+ * Os tokens de cor e fonte vivem em tailwind.config.ts — use as classes
+ * (bg-bg, text-ink-2, border-line, font-display…). Aqui ficam só a base do
+ * documento e os utilitários compostos que se repetem entre as páginas.
+ *
+ * A área logada (/login, /painel, /admin) e os simuladores (.sim-root) pintam
+ * o próprio fundo e a própria cor de texto por cima desta base.
+ */
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-size: 18px; /* Base font size increased for better readability */
   }
-  
+
   body {
-    @apply bg-white text-primary-navy antialiased text-lg;
+    @apply bg-bg text-ink font-sans antialiased;
+    font-size: 16px;
+    line-height: 1.6;
   }
 
   ::selection {
-    @apply bg-primary-cyan/30 text-primary-navy;
+    @apply bg-cyan/30 text-ink;
   }
 }
 
 @layer components {
-  .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-cyan to-primary-navy;
-  }
-
-  .glass-card {
-    @apply bg-white/80 backdrop-blur-lg border border-white/20 shadow-xl;
-  }
-
-  .ecg-line {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-    animation: ecg-draw 2s ease-in-out forwards infinite;
-  }
-
-  .btn-primary {
-    @apply relative overflow-hidden bg-primary-cyan text-white font-semibold px-8 py-4 rounded-full
-           transition-all duration-300 hover:bg-primary-navy hover:shadow-lg hover:shadow-primary-cyan/25
-           active:scale-95;
-  }
-
-  .btn-secondary {
-    @apply relative overflow-hidden bg-transparent border-2 border-primary-navy text-primary-navy 
-           font-semibold px-8 py-4 rounded-full transition-all duration-300 
-           hover:bg-primary-navy hover:text-white active:scale-95;
-  }
-
-  .section-padding {
-    @apply px-4 sm:px-6 lg:px-8 py-16 md:py-24;
-  }
-
+  /* Coluna central do site: 1200px + respiro lateral de 24px. */
   .container-custom {
-    @apply max-w-7xl mx-auto;
+    @apply mx-auto w-full max-w-wrap px-6;
+  }
+
+  /* Ritmo vertical padrão das seções (80px desktop, 52px mobile). */
+  .section-padding {
+    @apply py-[52px] sm:py-20;
+  }
+
+  /* Títulos de seção: Manrope, tracking fechado, linha justa. */
+  .heading {
+    @apply font-display tracking-[-0.018em];
+    line-height: 1.12;
   }
 }
 
@@ -66,67 +52,3 @@
     text-wrap: balance;
   }
 }
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-accent-light;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-primary-cyan/50 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-primary-cyan;
-}
-
-/* ECG Animation Keyframes */
-@keyframes ecg-draw {
-  0% {
-    stroke-dashoffset: 1000;
-  }
-  50% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: -1000;
-  }
-}
-
-/* Pulse ring animation for CTA buttons */
-@keyframes pulse-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
-}
-
-.pulse-ring::before {
-  content: '';
-  @apply absolute inset-0 rounded-full bg-primary-cyan;
-  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Mesh background pattern */
-.mesh-bg {
-  background-image: 
-    radial-gradient(at 40% 20%, rgba(0, 180, 230, 0.1) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(13, 33, 55, 0.05) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, rgba(0, 180, 230, 0.08) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, rgba(230, 249, 255, 0.5) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(0, 180, 230, 0.1) 0px, transparent 50%);
-}
-
-/* Geometric pattern overlay */
-.geometric-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300B4E6' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-

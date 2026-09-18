@@ -1,20 +1,24 @@
 import type { Metadata } from 'next'
-import { Outfit, Space_Grotesk } from 'next/font/google'
+import { Inter, Manrope } from 'next/font/google'
 import './globals.css'
 import { siteConfig } from '@/lib/site-config'
 import { organizationSchema, websiteSchema } from '@/lib/structured-data'
 import { JsonLd } from '@/components/JsonLd'
 import { CookieConsent } from '@/components/CookieConsent'
+import { SimulatorGateProvider } from '@/components/simulator-gate'
 
-const outfit = Outfit({
+// Inter no corpo, Manrope nos títulos — as duas fontes do layout aprovado.
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-outfit',
+  weight: ['400', '500', '600'],
+  variable: '--font-inter',
   display: 'swap',
 })
 
-const spaceGrotesk = Space_Grotesk({
+const manrope = Manrope({
   subsets: ['latin'],
-  variable: '--font-space-grotesk',
+  weight: ['500', '600', '700', '800'],
+  variable: '--font-manrope',
   display: 'swap',
 })
 
@@ -28,13 +32,14 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: [
-    'terceirização médica',
-    'telesaúde híbrida',
-    'telemedicina',
-    'agenda médica dedicada',
+    'telessaúde assistida',
+    'telemedicina B2B',
+    'programas de saúde assistida',
     'especialidades médicas',
     'clínicas',
-    'hospitais',
+    'academias',
+    'empresas',
+    'NR-1',
     'saúde',
   ],
   authors: [{ name: siteConfig.name }],
@@ -81,15 +86,12 @@ export const metadata: Metadata = {
     : undefined,
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang={siteConfig.language}
-      className={`${outfit.variable} ${spaceGrotesk.variable}`}
+      className={`${inter.variable} ${manrope.variable}`}
+      data-scroll-behavior="smooth"
     >
       <head>
         {/* Favicons vêm de app/icon.png, app/apple-icon.png e app/favicon.ico,
@@ -97,10 +99,11 @@ export default function RootLayout({
         <JsonLd data={[organizationSchema(), websiteSchema()]} />
       </head>
       <body className="font-sans">
-        {children}
+        {/* O modal "Simular proposta" é aberto pelo Header e pelos CTAs de
+            qualquer página pública, por isso o provider mora aqui. */}
+        <SimulatorGateProvider>{children}</SimulatorGateProvider>
         <CookieConsent gaId={siteConfig.analytics.gaId} />
       </body>
     </html>
   )
 }
-

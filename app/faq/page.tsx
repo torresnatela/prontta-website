@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronDown } from 'lucide-react'
 import { Header, Footer } from '@/components/layout'
-import { CTA } from '@/components/sections'
+import { FinalCTA } from '@/components/sections'
+import { Eyebrow } from '@/components/ui'
 import { JsonLd } from '@/components/JsonLd'
 import { Breadcrumbs } from '@/components/blog/Breadcrumbs'
 import { generateMetadata as buildMetadata } from '@/lib/seo'
@@ -63,43 +64,41 @@ export default function FaqPage() {
   return (
     <>
       <Header />
-      <main className="pt-28 md:pt-32">
-        <section className="section-padding">
-          <div className="container-custom mx-auto max-w-3xl">
+      <main>
+        <section className="container-custom pb-20 pt-10 lg:pt-14">
+          <div className="max-w-3xl">
             <Breadcrumbs items={breadcrumbs} />
 
-            <div className="text-center mb-10">
-              <span className="inline-block px-5 py-2.5 bg-primary-cyan/10 text-primary-cyan font-medium rounded-full text-base mb-4">
-                Perguntas Frequentes
-              </span>
-              <h1 className="font-display text-4xl md:text-5xl font-bold text-primary-navy text-balance">
+            <div className="mb-10 flex flex-col gap-4">
+              <Eyebrow>Perguntas frequentes</Eyebrow>
+              <h1 className="heading text-[clamp(34px,4.4vw,52px)] font-extrabold text-balance">
                 Tudo o que você precisa saber
               </h1>
-              <p className="mt-4 text-xl text-neutral-gray">
+              <p className="text-[17px] text-ink-2">
                 Dúvidas comuns sobre nossos modelos de atendimento e como começar.
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="flex flex-col gap-3">
               {faqs.map((faq) => (
                 <details
                   key={faq.question}
-                  className="group rounded-2xl border-2 border-accent-light bg-white p-5 open:shadow-lg"
+                  className="group rounded-xl border border-line bg-card p-5 open:border-cyan"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
-                    <h2 className="font-display text-lg md:text-xl font-bold text-primary-navy">
+                    <h2 className="font-display text-[17px] font-bold md:text-[19px]">
                       {faq.question}
                     </h2>
-                    <ChevronDown className="h-5 w-5 shrink-0 text-primary-cyan transition-transform group-open:rotate-180" />
+                    <ChevronDown className="h-5 w-5 shrink-0 text-cyan transition-transform group-open:rotate-180" />
                   </summary>
-                  <p className="mt-4 text-primary-navy/80 leading-relaxed">{faq.answer}</p>
+                  <p className="mt-4 text-[15.5px] leading-[1.6] text-ink-2">{faq.answer}</p>
                 </details>
               ))}
             </div>
 
-            <p className="mt-10 text-center text-neutral-gray">
+            <p className="mt-10 text-[15px] text-ink-3">
               Não encontrou sua resposta?{' '}
-              <Link href="/#contato" className="font-medium text-primary-cyan hover:underline">
+              <Link href="/#contato" className="font-semibold text-cyan-ink hover:underline">
                 Fale com nosso time
               </Link>
               .
@@ -107,7 +106,7 @@ export default function FaqPage() {
           </div>
         </section>
 
-        <CTA />
+        <FinalCTA />
       </main>
       <Footer />
 

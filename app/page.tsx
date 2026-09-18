@@ -1,5 +1,15 @@
 import { Header, Footer } from '@/components/layout'
-import { Hero, Services, Telesaude, HowItWorks, Benefits, CTA } from '@/components/sections'
+import {
+  Hero,
+  Doors,
+  Stats,
+  Compliance,
+  HowItWorks,
+  Programs,
+  OtherFormats,
+  PartnerChannel,
+  FinalCTA,
+} from '@/components/sections'
 
 export default function Home() {
   return (
@@ -7,14 +17,16 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Services />
-        <Telesaude />
+        <Doors />
+        <Stats />
+        <Compliance />
         <HowItWorks />
-        <Benefits />
-        <CTA />
+        <Programs />
+        <OtherFormats />
+        <PartnerChannel />
+        <FinalCTA />
       </main>
       <Footer />
     </>
   )
 }
-

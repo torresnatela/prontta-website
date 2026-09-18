@@ -13,9 +13,14 @@ Next.js 16 (App Router) · React 18 · TypeScript · Tailwind CSS · deploy na V
 
 - **Config do site**: tudo que descreve a empresa (URL, contato, redes) vive em
   `lib/site-config.ts`. Não duplique esses valores — importe de lá.
-- **Estilo**: tokens em `tailwind.config.ts`/`app/globals.css` (cores
-  `primary-cyan`/`primary-navy`, fontes Outfit/Space Grotesk, utilitários
-  `container-custom`, `section-padding`, `gradient-text`). Reuse `components/ui`.
+- **Estilo**: site institucional em tema navy escuro. Tokens em
+  `tailwind.config.ts` (cores `bg`/`surface`/`card`/`ink`/`line`/`cyan`/`band`/`foot`,
+  fontes Inter (`font-sans`) e Manrope (`font-display`)) e utilitários em
+  `app/globals.css` (`container-custom`, `section-padding`, `heading`).
+  Reuse `components/ui` (Button/ButtonLink, Eyebrow, Note, Tag, SectionHead).
+  `primary-*`/`accent-light`/`neutral-gray` são só da área logada (clara).
+- **Botões "Simular"**: use `OpenSimulatorButton` (`components/simulator-gate`) —
+  abre o modal que coleta os dados e leva a `/proposta/{clinicas,academias,empresa}`.
 
 ## SEO — manter sempre atualizado ⚠️
 

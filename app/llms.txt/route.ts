@@ -21,10 +21,12 @@ export function GET() {
 
 > ${siteConfig.description}
 
-A ${siteConfig.name} é uma empresa de terceirização de serviços médicos para clínicas e
-hospitais no Brasil. Oferece telesaúde híbrida (atendimento presencial com apoio de
-especialista remoto), agenda médica dedicada e agenda on demand, ajudando instituições
-de saúde a ampliar a oferta de especialidades com qualidade e menor custo operacional.
+A ${siteConfig.name} é uma infraestrutura B2B de telessaúde assistida no Brasil. Leva
+atendimento com médicos especialistas da rede credenciada para dentro de clínicas,
+laboratórios, academias e empresas, em Programas de Saúde Assistida com número definido
+de consultas e ciclos de 3, 6 ou 12 meses, gerando receita recorrente para o parceiro.
+Uma IA de pré-triagem organiza a jornada e direciona à especialidade certa — ela não
+emite diagnóstico. Não é plano de saúde, seguro-saúde nem administradora de benefícios.
 
 - Site: ${siteConfig.url}
 - Contato: ${siteConfig.contact.email} | ${siteConfig.contact.phoneDisplay}
@@ -32,7 +34,7 @@ de saúde a ampliar a oferta de especialidades com qualidade e menor custo opera
 
 ## Páginas principais
 
-- [Início](${siteConfig.url}/): visão geral dos serviços de terceirização médica e telesaúde híbrida.
+- [Início](${siteConfig.url}/): como a Prontta funciona, os três canais (clínicas, academias, empresas), os doze programas e o que a Prontta é e não é.
 - [Proposta e simulador para clínicas](${siteConfig.url}/proposta/clinicas): monte uma proposta de Programas de Saúde Assistida e consultas por telessaúde para uma clínica e simule o resultado da operação, com três vídeos curtos explicando o simulador.
 - [Proposta e simulador para academias](${siteConfig.url}/proposta/academias): a mesma proposta e o mesmo simulador, no canal academia.
 - [Proposta de benefício corporativo](${siteConfig.url}/proposta/empresa): proposta de saúde assistida como benefício para colaboradores de uma empresa — custo por colaborador e retorno estimado.

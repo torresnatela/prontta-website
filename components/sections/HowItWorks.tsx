@@ -1,131 +1,143 @@
-'use client'
-
-import { motion } from 'framer-motion'
-import { ClipboardList, Users, Rocket, CheckCircle } from 'lucide-react'
+import Image from 'next/image'
+import { Note, SectionHead } from '@/components/ui'
+import clinica from '@/public/home/como-funciona-clinica.jpg'
+import academia from '@/public/home/como-funciona-academia.jpg'
+import empresa from '@/public/home/como-funciona-empresa.jpg'
 
 const steps = [
   {
-    number: '01',
-    icon: ClipboardList,
-    title: 'Solicite uma Proposta',
-    description: 'Preencha o formulário com as necessidades da sua clínica. Nossa equipe analisa e prepara uma proposta personalizada.',
+    title: 'Pré-triagem por IA',
+    text: 'A pessoa responde a um roteiro estruturado. A IA organiza a jornada e indica a especialidade adequada. Ela não emite diagnóstico.',
   },
   {
-    number: '02',
-    icon: Users,
-    title: 'Alinhamento de Expectativas',
-    description: 'Realizamos uma reunião para entender sua operação e definir os melhores profissionais para sua demanda.',
+    title: 'Acolhimento e acesso',
+    text: 'No ponto parceiro, uma pessoa da equipe recepciona, organiza o acesso à sala e garante a privacidade do atendimento.',
   },
   {
-    number: '03',
-    icon: Rocket,
-    title: 'Início das Operações',
-    description: 'Integramos nossos profissionais ao seu fluxo de trabalho. Treinamento e adaptação inclusos.',
+    title: 'Consulta com o especialista',
+    text: 'Atendimento por telessaúde com médico da rede credenciada. O ato médico é de responsabilidade exclusiva do profissional que o pratica.',
   },
   {
-    number: '04',
-    icon: CheckCircle,
-    title: 'Acompanhamento Contínuo',
-    description: 'Monitoramos a qualidade dos atendimentos e ajustamos processos para garantir excelência.',
+    title: 'Programa e continuidade',
+    text: 'Consultas em sequência definida, retornos e acompanhamento ao longo de 3, 6 ou 12 meses, dentro do programa contratado.',
   },
 ]
 
+/** Linhas da tabela "dois modos de operação": rótulo, ponto de acesso, estabelecimento parceiro. */
+const modes = [
+  [
+    'Quem está no local',
+    'Atendente treinado, sem função clínica',
+    'A equipe do próprio parceiro, sob o RT dele',
+  ],
+  [
+    'Ato de saúde presencial',
+    'Não ocorre. O atendimento é integralmente por telessaúde',
+    'Dentro do escopo da licença sanitária e do RT do parceiro',
+  ],
+  [
+    'Remuneração do parceiro',
+    'Valor fixo pela cessão do espaço, nunca comissão por consulta',
+    'Margem de revenda dos pacotes, faturados sob o RT dele',
+  ],
+  [
+    'Equipamento no espaço',
+    'Somente terminal de acesso. Nada que meça o corpo',
+    'O que a licença sanitária do parceiro já cobre',
+  ],
+]
+
+const illustrations = [
+  {
+    src: clinica,
+    alt: 'Paciente acolhida pela equipe do estabelecimento durante atendimento com especialista por telessaúde',
+    caption:
+      'Em clínica, a equipe do próprio estabelecimento acolhe o paciente, sob a responsabilidade técnica da clínica.',
+  },
+  {
+    src: academia,
+    alt: 'Aluna em sala reservada de academia durante atendimento com especialista por telessaúde',
+    caption:
+      'Em academia, uma sala reservada com terminal de acesso. Nenhum ato de saúde presencial acontece ali.',
+  },
+  {
+    src: empresa,
+    alt: 'Colaborador em atendimento com especialista por telessaúde dentro da empresa',
+    caption:
+      'Na empresa, o acesso acontece no espaço cedido pela companhia ou pelo próprio celular.',
+  },
+]
+
+// Células da tabela: padding e altura de linha são iguais; o que muda é peso,
+// tamanho e cor — por isso cada variante monta a própria string.
+const cellBase = 'px-5 py-3 leading-[1.5] lg:px-[22px] lg:py-4'
+const cellBody = `${cellBase} text-[14.5px] text-ink-2`
+const cellLabel = `${cellBase} text-[14.5px] font-semibold text-ink max-lg:bg-surface-2 max-lg:pt-[18px]`
+const cellHead = `${cellBase} font-display text-[15px] font-bold text-ink`
+const cellHeadLabel = `${cellBase} font-sans text-[12.5px] font-semibold tracking-[0.07em] text-ink-3 max-lg:pt-[18px]`
+
 export function HowItWorks() {
   return (
-    <section id="como-funciona" className="relative section-padding bg-primary-navy overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-10">
-        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <defs>
-            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#00B4E6" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100" height="100" fill="url(#grid)" />
-        </svg>
-      </div>
-      
-      {/* Glowing orbs */}
-      <div className="absolute top-1/4 left-0 w-64 h-64 bg-primary-cyan/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-primary-cyan/10 rounded-full blur-3xl" />
+    <section id="como-funciona" className="section-padding">
+      <div className="container-custom">
+        <SectionHead
+          title="Como funciona, em quatro passos"
+          lede="O mesmo desenho em todos os canais. O que muda é quem está no local e quem responde pelo ato de saúde."
+        />
 
-      <div className="container-custom mx-auto relative z-10">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-16"
-        >
-          <span className="inline-block px-5 py-2.5 bg-primary-cyan/20 text-primary-cyan font-medium rounded-full text-base mb-4">
-            Como Funciona
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Processo simples e{' '}
-            <span className="text-primary-cyan">transparente</span>
-          </h2>
-          <p className="text-white/70 text-xl">
-            Em apenas 4 passos, sua clínica estará conectada aos melhores 
-            profissionais de saúde do mercado.
-          </p>
-        </motion.div>
-
-        {/* Steps */}
-        <div className="relative">
-          {/* Connection line */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary-cyan/30 to-transparent transform -translate-y-1/2" />
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {steps.map((step, index) => (
-              <motion.div
-                key={step.number}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
-                className="relative"
-              >
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 h-full hover:bg-white/10 transition-colors">
-                  {/* Number badge */}
-                  <div className="absolute -top-4 left-6">
-                    <div className="bg-primary-cyan text-white font-display font-bold text-xl px-5 py-1.5 rounded-full">
-                      {step.number}
-                    </div>
-                  </div>
-
-                  {/* Icon */}
-                  <div className="mt-4 mb-6">
-                    <div className="inline-flex p-5 bg-primary-cyan/20 rounded-xl">
-                      <step.icon className="w-10 h-10 text-primary-cyan" />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <h3 className="font-display text-2xl font-bold text-white mb-3">
-                    {step.title}
-                  </h3>
-                  <p className="text-white/60 leading-relaxed text-lg">
-                    {step.description}
-                  </p>
-                </div>
-
-                {/* Arrow connector (desktop) */}
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                    <div className="w-8 h-8 bg-primary-navy border-2 border-primary-cyan rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-primary-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {steps.map((step, index) => (
+            <div
+              key={step.title}
+              className="flex flex-col gap-[9px] rounded-[14px] bg-surface-2 p-6"
+            >
+              <em className="font-display text-[12.5px] font-bold not-italic tracking-[0.08em] text-cyan-ink">
+                PASSO {String(index + 1).padStart(2, '0')}
+              </em>
+              <b className="font-display text-[19px] font-bold">{step.title}</b>
+              <span className="text-[14.5px] text-ink-2">{step.text}</span>
+            </div>
+          ))}
         </div>
+
+        <div className="mt-8 overflow-hidden rounded-card border border-line">
+          <div className="grid grid-cols-1 bg-surface-2 lg:grid-cols-[1fr_1.25fr_1.25fr]">
+            <div className={cellHeadLabel}>DOIS MODOS DE OPERAÇÃO</div>
+            <div className={cellHead}>Ponto de acesso: academia, empresa</div>
+            <div className={cellHead}>Estabelecimento parceiro: clínica, laboratório</div>
+          </div>
+          {modes.map(([label, access, partner]) => (
+            <div
+              key={label}
+              className="grid grid-cols-1 border-t border-line-2 lg:grid-cols-[1fr_1.25fr_1.25fr]"
+            >
+              <div className={cellLabel}>{label}</div>
+              <div className={cellBody}>{access}</div>
+              <div className={cellBody}>{partner}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-9 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {illustrations.map((figure) => (
+            <figure key={figure.caption} className="m-0">
+              <Image
+                src={figure.src}
+                alt={figure.alt}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
+                className="aspect-[4/3] h-auto w-full rounded-[14px] border border-line object-cover"
+              />
+              <figcaption className="mt-2.5 text-[13.5px] leading-[1.5] text-ink-3">
+                {figure.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <Note className="mt-5">
+          Imagens ilustrativas, produzidas para demonstrar o formato de atendimento. Não retratam
+          pacientes reais nem consultas reais.
+        </Note>
       </div>
     </section>
   )
 }
-

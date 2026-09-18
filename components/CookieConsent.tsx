@@ -50,29 +50,20 @@ export function CookieConsent({ gaId }: { gaId?: string }) {
             aria-label="Aviso de cookies"
             className="fixed bottom-4 inset-x-4 z-[60] mx-auto max-w-3xl"
           >
-            <div className="glass-card rounded-2xl p-5 md:p-6 shadow-2xl">
-              <div className="flex flex-col md:flex-row md:items-center gap-4">
-                <div className="flex items-start gap-3 flex-1">
-                  <Cookie className="w-6 h-6 text-primary-cyan shrink-0 mt-0.5" />
-                  <p className="text-sm md:text-base text-primary-navy/80 leading-relaxed">
-                    Usamos cookies para analisar o tráfego e melhorar sua
-                    experiência. Você pode aceitar ou recusar a coleta de dados
-                    de análise.
+            <div className="rounded-card border border-line bg-card p-5 shadow-2xl shadow-black/40 md:p-6">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                <div className="flex flex-1 items-start gap-3">
+                  <Cookie className="mt-0.5 h-6 w-6 shrink-0 text-cyan" />
+                  <p className="text-[14px] leading-[1.6] text-ink-2 md:text-[15px]">
+                    Usamos cookies para analisar o tráfego e melhorar sua experiência. Você pode
+                    aceitar ou recusar a coleta de dados de análise.
                   </p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => decide('rejected')}
-                  >
+                  <Button variant="ghost" size="sm" onClick={() => decide('rejected')}>
                     Recusar
                   </Button>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => decide('accepted')}
-                  >
+                  <Button variant="primary" size="sm" onClick={() => decide('accepted')}>
                     Aceitar
                   </Button>
                 </div>

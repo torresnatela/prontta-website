@@ -1,4 +1,3 @@
-export { Button } from './Button'
-export { Card, CardHeader, CardTitle, CardDescription, CardContent } from './Card'
+export { Button, ButtonLink, buttonClasses } from './Button'
+export { Eyebrow, Note, Tag, SectionHead } from './Text'
 export { Input, Textarea, Select } from './Input'
-
