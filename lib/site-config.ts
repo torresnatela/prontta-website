@@ -48,8 +48,8 @@ export const siteConfig = {
     legalName: 'Prontta Saúde Ltda.',
     cnpj: '63.638.463/0001-01',
     technicalDirector: 'Dr. Romualdo da Silva Gonçalves, médico, CRM-MG 39150',
-    /** Inscrição da PJ no CRM-MG — preencha quando o protocolo sair. */
-    crmProtocol: '[Nº DO PROTOCOLO]',
+    /** Inscrição da PJ no CRM-MG — valor de EXEMPLO; troque pelo protocolo real. */
+    crmProtocol: '00000/2026',
     /** Encarregado de dados (LGPD). */
     dpoEmail: 'contato@pronttasaude.com.br',
   },

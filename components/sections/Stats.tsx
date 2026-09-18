@@ -1,5 +1,8 @@
 import { Note } from '@/components/ui'
 
+/** Mês/ano de referência do volume da Renovi — valor de EXEMPLO; atualize ao publicar. */
+const VOLUME_REFERENCE = 'agosto/2026'
+
 const stats = [
   { value: '+25', label: 'especialidades médicas na rede credenciada' },
   { value: '12', label: 'Programas de Saúde Assistida pré-estabelecidos' },
@@ -24,7 +27,7 @@ export function Stats() {
         <Note>
           Rede credenciada formada por médicos com registro ativo no respectivo Conselho Regional de
           Medicina, atuando com autonomia técnica e ética plena. Volume de atendimentos referente à
-          operação da Renovi, sócia operadora da Prontta, referência [MÊS/ANO].
+          operação da Renovi, sócia operadora da Prontta, referência {VOLUME_REFERENCE}.
         </Note>
       </div>
     </section>

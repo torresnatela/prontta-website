@@ -85,9 +85,38 @@ export const proposals = pgTable(
   }),
 );
 
+/**
+ * Leads capturados pelo gate do simulador no site público (nome, WhatsApp e
+ * CNPJ antes de abrir /proposta/*). Sem vínculo com usuário: quem preenche é
+ * o visitante, não um parceiro logado.
+ */
+export const leads = pgTable(
+  'leads',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    name: text('name').notNull(),
+    /** Só dígitos (DDD + número). */
+    phone: text('phone').notNull(),
+    /** Só dígitos (14) — opcional: quem ainda não tem CNPJ segue pelo WhatsApp. */
+    cnpj: text('cnpj'),
+    /** Segmento escolhido no gate: clinicas, academias, empresas, outros, parceiro. */
+    segment: text('segment').notNull(),
+    /** De onde veio o lead (hoje só 'site-gate'; deixa espaço para outras origens). */
+    source: text('source').notNull().default('site-gate'),
+    /** Momento em que o visitante marcou a autorização de contato (LGPD). */
+    consentAt: timestamp('consent_at', { withTimezone: true }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    createdIdx: index('leads_created_idx').on(t.createdAt.desc()),
+  }),
+);
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Proposal = typeof proposals.$inferSelect;
 export type NewProposal = typeof proposals.$inferInsert;
+export type Lead = typeof leads.$inferSelect;
+export type NewLead = typeof leads.$inferInsert;
 export type UserRole = (typeof userRole.enumValues)[number];
 export type ProposalStatusValue = (typeof proposalStatus.enumValues)[number];

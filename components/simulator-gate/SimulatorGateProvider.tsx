@@ -12,6 +12,8 @@ import {
 } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, ButtonLink } from '@/components/ui/Button'
+import { saveGateLead } from '@/lib/leads/actions'
+import type { LeadSegment } from '@/lib/leads/schemas'
 import { whatsappHref } from '@/lib/site-config'
 import { cn } from '@/lib/utils'
 
@@ -24,9 +26,11 @@ import { cn } from '@/lib/utils'
  * /proposta/academias ou /proposta/empresa. Segmentos sem simulador
  * automático ("outro formato", "programa de parceiros") terminam no passo 3,
  * que encaminha para o WhatsApp.
+ *
+ * Os dados vão para a tabela `leads` via `saveGateLead` antes do redirect.
  */
 
-export type GateSegment = 'clinicas' | 'academias' | 'empresas' | 'outros' | 'parceiro'
+export type GateSegment = LeadSegment
 
 const ROUTES: Partial<Record<GateSegment, string>> = {
   clinicas: '/proposta/clinicas',
@@ -126,6 +130,7 @@ function GateModal({ step, segment, onPick, onBack, onDone, onClose }: GateModal
   const [documento, setDocumento] = useState('')
   const [consent, setConsent] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
 
   // Trava a rolagem da página e fecha com Esc enquanto o modal está aberto.
   useEffect(() => {
@@ -142,12 +147,27 @@ function GateModal({ step, segment, onPick, onBack, onDone, onClose }: GateModal
     }
   }, [onClose])
 
-  const submit = () => {
+  const submit = async () => {
     if (!nome.trim() || !telefone.trim() || !consent) {
       setError('Preencha nome, WhatsApp e marque a autorização para continuar.')
       return
     }
     setError(null)
+    setSaving(true)
+    const result = await saveGateLead({
+      name: nome,
+      phone: telefone,
+      cnpj: documento,
+      segment,
+      consent,
+    })
+    setSaving(false)
+    // Erro de validação barra; falha de banco (sem mensagem) não — o lead
+    // é registrado no log do servidor e o visitante segue para o simulador.
+    if (result.error) {
+      setError(result.error)
+      return
+    }
     const route = segment ? ROUTES[segment] : undefined
     if (route) {
       router.push(route)
@@ -229,7 +249,7 @@ function GateModal({ step, segment, onPick, onBack, onDone, onClose }: GateModal
               className="flex flex-col gap-4"
               onSubmit={(event) => {
                 event.preventDefault()
-                submit()
+                void submit()
               }}
               noValidate
             >
@@ -284,8 +304,8 @@ function GateModal({ step, segment, onPick, onBack, onDone, onClose }: GateModal
                 </p>
               ) : null}
               <div className="flex flex-wrap gap-3">
-                <Button type="submit" className="w-full sm:w-auto">
-                  Ver a minha simulação
+                <Button type="submit" className="w-full sm:w-auto" isLoading={saving}>
+                  {saving ? 'Enviando…' : 'Ver a minha simulação'}
                 </Button>
                 <Button
                   type="button"
