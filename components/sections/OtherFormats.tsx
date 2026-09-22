@@ -22,7 +22,7 @@ const formats = [
 export function OtherFormats() {
   return (
     <section className="section-padding">
-      <div className="container-custom grid grid-cols-1 items-start gap-8 lg:grid-cols-[400px_1fr] lg:gap-14">
+      <div className="container-custom grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,400px)_1fr] lg:gap-14">
         <div className="flex flex-col gap-3.5">
           <h2 className="heading text-[clamp(26px,3vw,34px)] font-extrabold">
             Outros formatos, sob análise caso a caso

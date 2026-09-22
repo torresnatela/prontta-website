@@ -10,6 +10,8 @@ interface OpenSimulatorButtonProps {
   variant?: ButtonVariant
   size?: ButtonSize
   className?: string
+  /** Chamado antes de abrir o gate (ex.: fechar o menu mobile). */
+  onClick?: () => void
   children: ReactNode
 }
 
@@ -23,11 +25,20 @@ export function OpenSimulatorButton({
   variant = 'primary',
   size = 'md',
   className,
+  onClick,
   children,
 }: OpenSimulatorButtonProps) {
   const { open } = useSimulatorGate()
   return (
-    <Button variant={variant} size={size} className={className} onClick={() => open(segment)}>
+    <Button
+      variant={variant}
+      size={size}
+      className={className}
+      onClick={() => {
+        onClick?.()
+        open(segment)
+      }}
+    >
       {children}
     </Button>
   )

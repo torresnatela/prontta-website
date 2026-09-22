@@ -22,11 +22,12 @@ const journey = [
 
 export function Hero() {
   return (
-    // No desktop o hero ocupa os 1200px inteiros (sem o respiro lateral das
-    // demais seções), como no layout aprovado.
+    // A partir de 1280px o hero ocupa os 1200px inteiros (sem o respiro lateral
+    // das demais seções), como no layout aprovado; entre 1024 e 1279px o
+    // container ainda não tem margem própria e o padding continua.
     <section
       id="topo"
-      className="container-custom grid grid-cols-1 items-start gap-10 pb-12 pt-14 lg:grid-cols-[1.32fr_1fr] lg:gap-16 lg:px-0 lg:pb-[72px] lg:pt-20"
+      className="container-custom grid grid-cols-1 items-start gap-10 pb-12 pt-14 lg:grid-cols-[1.32fr_1fr] lg:gap-16 lg:pb-[72px] lg:pt-20 xl:px-0"
     >
       <div className="flex flex-col gap-6">
         <Eyebrow>Healthtech B2B e B2C · Telessaúde assistida</Eyebrow>

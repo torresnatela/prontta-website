@@ -5,7 +5,7 @@ import { siteConfig, whatsappHref } from '@/lib/site-config'
 /** O fechamento de todas as páginas públicas: simular ou chamar no WhatsApp. */
 export function FinalCTA() {
   return (
-    <section id="contato" className="py-[88px] text-center">
+    <section id="contato" className="py-[60px] text-center sm:py-[88px]">
       <div className="container-custom">
         <h2 className="heading mx-auto max-w-[760px] text-[clamp(28px,3.4vw,42px)] font-extrabold">
           Vinte minutos bastam para saber se faz sentido

@@ -93,6 +93,11 @@
   align-items: flex-end;
   margin-bottom: 12px;
 }
+/* Variante da linha de margens: dois campos que pedem mais ar entre si no
+   desktop. No celular (labels a 100%) o gap volta ao padrão — ver o responsivo. */
+.sim-root.proposta .frow.frow-wide {
+  gap: 48px;
+}
 .sim-root.proposta .frow label {
   display: flex;
   flex-direction: column;
@@ -478,6 +483,17 @@
 
 /* ── Responsivo ────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
+  /* A coluna de 380px acima tem especificidade maior que o `.sim-root .main-grid`
+     do simulador-ui.css e venceria em qualquer largura: sem esta regra o painel
+     de resultado continua fixo em 380px no celular e o formulário some. */
+  .sim-root.proposta .main-grid {
+    grid-template-columns: 1fr;
+  }
+  /* Espaço para a .mobile-result-bar fixa não cobrir o contato e o rodapé
+     (o simulador de academias faz o mesmo via .sim-root.sim). */
+  .sim-root.proposta {
+    padding-bottom: 88px;
+  }
   .sim-root.proposta .hero-example {
     max-width: none;
   }
@@ -496,9 +512,27 @@
     width: 100%;
   }
   .sim-root.proposta .frow input,
-  .sim-root.proposta .frow select {
+  .sim-root.proposta .frow select,
+  .sim-root.proposta .frow input[type='number'] {
     width: 100%;
     min-width: 0;
+  }
+  .sim-root.proposta .frow.frow-wide {
+    gap: 12px;
+  }
+  /* A pílula de 3 opções (popular/intermediário/premium; empresa/dividido/
+     colaborador) não cabe em 320–360px como inline-flex: vira uma linha
+     inteira com os botões dividindo a largura. */
+  .sim-root.proposta .frow .seg {
+    display: flex;
+    width: 100%;
+  }
+  .sim-root.proposta .frow .seg button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-align: center;
   }
   .sim-root.proposta .contact .cta,
   .sim-root.proposta .sbtn {

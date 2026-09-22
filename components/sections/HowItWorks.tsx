@@ -68,13 +68,22 @@ const illustrations = [
   },
 ]
 
+// Cabeçalhos das duas colunas de valor. No desktop ficam na linha de topo;
+// abaixo de 1024px a linha some e cada célula repete o seu cabeçalho como
+// rótulo, senão os valores empilhados perdem a referência de coluna.
+const columnHeads = [
+  'Ponto de acesso: academia, empresa',
+  'Estabelecimento parceiro: clínica, laboratório',
+]
+
 // Células da tabela: padding e altura de linha são iguais; o que muda é peso,
 // tamanho e cor — por isso cada variante monta a própria string.
 const cellBase = 'px-5 py-3 leading-[1.5] lg:px-[22px] lg:py-4'
 const cellBody = `${cellBase} text-[14.5px] text-ink-2`
 const cellLabel = `${cellBase} text-[14.5px] font-semibold text-ink max-lg:bg-surface-2 max-lg:pt-[18px]`
 const cellHead = `${cellBase} font-display text-[15px] font-bold text-ink`
-const cellHeadLabel = `${cellBase} font-sans text-[12.5px] font-semibold tracking-[0.07em] text-ink-3 max-lg:pt-[18px]`
+const cellHeadLabel = `${cellBase} font-sans text-[12.5px] font-semibold tracking-[0.07em] text-ink-3`
+const cellMobileHead = 'mb-1 block text-[12px] font-semibold tracking-[0.07em] text-ink-3 lg:hidden'
 
 export function HowItWorks() {
   return (
@@ -103,17 +112,24 @@ export function HowItWorks() {
         <div className="mt-8 overflow-hidden rounded-card border border-line">
           <div className="grid grid-cols-1 bg-surface-2 lg:grid-cols-[1fr_1.25fr_1.25fr]">
             <div className={cellHeadLabel}>DOIS MODOS DE OPERAÇÃO</div>
-            <div className={cellHead}>Ponto de acesso: academia, empresa</div>
-            <div className={cellHead}>Estabelecimento parceiro: clínica, laboratório</div>
+            {columnHeads.map((head) => (
+              <div key={head} className={`${cellHead} hidden lg:block`}>
+                {head}
+              </div>
+            ))}
           </div>
-          {modes.map(([label, access, partner]) => (
+          {modes.map(([label, ...values]) => (
             <div
               key={label}
               className="grid grid-cols-1 border-t border-line-2 lg:grid-cols-[1fr_1.25fr_1.25fr]"
             >
               <div className={cellLabel}>{label}</div>
-              <div className={cellBody}>{access}</div>
-              <div className={cellBody}>{partner}</div>
+              {values.map((value, index) => (
+                <div key={columnHeads[index]} className={cellBody}>
+                  <span className={cellMobileHead}>{columnHeads[index]}</span>
+                  {value}
+                </div>
+              ))}
             </div>
           ))}
         </div>

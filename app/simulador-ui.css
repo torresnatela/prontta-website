@@ -3000,7 +3000,10 @@
     align-items: flex-start;
     gap: 10px;
   }
-  .sim-root .result-item span {
+  /* Só o rótulo (filho direto): o valor também é um span (.roleta, nowrap)
+     dentro do strong e, com max-width, transbordava e era cortado pelo
+     overflow do painel. */
+  .sim-root .result-item > span {
     max-width: 58%;
     font-size: 12px;
     line-height: 1.3;
@@ -3014,6 +3017,19 @@
   .sim-root .profit-card strong {
     font-size: 30px;
     overflow-wrap: anywhere;
+  }
+  /* Rótulos longos (modo benefício: "Resultado no mês (evitado − desembolso…)")
+     empilham o valor abaixo em vez de espremer as duas pontas. */
+  .sim-root .dre-line {
+    flex-wrap: wrap;
+  }
+  .sim-root .dre-line strong {
+    margin-left: auto;
+  }
+  /* O valor da barra móvel é nowrap (roleta): em 320px um total de 7+ dígitos
+     precisa encolher para não empurrar o botão para fora. */
+  .sim-root .mobile-result-bar strong {
+    font-size: clamp(16px, 5vw, 21px);
   }
   .sim-root .distribution-row strong {
     text-align: right;

@@ -22,7 +22,7 @@ export function MarginsStep() {
         lead="É a sua remuneração como parceiro, embutida no preço que o paciente paga. Tudo abaixo recalcula na hora."
         chapterId="visao-geral"
       />
-      <div className="frow" style={{ gap: 48 }}>
+      <div className="frow frow-wide">
         <label>
           Margem das consultas (%) — recomendado: {RECOMMENDED.consulta}
           <input

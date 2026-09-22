@@ -179,7 +179,7 @@ function GateModal({ step, segment, onPick, onBack, onDone, onClose }: GateModal
 
   return (
     <div
-      className="fixed inset-0 z-[90] flex items-start justify-center overflow-y-auto bg-[rgba(0,8,20,0.8)] p-6"
+      className="fixed inset-0 z-[90] flex items-start justify-center overflow-y-auto bg-[rgba(0,8,20,0.8)] p-3 sm:p-6"
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose()
       }}
@@ -190,7 +190,7 @@ function GateModal({ step, segment, onPick, onBack, onDone, onClose }: GateModal
         role="dialog"
         aria-modal="true"
         aria-labelledby="sim-gate-title"
-        className="m-auto flex w-full max-w-[640px] flex-col gap-5 rounded-[18px] border border-line bg-bg p-6 outline-none sm:p-8"
+        className="m-auto flex w-full max-w-[640px] flex-col gap-5 rounded-[18px] border border-line bg-bg p-5 outline-none sm:p-8"
       >
         <div className="flex items-center justify-between">
           <div className="flex gap-1.5" aria-hidden="true">
@@ -215,7 +215,7 @@ function GateModal({ step, segment, onPick, onBack, onDone, onClose }: GateModal
 
         {step === 1 ? (
           <div>
-            <h2 id="sim-gate-title" className="heading text-[26px] font-extrabold">
+            <h2 id="sim-gate-title" className="heading text-[22px] font-extrabold sm:text-[26px]">
               Qual é o seu negócio?
             </h2>
             <p className="mb-5 mt-2.5 text-[15.5px] text-ink-2">
@@ -239,7 +239,7 @@ function GateModal({ step, segment, onPick, onBack, onDone, onClose }: GateModal
 
         {step === 2 ? (
           <div>
-            <h2 id="sim-gate-title" className="heading text-[26px] font-extrabold">
+            <h2 id="sim-gate-title" className="heading text-[22px] font-extrabold sm:text-[26px]">
               {segment ? LABELS[segment] : 'Antes de simular'}
             </h2>
             <p className="mb-5 mt-2.5 text-[15.5px] text-ink-2">
@@ -323,7 +323,7 @@ function GateModal({ step, segment, onPick, onBack, onDone, onClose }: GateModal
 
         {step === 3 ? (
           <div>
-            <h2 id="sim-gate-title" className="heading text-[26px] font-extrabold">
+            <h2 id="sim-gate-title" className="heading text-[22px] font-extrabold sm:text-[26px]">
               Recebemos os seus dados
             </h2>
             <p className="mb-5 mt-2.5 text-[15.5px] text-ink-2">
@@ -373,7 +373,7 @@ function Field({ id, label, hint, value, onChange, ...input }: FieldProps) {
         id={id}
         value={value}
         onChange={(event) => onChange(event.currentTarget.value)}
-        className="h-[50px] rounded-[9px] border-[1.5px] border-line bg-card px-[14px] font-sans text-[15px] text-ink placeholder:text-ink-3/70 focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-cyan"
+        className="h-[50px] rounded-[9px] border-[1.5px] border-line bg-card px-[14px] font-sans text-[16px] text-ink placeholder:text-ink-3/70 focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-cyan"
         {...input}
       />
       {hint ? <small className="text-[12.5px] text-ink-3">{hint}</small> : null}

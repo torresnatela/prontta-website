@@ -32,8 +32,8 @@ export function buttonClasses({
     lg: 'min-h-[52px] px-[26px] text-[16px]',
   }
   return cn(
-    'inline-flex items-center justify-center whitespace-nowrap rounded-[9px] border-[1.5px] border-transparent',
-    'font-sans font-semibold leading-none cursor-pointer transition-[filter,border-color] duration-200',
+    'inline-flex items-center justify-center text-center rounded-[9px] border-[1.5px] border-transparent',
+    'font-sans font-semibold leading-[1.2] cursor-pointer transition-[filter,border-color] duration-200',
     'disabled:opacity-50 disabled:cursor-not-allowed',
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan',
     variants[variant],

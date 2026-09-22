@@ -41,7 +41,10 @@ export function Footer() {
       <div className="container-custom">
         <div className="grid grid-cols-1 gap-8 pb-9 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-12">
           <div className="flex flex-col gap-[11px]">
-            <Logo size="lg" variant="white" className="mb-1.5" />
+            {/* O Link (self-start) impede o flex-col de esticar a logo à largura da coluna. */}
+            <Link href="/" aria-label="Prontta Saúde" className="mb-1.5 self-start">
+              <Logo size="lg" variant="white" />
+            </Link>
             <p className="text-[14.5px] leading-[1.62] text-foot-ink-2">
               Infraestrutura B2B de telessaúde assistida. Transformamos parceiros físicos em pontos
               de cuidado especializado, com programas recorrentes e responsabilidades definidas em
