@@ -26,6 +26,14 @@
   grid-template-columns: minmax(0, 1fr) 380px;
 }
 
+/* As fotos de clínica e empresa (`heroImageFor`) são 4:3 e o hero é bem mais
+   largo que alto: o recorte é vertical. Ancorar a 20% do topo mantém a logo da
+   parede e o médico na tela; "right" continua valendo para a arte de academias,
+   que é larga e recorta no eixo horizontal. */
+.sim-root.proposta .hero-media img {
+  object-position: right 20%;
+}
+
 /* Espaçamento entre os blocos de nível superior — no simulador de academias
    quem faz isso é o .below; aqui as seções institucionais são empilhadas. */
 .sim-root.proposta .main-grid,

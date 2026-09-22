@@ -161,16 +161,13 @@ describe('foto do hero por canal', () => {
   const heroSrc = (container: HTMLElement) =>
     container.querySelector('.hero-media img')?.getAttribute('src');
 
-  it('clínicas e academias usam a foto real de /academias', () => {
-    expect(heroSrc(renderRevenda().container)).toBe(ACADEMIA_HERO_IMAGE);
+  it('cada canal mostra a própria foto', () => {
+    expect(heroSrc(renderRevenda().container)).toBe('/home/como-funciona-clinica.jpg');
     expect(
       heroSrc(
         render(<ProposalExperience clientType="academia" topBarSubtitle="academias" />).container,
       ),
     ).toBe(ACADEMIA_HERO_IMAGE);
-  });
-
-  it('a empresa segue com a arte placeholder', () => {
-    expect(heroSrc(renderBeneficio().container)).toBe('/proposta-midia/hero-proposta.svg');
+    expect(heroSrc(renderBeneficio().container)).toBe('/home/como-funciona-empresa.jpg');
   });
 });

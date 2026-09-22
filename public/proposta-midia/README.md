@@ -67,7 +67,7 @@ no deploy — o token só é necessário para subir arquivo.
 | `capitulos/dre.jpg` | 16:9 (1600×900) | Capa do capítulo 3. **Frame real** (1:03). |
 | `capitulos/visao-geral.svg`, `consultas.svg`, `programas.svg`, `pdf.svg` | 16:9 | Capas de `/proposta/empresa`. Placeholder. |
 | `capitulos/beneficio.svg`, `retorno.svg` | 16:9 | Capas exclusivas de `/proposta/empresa`. Placeholder. |
-| `hero-proposta.svg` | 1916×821 (~2.33:1) | Fundo do hero de `/proposta/empresa` (via `heroImageFor` em `lib/proposta/videos.ts`). Placeholder. |
+| `hero-proposta.svg` | 1916×821 (~2.33:1) | Fundo do hero dos canais sem foto própria (farmácia), via `heroImageFor` em `lib/proposta/videos.ts`. Placeholder. |
 
 Para extrair uma capa nova de um vídeo (escolha um instante sem legenda queimada;
 o recorte tira a barra do navegador):
@@ -77,9 +77,21 @@ ffmpeg -ss 137.5 -i IMG_0168.MOV -frames:v 1 -vf "crop=1688:949:0:131,scale=1600
   -q:v 3 public/proposta-midia/capitulos/visao-geral.jpg
 ```
 
-O hero de `/proposta/clinicas` e `/proposta/academias` usa a **foto real de
-/academias** (`public/academias/hero-academias.png`) — decisão deliberada até
-existir uma foto própria de clínica; trocar é uma linha em `heroImageFor`.
+## Hero por canal
+
+`heroImageFor` (`lib/proposta/videos.ts`) escolhe a foto de fundo do hero:
+
+| Canal | Arquivo | Observação |
+| --- | --- | --- |
+| academia | `public/academias/hero-academias.png` | Arte própria, 1916×821 (~2.33:1). |
+| clínica, laboratório | `public/home/como-funciona-clinica.jpg` | Foto da seção "Como funciona" da home, 960×720 (4:3). |
+| empresa | `public/home/como-funciona-empresa.jpg` | Idem, 960×720 (4:3). |
+| farmácia | `hero-proposta.svg` | Placeholder. |
+
+As fotos 4:3 são recortadas na vertical pelo `object-position: right 20%` em
+`app/proposta.css`. Elas têm 960px de largura e o hero chega a ~1330px no
+desktop — uma foto própria em ≥1600px de largura e ~2.33:1 ficaria mais nítida;
+para trocar, basta apontar a constante em `heroImageFor`.
 
 Os placeholders em SVG saem de
 [`scripts/generate-placeholder-covers.mjs`](../../scripts/generate-placeholder-covers.mjs):
@@ -93,11 +105,12 @@ A saída é determinística — rodar o script sem ter mudado o template deixa o
 
 ## Pendências
 
-1. **/proposta/empresa** ainda é todo placeholder: vídeos (Big Buck Bunny via
-   `PLACEHOLDER_VIDEO`), capas e hero. Quando gravar, siga o mesmo caminho acima
-   e troque `video: PLACEHOLDER_VIDEO` por `{ kind: 'file', src }` em
+1. **/proposta/empresa** ainda tem vídeos (Big Buck Bunny via
+   `PLACEHOLDER_VIDEO`) e capas placeholder. Quando gravar, siga o mesmo caminho
+   acima e troque `video: PLACEHOLDER_VIDEO` por `{ kind: 'file', src }` em
    [`lib/empresa/videos.ts`](../../lib/empresa/videos.ts).
-2. **Foto própria de clínica** para o hero de `/proposta/clinicas`.
+2. **Fotos de hero em alta resolução** para clínicas e empresa (hoje reusam as
+   960px da home; ver "Hero por canal").
 3. **JSON-LD `VideoObject`** para os três vídeos reais de clínicas/academias — o
    helper deve entrar em [`lib/structured-data.ts`](../../lib/structured-data.ts),
    como os demais. Só para capítulos com vídeo real; nunca para placeholder.

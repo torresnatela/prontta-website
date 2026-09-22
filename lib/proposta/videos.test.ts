@@ -51,13 +51,18 @@ describe('PROPOSTA_CHAPTERS', () => {
 });
 
 describe('heroImageFor', () => {
-  it('clínicas e academias usam a foto real do hero de /academias', () => {
-    expect(heroImageFor('clinica')).toBe(ACADEMIA_HERO_IMAGE);
+  it('cada canal com simulador tem a sua própria foto', () => {
     expect(heroImageFor('academia')).toBe(ACADEMIA_HERO_IMAGE);
+    expect(heroImageFor('clinica')).toBe('/home/como-funciona-clinica.jpg');
+    expect(heroImageFor('empresa')).toBe('/home/como-funciona-empresa.jpg');
+  });
+
+  it('laboratório é estabelecimento parceiro como a clínica e divide a foto', () => {
+    expect(heroImageFor('laboratorio')).toBe(heroImageFor('clinica'));
   });
 
   it('os demais canais seguem com a arte placeholder', () => {
-    expect(heroImageFor('empresa')).toBe('/proposta-midia/hero-proposta.svg');
+    expect(heroImageFor('farmacia')).toBe('/proposta-midia/hero-proposta.svg');
   });
 
   it('todo caminho devolvido existe em public/', () => {

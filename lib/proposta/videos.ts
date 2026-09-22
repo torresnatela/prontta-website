@@ -26,17 +26,28 @@ import type { ExplainerChapter, ExplainerVideo } from '@/lib/simulador/explainer
 /**
  * Foto de fundo do hero, por canal.
  *
- * Clínicas e academias usam a mesma foto real de /academias — decisão
- * deliberada até existir uma foto própria de clínica. Os demais canais seguem
- * com a arte gerada por script (`hero-proposta.svg`), que é o placeholder de
- * `/proposta/empresa`.
+ * Clínica (e laboratório, o outro "estabelecimento parceiro") e empresa usam as
+ * fotos da seção "Como funciona" da home — a mesma cena da marca, em 4:3; o
+ * recorte para o hero de 2.33:1 está em `app/proposta.css` (`.hero-media img`).
+ * Academia usa a arte própria de /academias. Os demais canais seguem com a
+ * arte gerada por script (`hero-proposta.svg`).
  */
 const PLACEHOLDER_HERO_IMAGE = '/proposta-midia/hero-proposta.svg';
+const CLINICA_HERO_IMAGE = '/home/como-funciona-clinica.jpg';
+const EMPRESA_HERO_IMAGE = '/home/como-funciona-empresa.jpg';
 
 export function heroImageFor(clientType: ClientType): string {
-  return clientType === 'clinica' || clientType === 'academia'
-    ? ACADEMIA_HERO_IMAGE
-    : PLACEHOLDER_HERO_IMAGE;
+  switch (clientType) {
+    case 'academia':
+      return ACADEMIA_HERO_IMAGE;
+    case 'clinica':
+    case 'laboratorio':
+      return CLINICA_HERO_IMAGE;
+    case 'empresa':
+      return EMPRESA_HERO_IMAGE;
+    default:
+      return PLACEHOLDER_HERO_IMAGE;
+  }
 }
 
 /** Host público do store `prontta-website-midia` (região gru1). */
