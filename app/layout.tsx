@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Manrope } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import { siteConfig } from '@/lib/site-config'
 import { organizationSchema, websiteSchema } from '@/lib/structured-data'
@@ -8,16 +8,18 @@ import { CookieConsent } from '@/components/CookieConsent'
 import { SimulatorGateProvider } from '@/components/simulator-gate'
 
 // Inter no corpo, Manrope nos títulos — as duas fontes do layout aprovado.
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
+// Auto-hospedadas (variáveis, subset latin, OFL, via Fontsource) em vez de
+// next/font/google: o build na Vercel quebrava ao baixar do Google Fonts.
+const inter = localFont({
+  src: './fonts/inter-latin.woff2',
+  weight: '100 900',
   variable: '--font-inter',
   display: 'swap',
 })
 
-const manrope = Manrope({
-  subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
+const manrope = localFont({
+  src: './fonts/manrope-latin.woff2',
+  weight: '200 800',
   variable: '--font-manrope',
   display: 'swap',
 })
