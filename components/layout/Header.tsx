@@ -12,12 +12,12 @@ import { OpenSimulatorButton } from '@/components/simulator-gate'
 export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg">
-      <div className="container-custom flex min-h-[72px] items-center justify-between gap-3 lg:min-h-[92px] lg:gap-6">
+      <div className="container-custom flex min-h-[72px] items-center justify-between gap-3 lg:min-h-[92px] lg:gap-4 xl:gap-6">
         <Link href="/" aria-label="Prontta Saúde" className="shrink-0">
           <Logo size="nav" variant="white" priority />
         </Link>
 
-        <nav className="hidden items-center gap-[26px] text-[15px] font-medium text-ink-2 lg:flex">
+        <nav className="hidden items-center gap-[14px] whitespace-nowrap text-[15px] font-medium text-ink-2 lg:flex xl:gap-[26px]">
           {navItems.map((item) => (
             <Link key={item.name} href={item.href} className="text-ink-2 hover:text-ink">
               {item.name}

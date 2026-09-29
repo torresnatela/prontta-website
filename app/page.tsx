@@ -8,6 +8,7 @@ import {
   Programs,
   OtherFormats,
   PartnerChannel,
+  LatestPosts,
   FinalCTA,
 } from '@/components/sections'
 
@@ -24,6 +25,7 @@ export default function Home() {
         <Programs />
         <OtherFormats />
         <PartnerChannel />
+        <LatestPosts />
         <FinalCTA />
       </main>
       <Footer />

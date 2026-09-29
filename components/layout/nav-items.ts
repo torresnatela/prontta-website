@@ -7,6 +7,7 @@ export const navItems = [
   { name: 'Programas', href: '/#programas' },
   { name: 'Como funciona', href: '/#como-funciona' },
   { name: 'Conformidade', href: '/#conformidade' },
+  { name: 'Blog', href: '/blog' },
 ]
 
 export type NavItem = (typeof navItems)[number]
