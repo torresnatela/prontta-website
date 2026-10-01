@@ -5,6 +5,11 @@ const nextConfig = {
   // Permite importar arquivos .mdx como módulos (compilados pelo bundler, com
   // a versão de React correta — diferente de compilar MDX em runtime).
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+  // O MCP do blog (app/api/blog/mcp) lê os posts do disco em runtime para
+  // listar, ler e validar — sem isto os .mdx não vão para a função na Vercel.
+  outputFileTracingIncludes: {
+    '/api/blog/mcp': ['./content/blog/**/*'],
+  },
   images: {
     // Capas locais (em /public) não precisam de config. Estes padrões liberam
     // capas hospedadas remotamente (coverImage com URL https), caso sejam usadas.

@@ -3,8 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
 import readingTime from 'reading-time'
-import { z } from 'zod'
-import { DEFAULT_AUTHOR_ID } from './authors'
+import { frontmatterSchema, type PostFrontmatter } from './blog-schema'
 
 /**
  * Camada de dados do blog (MDX baseado em arquivos).
@@ -16,32 +15,14 @@ import { DEFAULT_AUTHOR_ID } from './authors'
 
 const BLOG_DIR = path.join(process.cwd(), 'content', 'blog')
 
-/** Schema do frontmatter — validado no build; erro de schema quebra o build. */
-const faqItemSchema = z.object({
-  question: z.string(),
-  answer: z.string(),
-})
-
-const frontmatterSchema = z.object({
-  title: z.string().min(1),
-  description: z.string().min(1),
-  publishedAt: z.string().min(1), // ISO date: 2026-06-23
-  updatedAt: z.string().optional(),
-  author: z.string().default(DEFAULT_AUTHOR_ID),
-  category: z.string().default('Geral'),
-  tags: z.array(z.string()).default([]),
-  keywords: z.array(z.string()).optional(),
-  coverImage: z.string().optional(),
-  draft: z.boolean().default(false),
-  faq: z.array(faqItemSchema).optional(),
-})
-
-export type PostFrontmatter = z.infer<typeof frontmatterSchema>
+export { frontmatterSchema, postKeywords, type PostFrontmatter } from './blog-schema'
 
 export interface PostMeta extends PostFrontmatter {
   slug: string
   /** Tempo de leitura em minutos (arredondado). */
   readingMinutes: number
+  /** Número de palavras do corpo (vai para o JSON-LD `wordCount`). */
+  wordCount: number
 }
 
 export interface Post extends PostMeta {
@@ -70,10 +51,12 @@ function readPost(fileName: string): Post {
     )
   }
 
+  const stats = readingTime(content)
   return {
     ...parsed.data,
     slug,
-    readingMinutes: Math.max(1, Math.ceil(readingTime(content).minutes)),
+    readingMinutes: Math.max(1, Math.ceil(stats.minutes)),
+    wordCount: stats.words,
     content,
   }
 }
