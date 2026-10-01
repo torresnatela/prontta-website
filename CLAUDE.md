@@ -36,6 +36,10 @@ Detalhes completos em [`docs/SEO.md`](docs/SEO.md). Regras essenciais:
 
 ## Blog (MDX)
 
-- Posts: `content/blog/*.mdx` (frontmatter validado por Zod em `lib/blog.ts`).
+- Posts: `content/blog/*.mdx` (frontmatter validado por Zod em `lib/blog-schema.ts`).
+- **MCP de publicação** (`app/api/blog/mcp` + `lib/blog-mcp/`): IA escreve e envia
+  artigos como PR. Guia: [`docs/BLOG-MCP.md`](docs/BLOG-MCP.md). Mudou o frontmatter,
+  as rotas internas ou os componentes MDX? Atualize também `lib/blog-mcp/`
+  (`post-input.ts`, `seo-check.ts` → `INTERNAL_ROUTES`/`ALLOWED_COMPONENTS`, `guidelines.ts`).
 - Autores: `lib/authors.ts` (preencha credenciais — conteúdo de saúde é YMYL/E-E-A-T).
 - Componentes: `components/blog/`.

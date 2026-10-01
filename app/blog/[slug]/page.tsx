@@ -12,7 +12,7 @@ import { BlogCard } from '@/components/blog/BlogCard'
 import { mdxComponents } from '@/components/blog/mdx-components'
 
 import { generateMetadata as buildMetadata } from '@/lib/seo'
-import { getAllSlugs, getPostBySlug, getRelatedPosts } from '@/lib/blog'
+import { getAllSlugs, getPostBySlug, getRelatedPosts, postKeywords } from '@/lib/blog'
 import { getAuthor } from '@/lib/authors'
 import { absoluteUrl } from '@/lib/site-config'
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/structured-data'
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const author = getAuthor(post.author)
 
   return buildMetadata({
-    title: post.title,
+    title: post.seoTitle ?? post.title,
     description: post.description,
     path: `/blog/${post.slug}`,
     // OG image é fornecida pelo opengraph-image.tsx (file convention).
@@ -43,6 +43,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       authors: [author.name],
       tags: post.tags,
     },
+    keywords: postKeywords(post),
   })
 }
 
@@ -72,6 +73,11 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
       publishedAt: post.publishedAt,
       updatedAt: post.updatedAt,
       image: post.coverImage,
+      imageAlt: post.coverImageAlt,
+      category: post.category,
+      keywords: postKeywords(post),
+      focusKeyword: post.focusKeyword,
+      wordCount: post.wordCount,
       authorName: author.name,
       authorUrl: author.sameAs?.[0],
       authorJobTitle: author.credentials ?? author.role,
