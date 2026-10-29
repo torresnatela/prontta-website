@@ -60,6 +60,15 @@ export interface ArticleSchemaInput {
   publishedAt: string
   updatedAt?: string
   image?: string
+  /** Texto alternativo da imagem (capa). */
+  imageAlt?: string
+  /** Categoria do post → `articleSection`. */
+  category?: string
+  /** Palavra-chave foco + secundárias → `keywords`. */
+  keywords?: string[]
+  /** Palavra-chave foco → `about` (entidade principal do artigo). */
+  focusKeyword?: string
+  wordCount?: number
   authorName: string
   authorUrl?: string
   authorJobTitle?: string
@@ -74,10 +83,18 @@ export function articleSchema(post: ArticleSchemaInput) {
     '@id': `${url}#article`,
     headline: post.title,
     description: post.description,
-    image: absoluteUrl(post.image ?? `/blog/${post.slug}/opengraph-image`),
+    image: {
+      '@type': 'ImageObject',
+      url: absoluteUrl(post.image ?? `/blog/${post.slug}/opengraph-image`),
+      ...(post.imageAlt ? { caption: post.imageAlt } : {}),
+    },
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
     inLanguage: siteConfig.language,
+    ...(post.category ? { articleSection: post.category } : {}),
+    ...(post.keywords?.length ? { keywords: post.keywords.join(', ') } : {}),
+    ...(post.focusKeyword ? { about: { '@type': 'Thing', name: post.focusKeyword } } : {}),
+    ...(post.wordCount ? { wordCount: post.wordCount } : {}),
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     author: {
       '@type': 'Person',

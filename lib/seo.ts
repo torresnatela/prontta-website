@@ -21,6 +21,8 @@ interface SeoInput {
     authors?: string[]
     tags?: string[]
   }
+  /** Palavras-chave da página (meta keywords — sinal fraco, mas lido por IAs). */
+  keywords?: string[]
   /** Define como `false` para gerar uma página com noindex. */
   index?: boolean
 }
@@ -37,15 +39,18 @@ export function generateMetadata({
   image = siteConfig.ogImage,
   type = 'website',
   article,
+  keywords,
   index = true,
 }: SeoInput): Metadata {
   const url = absoluteUrl(path)
   const fullTitle = `${title} | ${siteConfig.name}`
-  const ogImages = image === null ? undefined : [{ url: image, width: 1200, height: 630, alt: title }]
+  const ogImages =
+    image === null ? undefined : [{ url: image, width: 1200, height: 630, alt: title }]
 
   return {
     title,
     description,
+    ...(keywords?.length ? { keywords } : {}),
     alternates: {
       canonical: path || '/',
     },

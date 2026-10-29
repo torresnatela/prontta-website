@@ -17,7 +17,8 @@ clareza, autoria com credenciais (E-E-A-T) e dados estruturados.
 | robots.txt (libera crawlers de IA) | `app/robots.ts` |
 | Índice para IA (llms.txt) | `app/llms.txt/route.ts` |
 | Analytics (GA4 + consentimento LGPD) | `components/CookieConsent.tsx` |
-| Blog (dados/MDX) | `lib/blog.ts`, `content/blog/` |
+| Blog (dados/MDX) | `lib/blog.ts`, `lib/blog-schema.ts`, `content/blog/` |
+| Publicação por IA (MCP) | `app/api/blog/mcp/route.ts`, `lib/blog-mcp/` — guia em [`BLOG-MCP.md`](BLOG-MCP.md) |
 | Imagem OG por artigo (gerada) | `app/blog/[slug]/opengraph-image.tsx` |
 | FAQ (rich result) | `app/faq/page.tsx` |
 
@@ -28,7 +29,8 @@ clareza, autoria com credenciais (E-E-A-T) e dados estruturados.
 - **Imagem OG dos artigos**: gerada a partir do título — nada manual.
 
 Ou seja: **publicar um artigo é só adicionar um arquivo** em `content/blog/`
-(veja `content/blog/README.md`).
+(veja `content/blog/README.md`) — ou pedir a uma IA conectada ao MCP do blog,
+que abre um PR com o artigo já validado (veja [`BLOG-MCP.md`](BLOG-MCP.md)).
 
 ## Checklist de manutenção 🔧
 
@@ -45,6 +47,7 @@ Ou seja: **publicar um artigo é só adicionar um arquivo** em `content/blog/`
 | `NEXT_PUBLIC_SITE_URL` | URL canônica (default: `https://pronttasaude.com.br`) | Não |
 | `NEXT_PUBLIC_GA_ID` | ID do Google Analytics 4 (ex.: `G-XXXXXXX`) | Para ativar GA |
 | `NEXT_PUBLIC_GSC_VERIFICATION` | Código de verificação do Search Console | Para verificar via meta tag |
+| `BLOG_MCP_TOKEN` / `BLOG_GITHUB_TOKEN` | MCP de publicação do blog (ver `BLOG-MCP.md`) | Para usar o MCP |
 
 Sem `NEXT_PUBLIC_GA_ID`, o banner de cookies e o GA não são renderizados.
 

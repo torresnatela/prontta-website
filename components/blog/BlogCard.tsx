@@ -21,7 +21,7 @@ export function BlogCard({ post, priority = false }: { post: PostMeta; priority?
           {post.coverImage ? (
             <Image
               src={post.coverImage}
-              alt={post.title}
+              alt={post.coverImageAlt ?? post.title}
               fill
               priority={priority}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"

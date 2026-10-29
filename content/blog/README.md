@@ -1,5 +1,9 @@
 # Blog da Prontta Saúde — como publicar
 
+> **Publicando com IA?** Conecte o Claude (ou outra IA) ao MCP do blog: ele escreve,
+> valida o SEO/GEO e abre um Pull Request para você revisar. Veja
+> [`docs/BLOG-MCP.md`](../../docs/BLOG-MCP.md). O guia abaixo é para publicar à mão.
+
 Os artigos do blog são arquivos **MDX** nesta pasta (`content/blog/`). Adicionar um
 arquivo `.mdx` aqui é **tudo** o que você precisa fazer para publicar:
 
@@ -26,14 +30,17 @@ No topo do arquivo, entre `---`:
 ```yaml
 ---
 title: "Título do artigo (aparece como H1 e no Google)"
+seoTitle: "Meta title curto (≤ 48 car.)"   # opcional; o site acrescenta " | Prontta Saúde"
 description: "Resumo de 1–2 frases. É a meta description — escreva pensando no clique."
 publishedAt: "2026-06-23"        # data ISO (AAAA-MM-DD)
 updatedAt: "2026-07-01"          # opcional, quando revisar o conteúdo
 author: "equipe-prontta"         # id de um autor em lib/authors.ts
 category: "Telesaúde"            # categoria principal
 tags: ["telesaúde", "gestão de clínicas"]
-keywords: ["palavra-chave 1", "palavra-chave 2"]   # opcional
+focusKeyword: "palavra-chave principal"          # opcional, recomendado
+keywords: ["palavra-chave 1", "palavra-chave 2"]   # opcional (vão para <meta keywords> e JSON-LD)
 coverImage: "/blog/minha-capa.jpg"                 # opcional (em /public)
+coverImageAlt: "Descrição da capa"                 # opcional, recomendado com capa
 draft: false                     # true = não publica em produção
 faq:                             # opcional, mas recomendado (vira rich result + ajuda IA)
   - question: "Pergunta frequente?"
