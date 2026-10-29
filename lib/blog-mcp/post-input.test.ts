@@ -2,7 +2,14 @@
 import matter from 'gray-matter'
 import { describe, expect, it } from 'vitest'
 import { frontmatterSchema } from '@/lib/blog-schema'
-import { buildFrontmatter, postInputSchema, slugify, todayISO, toMdx } from './post-input'
+import {
+  buildFrontmatter,
+  postInputSchema,
+  postUpdateFieldsSchema,
+  slugify,
+  todayISO,
+  toMdx,
+} from './post-input'
 
 const base = postInputSchema.parse({
   title: 'Telesaúde híbrida: o que é e como funciona',
@@ -60,5 +67,23 @@ describe('toMdx', () => {
     expect(data).not.toHaveProperty('draft')
     expect(content.trim().startsWith('**Resumo')).toBe(true)
     expect(frontmatterSchema.safeParse(data).success).toBe(true)
+  })
+})
+
+describe('postUpdateFieldsSchema', () => {
+  it('não injeta defaults: campos omitidos ficam ausentes (update_post só muda o enviado)', () => {
+    expect(postUpdateFieldsSchema.parse({ title: 'Novo título do artigo' })).toEqual({
+      title: 'Novo título do artigo',
+    })
+  })
+
+  it('continua validando os campos enviados', () => {
+    expect(() => postUpdateFieldsSchema.parse({ description: 'curta' })).toThrow()
+  })
+
+  it('mantém as descrições lidas pela IA', () => {
+    expect(postUpdateFieldsSchema.shape.tags.description).toBe(
+      postInputSchema.shape.tags.description,
+    )
   })
 })

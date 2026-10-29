@@ -143,6 +143,24 @@ export const postInputSchema = z.object({
 
 export type PostInput = z.infer<typeof postInputSchema>
 
+const partialPostFields = postInputSchema.omit({ slug: true }).partial()
+
+/**
+ * Campos editáveis por `update_post`, todos opcionais e SEM defaults. No zod v4
+ * o `.partial()` ainda aplica os `.default()` internos — um update só com
+ * `title` zeraria tags, keywords, FAQ e o `draft`. Aqui o default é removido
+ * de cada campo (mantendo a descrição que a IA lê).
+ */
+export const postUpdateFieldsSchema = z.object(
+  Object.fromEntries(
+    Object.entries(partialPostFields.shape).map(([key, field]) => {
+      const inner = field.unwrap()
+      const base = inner instanceof z.ZodDefault ? inner.unwrap() : inner
+      return [key, (base as z.ZodType).optional().describe(inner.description ?? '')]
+    }),
+  ),
+) as unknown as typeof partialPostFields
+
 /** "Telesaúde híbrida: o que é?" → "telesaude-hibrida-o-que-e" */
 export function slugify(text: string): string {
   return text

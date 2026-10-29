@@ -5,7 +5,7 @@ import type { PostFrontmatter } from '@/lib/blog-schema'
 import { toMdx } from './post-input'
 import { GithubClient, githubConfig } from './github'
 import { buildGuidelines, writeArticlePrompt } from './guidelines'
-import { postInputSchema, SLUG_PATTERN } from './post-input'
+import { postInputSchema, postUpdateFieldsSchema, SLUG_PATTERN } from './post-input'
 import { publishPost, updatePost, validatePost, type ExistingPostFull } from './service'
 
 /**
@@ -80,19 +80,16 @@ function summarize(post: PostMeta) {
 
 const getGithub = () => new GithubClient(githubConfig())
 
-const updateInputSchema = postInputSchema
-  .omit({ slug: true })
-  .partial()
-  .extend({
-    slug: z.string().regex(SLUG_PATTERN).describe('Slug do post publicado que será atualizado.'),
-    bumpUpdatedAt: z
-      .boolean()
-      .default(true)
-      .describe(
-        'true (padrão) define updatedAt = hoje — sinal de conteúdo atualizado para Google e IAs. Use false só para correções mínimas.',
-      ),
-    dryRun: z.boolean().default(false).describe('true = só valida, sem abrir PR.'),
-  })
+const updateInputSchema = postUpdateFieldsSchema.extend({
+  slug: z.string().regex(SLUG_PATTERN).describe('Slug do post publicado que será atualizado.'),
+  bumpUpdatedAt: z
+    .boolean()
+    .default(true)
+    .describe(
+      'true (padrão) define updatedAt = hoje — sinal de conteúdo atualizado para Google e IAs. Use false só para correções mínimas.',
+    ),
+  dryRun: z.boolean().default(false).describe('true = só valida, sem abrir PR.'),
+})
 
 export function registerBlogTools(server: McpServer) {
   server.registerTool(
