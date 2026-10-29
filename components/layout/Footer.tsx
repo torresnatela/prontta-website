@@ -78,7 +78,7 @@ export function Footer() {
             {contact.email} · {contact.phoneDisplay} · {contact.hours}.
           </p>
           <p>
-            Diretor Técnico Médico: <strong>{legal.technicalDirector}</strong>. Inscrição da pessoa
+            Responsável Técnico: <strong>{legal.technicalDirector}</strong>. Inscrição da pessoa
             jurídica no Conselho Regional de Medicina de Minas Gerais em processamento sob o
             protocolo <strong>{legal.crmProtocol}</strong>. Publicidade em conformidade com a
             Resolução CFM nº 2.336/2023.
