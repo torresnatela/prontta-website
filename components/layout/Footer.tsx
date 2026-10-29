@@ -78,10 +78,7 @@ export function Footer() {
             {contact.email} · {contact.phoneDisplay} · {contact.hours}.
           </p>
           <p>
-            Responsável Técnico: <strong>{legal.technicalDirector}</strong>. Inscrição da pessoa
-            jurídica no Conselho Regional de Medicina de Minas Gerais em processamento sob o
-            protocolo <strong>{legal.crmProtocol}</strong>. Publicidade em conformidade com a
-            Resolução CFM nº 2.336/2023.
+            Responsável Técnico: <strong>{legal.technicalDirector}</strong>.
           </p>
           <p>
             A Prontta é infraestrutura de telessaúde assistida.{' '}
