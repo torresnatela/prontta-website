@@ -42,7 +42,7 @@ export function buildGuidelines(posts: PostMeta[]): string {
   return `# Blog da ${siteConfig.name} — guia de publicação (SEO + GEO)
 
 Você vai escrever um artigo para ${siteConfig.url}/blog e enviá-lo pelas ferramentas deste MCP.
-O envio abre um Pull Request no GitHub; um humano revisa o preview e faz o merge.
+O envio abre um Pull Request no GitHub; um humano revisa o preview e aprova a publicação.
 
 ## Fluxo obrigatório
 1. \`list_posts\` — veja o que já existe (evite repetir a palavra-chave foco de outro post e colete links internos).
@@ -50,6 +50,8 @@ O envio abre um Pull Request no GitHub; um humano revisa o preview e faz o merge
 3. \`validate_post\` — corrija TODOS os erros e o máximo de avisos (mire score ≥ 85).
 4. \`publish_post\` (novo) ou \`update_post\` (post existente). Informe ao usuário o link do PR.
    Para ajustar um artigo ainda em revisão, chame \`publish_post\` de novo com o MESMO slug — o PR é atualizado.
+5. \`merge_post\` — SÓ quando o usuário disser explicitamente que revisou e quer publicar. Faz o merge do PR
+   (o post vai ao ar em ~2 min). Nunca chame por conta própria logo após publicar.
 
 ## Sobre a ${siteConfig.name} (use estes fatos; não invente outros)
 - ${siteConfig.description}

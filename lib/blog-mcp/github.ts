@@ -165,7 +165,64 @@ export class GithubClient {
     await this.request('POST', `/issues/${pr.number}/labels`, { labels: ['blog'] }).catch(() => {})
     return { ...toPr(pr), created: true }
   }
+
+  /**
+   * Faz o merge (squash) do PR aberto de `branch` — é o que coloca o post no ar.
+   * Só segue com o build de preview da Vercel ok (status "Vercel" = success),
+   * para não quebrar produção, e trava o merge no commit que foi checado.
+   */
+  async mergeBlogPr(branch: string): Promise<MergeResult> {
+    const open = await this.findOpenPr(branch)
+    if (!open) throw new Error(`Não há PR aberto para a branch ${branch}.`)
+
+    const pr = await this.request<RawPr & { mergeable: boolean | null; head: { sha: string } }>(
+      'GET',
+      `/pulls/${open.number}`,
+    )
+    if (pr.mergeable === false) {
+      throw new Error(
+        `O PR #${pr.number} tem conflito com a base — resolva no GitHub (${pr.html_url}).`,
+      )
+    }
+    if (pr.mergeable === null) {
+      throw new Error('O GitHub ainda está verificando o PR. Tente de novo em alguns segundos.')
+    }
+
+    const { statuses } = await this.request<{ statuses: { context: string; state: string }[] }>(
+      'GET',
+      `/commits/${pr.head.sha}/status`,
+    )
+    const vercel = statuses.find((s) => s.context === VERCEL_STATUS)
+    if (!vercel || vercel.state === 'pending') {
+      throw new Error(
+        'O preview da Vercel ainda não terminou. Aguarde 1–2 minutos e tente de novo.',
+      )
+    }
+    if (vercel.state !== 'success') {
+      throw new Error(
+        `O build do preview da Vercel falhou (${vercel.state}) — corrija o post antes de publicar (${pr.html_url}).`,
+      )
+    }
+
+    const merged = await this.request<{ sha: string }>('PUT', `/pulls/${pr.number}/merge`, {
+      merge_method: 'squash',
+      sha: pr.head.sha,
+      commit_title: `${pr.title} (#${pr.number})`,
+    })
+    // Branch é descartável depois do merge — não falha a publicação.
+    await this.request('DELETE', `/git/refs/heads/${encodeBranch(branch)}`).catch(() => {})
+    return { number: pr.number, url: pr.html_url, mergeSha: merged.sha }
+  }
 }
+
+export interface MergeResult {
+  number: number
+  url: string
+  mergeSha: string
+}
+
+/** Contexto do commit status que a Vercel publica com o resultado do preview. */
+const VERCEL_STATUS = 'Vercel'
 
 export class GithubError extends Error {
   constructor(

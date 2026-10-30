@@ -3,18 +3,19 @@
 Este MCP (Model Context Protocol) deixa uma IA, como o Claude, **escrever e enviar
 artigos para o blog** já com os metadados de SEO (Google) e GEO (ChatGPT, Gemini,
 Perplexity etc.) preenchidos e validados. Nenhum artigo vai ao ar sozinho: **cada
-envio vira um Pull Request** no GitHub. Você revisa o preview da Vercel e faz o merge.
+envio vira um Pull Request** no GitHub. Você revisa o preview da Vercel e aprova a
+publicação: fazendo o merge no GitHub ou pedindo à IA (`merge_post`).
 
 ```
 IA (claude.ai, Claude Desktop, Claude Code, ChatGPT, Cursor…)
  │  MCP · Streamable HTTP
  ▼
-https://pronttasaude.com.br/api/blog/mcp      ← token (BLOG_MCP_TOKEN)
+https://www.pronttasaude.com.br/api/blog/mcp      ← token (BLOG_MCP_TOKEN)
  │  1. valida: schema, MDX (compila como no build), checklist SEO/GEO
  │  2. envia capa e imagens → public/blog/images/<slug>/
  │  3. commita content/blog/<slug>.mdx na branch blog/<slug>
  ▼
-Pull Request (rótulo "blog") → preview da Vercel → você revisa → merge → no ar
+Pull Request (rótulo "blog") → preview da Vercel → você revisa → merge (GitHub ou merge_post) → no ar
 ```
 
 Código: `app/api/blog/mcp/route.ts` e `lib/blog-mcp/`.
@@ -69,7 +70,7 @@ Depois de salvar, **faça um redeploy de produção** para as variáveis valerem
 A URL do servidor é:
 
 ```
-https://pronttasaude.com.br/api/blog/mcp
+https://www.pronttasaude.com.br/api/blog/mcp
 ```
 
 O token vai de um destes dois jeitos:
@@ -85,7 +86,7 @@ Claude Desktop e no app do celular.
 1. **Configurações → Conectores → Adicionar conector personalizado**.
    (Em planos Team/Enterprise, quem adiciona é um admin, em *Configurações da organização → Conectores*.)
 2. **Nome:** `Blog Prontta`
-3. **URL:** `https://pronttasaude.com.br/api/blog/mcp?key=SEU_TOKEN`
+3. **URL:** `https://www.pronttasaude.com.br/api/blog/mcp?key=SEU_TOKEN`
 4. Deixe as opções de OAuth em branco e salve.
 5. Numa conversa, abra o menu de ferramentas (ícone de controles) e ative o conector **Blog Prontta**.
 
@@ -95,7 +96,7 @@ Claude Desktop e no app do celular.
 ### Claude Code
 
 ```bash
-claude mcp add --transport http prontta-blog https://pronttasaude.com.br/api/blog/mcp \
+claude mcp add --transport http prontta-blog https://www.pronttasaude.com.br/api/blog/mcp \
   --header "Authorization: Bearer SEU_TOKEN"
 ```
 
@@ -113,7 +114,7 @@ Se preferir não usar o conector da conta, edite o `claude_desktop_config.json`
     "prontta-blog": {
       "command": "npx",
       "args": [
-        "-y", "mcp-remote", "https://pronttasaude.com.br/api/blog/mcp",
+        "-y", "mcp-remote", "https://www.pronttasaude.com.br/api/blog/mcp",
         "--header", "Authorization: Bearer ${BLOG_MCP_TOKEN}"
       ],
       "env": { "BLOG_MCP_TOKEN": "SEU_TOKEN" }
@@ -132,7 +133,7 @@ Reinicie o Claude Desktop. Requer Node.js instalado.
 {
   "mcpServers": {
     "prontta-blog": {
-      "url": "https://pronttasaude.com.br/api/blog/mcp",
+      "url": "https://www.pronttasaude.com.br/api/blog/mcp",
       "headers": { "Authorization": "Bearer SEU_TOKEN" }
     }
   }
@@ -142,7 +143,7 @@ Reinicie o Claude Desktop. Requer Node.js instalado.
 ### ChatGPT e outros clientes MCP
 
 No ChatGPT (com o **modo desenvolvedor** ativado em *Configurações → Apps e conectores → Avançado*),
-crie um conector com a URL `https://pronttasaude.com.br/api/blog/mcp?key=SEU_TOKEN` e
+crie um conector com a URL `https://www.pronttasaude.com.br/api/blog/mcp?key=SEU_TOKEN` e
 autenticação **Nenhuma**. Qualquer outro cliente com suporte a MCP via HTTP (Streamable HTTP)
 funciona com a URL + header ou `?key=`.
 
@@ -178,6 +179,7 @@ também dá para usar o prompt pronto **`escrever_artigo`**, informando tema e p
 3. Escreve o artigo com TL;DR, H2 em forma de pergunta, dados com fonte, FAQ e CTA.
 4. `validate_post`: corrige os **erros** e o máximo de **avisos** (meta: score ≥ 85).
 5. `publish_post`: abre o PR e te devolve o link.
+6. `merge_post`: **só quando você pedir** ("pode publicar"), faz o merge e o post vai ao ar.
 
 ### Revisar e publicar
 
@@ -189,8 +191,13 @@ também dá para usar o prompt pronto **`escrever_artigo`**, informando tema e p
 4. Quer mudanças? Peça à IA na mesma conversa ("encurte a introdução e troque a capa").
    Ela chama `publish_post` de novo **com o mesmo slug**, e o PR é atualizado.
    Ou edite direto no GitHub.
-5. **Merge** → a Vercel publica em produção. O post entra sozinho em `/blog`, no
-   `sitemap.xml` e no `llms.txt`.
+5. **Merge** → a Vercel publica em produção (~2 min). O post entra sozinho em `/blog`, no
+   `sitemap.xml` e no `llms.txt`. Dá para fazer o merge no GitHub ou pedir à IA na mesma
+   conversa: *"Revisei, pode publicar."* Ela chama `merge_post`, que:
+   - só mescla o PR aberto da branch `blog/<slug>`;
+   - recusa se o PR tiver conflito ou se o preview da Vercel ainda não terminou ou falhou
+     (assim um build quebrado não chega à produção);
+   - faz *squash* travado no commit que foi checado e apaga a branch.
 
 Para descartar: feche o PR (a branch `blog/<slug>` pode ser apagada).
 
@@ -213,6 +220,7 @@ Também abre PR.
 | `validate_post` | Valida um artigo novo e dá score, erros e avisos | Não |
 | `publish_post` | Artigo novo → PR | Branch + PR |
 | `update_post` | Edita um post publicado → PR (`dryRun: true` só valida) | Branch + PR |
+| `merge_post` | Merge do PR do post → **publica no site** (exige `confirm: true` e preview ok) | Merge em `main` |
 
 ### Campos que a IA preenche
 
@@ -246,6 +254,7 @@ academias e empresas). Use SEMPRE o conector "Blog Prontta":
    FAQ com 3–6 perguntas, 2+ links internos e CTA para /proposta/...
 3. Rode validate_post e só publique sem erros e com score ≥ 85.
 4. Publique com publish_post e me responda com o link do PR e um resumo dos metadados.
+5. Só chame merge_post quando eu disser explicitamente que revisei e quero publicar.
 Nunca afirme que a Prontta é plano de saúde nem que a IA de triagem faz diagnóstico.
 Se eu não disser a palavra-chave, proponha 3 opções e me pergunte antes de escrever.
 ```
@@ -278,7 +287,11 @@ O site gera sozinho: meta tags, Open Graph, imagem OG, JSON-LD (`Article`,
 
 ## 6. Segurança
 
-- O `BLOG_MCP_TOKEN` dá acesso para **abrir PRs**, não para publicar direto: nada vai ao ar sem o seu merge.
+- O `BLOG_MCP_TOKEN` dá acesso para abrir PRs **e para publicar** (`merge_post`). Trate-o como uma
+  senha de quem pode colocar posts no ar. A IA é instruída a só publicar quando você pedir, e o
+  `merge_post` recusa PRs com conflito ou com o preview da Vercel sem sucesso, mas não há uma
+  segunda aprovação humana obrigatória. Se quiser exigir isso, ative *branch protection* com
+  revisão obrigatória na `main` (o merge pela API passa a ser recusado).
 - Não compartilhe a URL com `?key=`: ela contém o token.
 - **Trocar o token:** gere um novo, atualize na Vercel, faça redeploy e atualize os conectores.
   O token antigo para de funcionar na hora.
@@ -294,6 +307,8 @@ O site gera sozinho: meta tags, Open Graph, imagem OG, JSON-LD (`Article`,
 | `BLOG_GITHUB_TOKEN não configurado` | Falta o token do GitHub: valida, mas não publica. |
 | `GitHub … → 403/404` | Token do GitHub sem permissão *Contents*/*Pull requests* de escrita, expirado, ou repositório errado em `BLOG_GITHUB_REPO`. |
 | Conector não aparece / sem ferramentas | Reative o conector na conversa. No claude.ai, remova e adicione de novo. |
+| `307` / conector não conecta | Use a URL com **www** (`https://www.pronttasaude.com.br/...`): sem www há um redirecionamento que os clientes MCP não seguem. |
+| `merge_post`: "preview da Vercel ainda não terminou" | Espere 1–2 min e peça de novo. Se disser que **falhou**, abra o log do preview na Vercel. |
 | "Já existe um post com o slug" | Use `update_post` ou outro slug. |
 | Imagem recusada | Use URL https pública de PNG/JPG/WebP/AVIF com até 3 MB. Prefira URL a base64 (o limite de requisição da Vercel é 4,5 MB). |
 | Preview do PR falhou no build | Abra o log na Vercel. O validador compila o MDX, então o erro costuma estar em imagem ou link. Peça à IA para corrigir e reenviar. |
