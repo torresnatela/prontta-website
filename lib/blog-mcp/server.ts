@@ -2,6 +2,7 @@ import type { McpServer } from '@modelcontextprotocol/server'
 import { z } from 'zod-v4'
 import { getAllPosts, getPostBySlug, postKeywords, type PostMeta } from '@/lib/blog'
 import type { PostFrontmatter } from '@/lib/blog-schema'
+import { siteConfig } from '@/lib/site-config'
 import { toMdx } from './post-input'
 import { GithubClient, githubConfig } from './github'
 import { buildGuidelines, writeArticlePrompt } from './guidelines'
@@ -15,7 +16,8 @@ import { publishPost, updatePost, validatePost, type ExistingPostFull } from './
 
 export const SERVER_INSTRUCTIONS = `Servidor de publicação do blog da Prontta Saúde (telessaúde assistida B2B).
 Antes de escrever, chame get_blog_guidelines e list_posts. Depois valide com validate_post e publique com publish_post (ou update_post para posts existentes).
-Toda publicação abre um Pull Request para revisão humana — informe o link do PR ao usuário.`
+Toda publicação abre um Pull Request para revisão humana — informe o link do PR ao usuário.
+Só chame merge_post (coloca o post no ar) quando o usuário pedir explicitamente para publicar.`
 
 type ToolResult = {
   content: { type: 'text'; text: string }[]
@@ -199,6 +201,32 @@ export function registerBlogTools(server: McpServer) {
       return text({
         message: `PR ${report.pullRequest?.created ? 'aberto' : 'atualizado'}: ${report.pullRequest?.url}.`,
         ...report,
+      })
+    }),
+  )
+
+  server.registerTool(
+    'merge_post',
+    {
+      title: 'Publicar no site (merge do PR)',
+      description:
+        'Faz o merge do PR aberto de um post (branch blog/<slug>) — é o que coloca o artigo NO AR. Só chame quando o USUÁRIO pedir explicitamente para publicar/aprovar, depois de revisar o preview; nunca logo após publish_post por conta própria. Recusa se o PR tiver conflito ou se o preview da Vercel não tiver passado. Posts com draft: true continuam ocultos após o merge.',
+      inputSchema: z.object({
+        slug: z
+          .string()
+          .regex(SLUG_PATTERN)
+          .describe('Slug do post (o PR é o da branch blog/<slug>).'),
+        confirm: z
+          .literal(true)
+          .describe('Precisa ser true: confirma que o usuário pediu para publicar.'),
+      }),
+      annotations: { destructiveHint: true, idempotentHint: false, openWorldHint: true },
+    },
+    safe(async ({ slug }) => {
+      const merged = await getGithub().mergeBlogPr(`blog/${slug}`)
+      return text({
+        message: `PR #${merged.number} mesclado. O deploy de produção da Vercel leva ~2 minutos; depois o artigo fica em ${siteConfig.url}/blog/${slug}.`,
+        ...merged,
       })
     }),
   )

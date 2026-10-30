@@ -107,4 +107,54 @@ describe('GithubClient', () => {
       force: true,
     })
   })
+
+  describe('mergeBlogPr', () => {
+    const fullPr = { ...pr, mergeable: true, head: { ref: 'blog/a', sha: 'head1' } }
+    const routes = (overrides: { pr?: unknown; status?: unknown } = {}): Route[] => [
+      { method: 'GET', path: /^\/pulls\?state=open&head=/, body: [pr] },
+      { method: 'GET', path: /^\/pulls\/7$/, body: overrides.pr ?? fullPr },
+      {
+        method: 'GET',
+        path: /^\/commits\/head1\/status$/,
+        body: overrides.status ?? { statuses: [{ context: 'Vercel', state: 'success' }] },
+      },
+      { method: 'PUT', path: /^\/pulls\/7\/merge$/, body: { sha: 'merged1', merged: true } },
+      { method: 'DELETE', path: /^\/git\/refs\/heads\/blog\/a$/ },
+    ]
+
+    it('faz squash do PR (travado no head revisado) e apaga a branch', async () => {
+      const { fn, calls } = fakeFetch(routes())
+      const result = await client(fn).mergeBlogPr('blog/a')
+
+      expect(result).toEqual({ number: 7, url: pr.html_url, mergeSha: 'merged1' })
+      expect(calls.find((c) => c.method === 'PUT')?.body).toMatchObject({
+        merge_method: 'squash',
+        sha: 'head1',
+      })
+      expect(calls.some((c) => c.method === 'DELETE' && c.path === '/git/refs/heads/blog/a')).toBe(
+        true,
+      )
+    })
+
+    it('recusa quando não há PR aberto', async () => {
+      const { fn } = fakeFetch([{ method: 'GET', path: /^\/pulls\?state=open&head=/, body: [] }])
+      await expect(client(fn).mergeBlogPr('blog/a')).rejects.toThrow(/Não há PR aberto/)
+    })
+
+    it('recusa PR com conflito', async () => {
+      const { fn, calls } = fakeFetch(routes({ pr: { ...fullPr, mergeable: false } }))
+      await expect(client(fn).mergeBlogPr('blog/a')).rejects.toThrow(/conflito/)
+      expect(calls.some((c) => c.method === 'PUT')).toBe(false)
+    })
+
+    it.each([
+      [{ statuses: [] }, /ainda não terminou/],
+      [{ statuses: [{ context: 'Vercel', state: 'pending' }] }, /ainda não terminou/],
+      [{ statuses: [{ context: 'Vercel', state: 'failure' }] }, /falhou/],
+    ])('só faz merge com o preview da Vercel ok (%j)', async (status, message) => {
+      const { fn, calls } = fakeFetch(routes({ status }))
+      await expect(client(fn).mergeBlogPr('blog/a')).rejects.toThrow(message)
+      expect(calls.some((c) => c.method === 'PUT')).toBe(false)
+    })
+  })
 })

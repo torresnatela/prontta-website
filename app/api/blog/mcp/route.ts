@@ -5,7 +5,7 @@ import { registerBlogTools, SERVER_INSTRUCTIONS } from '@/lib/blog-mcp/server'
 /**
  * MCP (Model Context Protocol) de publicação do blog.
  *
- * URL: https://pronttasaude.com.br/api/blog/mcp — Streamable HTTP, stateless.
+ * URL: https://www.pronttasaude.com.br/api/blog/mcp — Streamable HTTP, stateless.
  * Autenticação por BLOG_MCP_TOKEN (Bearer ou ?key=). Cada publicação abre um
  * PR no GitHub. Como conectar e usar: docs/BLOG-MCP.md.
  */
