@@ -74,7 +74,7 @@ export function Footer() {
 
         <div className="flex flex-col gap-[11px] border-t border-foot-line pt-[26px] text-[13px] leading-[1.65] text-foot-ink-2 [&_strong]:font-semibold [&_strong]:text-foot-ink">
           <p>
-            <strong>{legal.legalName}</strong> · CNPJ {legal.cnpj} · {address.full} ·{' '}
+            <strong>{legal.legalName}</strong> · CNPJ {legal.cnpj} · {legal.crm} · {address.full} ·{' '}
             {contact.email} · {contact.phoneDisplay} · {contact.hours}.
           </p>
           <p>
